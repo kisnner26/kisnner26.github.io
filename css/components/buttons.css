@@ -1,0 +1,5 @@
+.btn-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 26px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 10px 17px; border: 1px solid var(--ink); border-radius: var(--radius-sm); color: var(--ink); font-weight: 600; text-decoration: none; transition: transform .15s ease, background .15s ease, color .15s ease; }
+.btn:hover { background: var(--paper-dark); text-decoration: none; transform: translateY(-1px); }
+.btn--solid { background: var(--ink); color: var(--paper); }
+.btn--solid:hover { background: var(--accent); border-color: var(--accent); color: #fff; }

@@ -1,0 +1,10 @@
+.sec-head { max-width: 680px; margin-bottom: 32px; }
+.sec-eyebrow { display: block; margin-bottom: 8px; color: var(--accent); font-family: var(--script); font-size: 1.35rem; font-weight: 700; }
+.sec-title { font-size: clamp(2.2rem, 5vw, 3.4rem); line-height: 1; }
+.sec-sub { max-width: 56ch; margin-top: 12px; color: var(--mid); font-size: 1.1rem; }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: -1px; border-top: 1px solid var(--faint); border-bottom: 1px solid var(--faint); }
+.stat { display: grid; place-content: center; min-height: 140px; padding: 18px; text-align: center; }
+.stat + .stat { border-left: 1px solid var(--faint); }
+.stat b { color: var(--accent); font-family: var(--display); font-size: clamp(2rem, 5vw, 3.25rem); font-weight: 400; line-height: 1; font-variant-numeric: tabular-nums; }
+.stat span { margin-top: 9px; color: var(--mid); font-size: .94rem; }
+@media (max-width: 520px) { .stats { grid-template-columns: 1fr; } .stat + .stat { border-top: 1px solid var(--faint); border-left: 0; } }

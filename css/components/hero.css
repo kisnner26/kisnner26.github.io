@@ -1,0 +1,12 @@
+.hero { position: relative; display: grid; place-items: center; min-height: min(720px, 100dvh); padding: clamp(104px, 14vw, 150px) 20px 96px; overflow: hidden; text-align: center; }
+.hero-center { position: relative; z-index: 1; max-width: 720px; margin-bottom: 68px; }
+.hero-title { font-size: clamp(3rem, 9vw, 6.5rem); line-height: .88; }
+.hero-kicker { display: block; margin-bottom: 12px; color: var(--accent); font-family: var(--script); font-size: clamp(1.8rem, 5vw, 3.6rem); font-weight: 700; line-height: 1; }
+.hero-rule { width: 72px; height: 1px; margin: 28px auto 24px; background: var(--ink); }
+.hero-lede { max-width: 58ch; margin: 0 auto; font-size: clamp(1.15rem, 2vw, 1.45rem); }
+.hero-tagline { margin-top: 24px; color: var(--mid); font-style: italic; }
+.hero-plant { position: absolute; bottom: -45px; width: clamp(160px, 24vw, 300px); color: var(--faint); opacity: .75; }
+.hero-plant--left { left: max(-58px, -4vw); }
+.hero-plant--right { right: max(-45px, -3vw); }
+.petals { display: none; }
+@media (max-width: 620px) { .hero-plant { opacity: .35; } }

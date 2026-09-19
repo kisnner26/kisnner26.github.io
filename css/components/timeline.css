@@ -1,0 +1,6 @@
+.experience-list { border-top: 1px solid var(--faint); }
+.experience-item { display: flex; justify-content: space-between; gap: 20px; padding: 20px 0; border-bottom: 1px solid var(--faint); }
+.experience-role { font-size: 1.45rem; line-height: 1; }
+.experience-org { margin-top: 7px; color: var(--mid); }
+.experience-date { flex: 0 0 auto; color: var(--accent); font-size: .9rem; font-style: italic; }
+@media (max-width: 540px) { .experience-item { flex-direction: column; gap: 8px; } }

@@ -1,0 +1,3 @@
+#loading { position: fixed; inset: 0; z-index: 30; display: grid; place-content: center; gap: 12px; background: var(--paper); color: var(--ink); text-align: center; transition: opacity .2s ease; }
+#loading.done { opacity: 0; pointer-events: none; }
+.loader-text { font-family: var(--script); font-size: 1.45rem; }

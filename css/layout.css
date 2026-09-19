@@ -1,0 +1,10 @@
+.wrap { width: 100%; max-width: var(--wrap); margin: 0 auto; padding-inline: clamp(16px, 4vw, 28px); }
+
+.section { padding-block: clamp(56px, 10vw, 104px); }
+.section + .section { border-top: 1px solid var(--faint); }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 290px), 1fr));
+  gap: clamp(18px, 3vw, 30px);
+}

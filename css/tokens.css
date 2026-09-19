@@ -1,0 +1,33 @@
+/* Variables de diseño: papel y tinta. */
+:root {
+  --ink: #1a1208;
+  --paper: #f5f0e8;
+  --paper-dark: #e8e0d0;
+  --mid: #5a4a30;
+  --faint: #c8bfaa;
+  --accent: #7a1a1a;
+
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --display: 'IM Fell English', 'Cormorant Garamond', Georgia, serif;
+  --script: 'Dancing Script', cursive;
+
+  --radius: 18px;
+  --radius-sm: 10px;
+  --nav-h: 56px;
+  --wrap: 1040px;
+  --shadow-sketch: 4px 4px 0 var(--faint);
+  --ease: cubic-bezier(.2, .7, .2, 1);
+
+  color-scheme: light;
+}
+
+/* "Noche": el escenario oscuro del creador de flores */
+:root[data-theme="night"] {
+  --ink: #f1e9d8;
+  --paper: #1a1208;
+  --paper-dark: #241b0f;
+  --mid: #b7a888;
+  --faint: #4a3d28;
+  --accent: #e0a08a;
+  color-scheme: dark;
+}

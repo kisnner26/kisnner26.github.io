@@ -1,0 +1,15 @@
+.card { display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--faint); border-radius: var(--radius); background: var(--paper); box-shadow: 3px 3px 0 var(--paper-dark); transition: transform .15s ease, box-shadow .15s ease; }
+.card:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--faint); }
+.card-media { aspect-ratio: 16 / 10; overflow: hidden; border-bottom: 1px solid var(--faint); background: var(--paper-dark); }
+.card-media img { width: 100%; height: 100%; object-fit: cover; transition: transform .25s ease; }
+.card:hover .card-media img { transform: scale(1.025); }
+.card-media--sketch { display: grid; place-items: center; padding: 20px; background: var(--paper-dark); }
+.card-media pre { color: var(--mid); font: .86rem/1.7 ui-monospace, SFMono-Regular, Menlo, monospace; text-align: center; white-space: pre-wrap; }
+.card-media b { color: var(--ink); font-family: var(--display); font-size: 1.35rem; font-weight: 400; }
+.card-body { display: flex; flex: 1; flex-direction: column; align-items: flex-start; gap: 13px; padding: 20px; }
+.card-title { font-size: 1.65rem; line-height: 1; }
+.card-line { padding-left: 11px; border-left: 2px solid var(--accent); color: var(--mid); font-size: 1.05rem; line-height: 1.35; }
+.tags, .card-links { display: flex; flex-wrap: wrap; gap: 8px; }
+.tag { border: 1px solid var(--faint); border-radius: 999px; padding: 3px 9px; color: var(--mid); font-size: .84rem; }
+.card-links { margin-top: auto; padding-top: 4px; }
+.card-links a { color: var(--accent); font-weight: 600; }
