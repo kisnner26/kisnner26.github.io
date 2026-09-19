@@ -1,7 +1,7 @@
 /** Datos personales. Edita aquí; ningún componente tiene texto escrito a mano. */
 export const profile = {
   name: 'Kisnner Obando',
-  kicker: 'ingeniero de software,',
+  kicker: 'ingeniero en sistemas de información,',
   tagline: 'código · diseño · open source',
   lede:
     'Estudiante de <strong>Ingeniería en Sistemas de Información Computacionales</strong> (UAM, Nicaragua) ' +
