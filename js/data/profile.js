@@ -1,3 +1,5 @@
+import { certificates } from './certificates.js';
+
 /** Datos personales. Edita aquí; ningún componente tiene texto escrito a mano. */
 export const profile = {
   name: 'Kisnner Obando',
@@ -14,8 +16,9 @@ export const profile = {
   },
   freelanceSince: '2025-01-01',
   stats: [
-    { value: '2', label: 'PRs mergeados en radare2' },
-    { value: '520', label: 'juegos en 2 Player Arcade' },
-    { value: '2022', label: 'estudiando en la UAM' },
+    { value: '4', label: 'plataformas: macOS, iOS, watchOS y navegador' },
+    // pruebas de los paquetes de Girasol (SunKit 35 + HealthCore 52 + GameCore 86), contadas con `swift test`
+    { value: '173', label: 'pruebas automáticas en Girasol' },
+    { value: String(certificates.length), label: 'certificaciones: Harvard, Cisco, Anthropic y más' },
   ],
 };
