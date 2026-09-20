@@ -15,10 +15,10 @@ export const profile = {
     email: 'kisnnerobando7@gmail.com',
   },
   freelanceSince: '2025-01-01',
+  // cifras de GitHub a 2026-09-20 (api graphql y `gh search prs`); los PRs cuentan los enviados a repos de otros, en cualquier estado
   stats: [
-    { value: '4', label: 'plataformas: macOS, iOS, watchOS y navegador' },
-    // pruebas de los paquetes de Girasol (SunKit 35 + HealthCore 52 + GameCore 86), contadas con `swift test`
-    { value: '173', label: 'pruebas automáticas en Girasol' },
+    { value: '289', label: 'contribuciones en GitHub en los últimos 12 meses' },
+    { value: '13', label: 'pull requests a proyectos ajenos: radare2, rizin y Apple; 2 ya mergeados' },
     { value: String(certificates.length), label: 'certificaciones: Harvard, Cisco, Anthropic y más' },
   ],
 };
