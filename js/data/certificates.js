@@ -6,6 +6,14 @@ const img = (name) => `assets/img/certificates/${name}.webp`;
 
 export const certificates = [
   {
+    id: 'cisco-cybersecurity',
+    title: 'Introduction to Cybersecurity',
+    org: 'Cisco Networking Academy',
+    date: 'mayo 2022',
+    image: 'assets/img/certificates/cisco-intro-cybersecurity.png',
+    alt: 'Certificado de Cisco Networking Academy: Introduction to Cybersecurity, a nombre de Kisnner Obando',
+  },
+  {
     id: 'cs50x',
     title: 'CS50x: Introduction to Computer Science',
     org: 'Harvard University · edX',
