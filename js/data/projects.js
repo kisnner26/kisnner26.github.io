@@ -6,6 +6,14 @@ const gh = (repo) => ({ label: 'código', href: `https://github.com/kisnner26/${
 
 export const projects = [
   {
+    id: 'umbra',
+    title: 'umbra',
+    line: 'cada bit va a una posición que solo conoce quien tiene la clave, y con ±1 para no dejar rastro en el histograma',
+    tags: ['JavaScript', 'WebCrypto', 'Esteganografía'],
+    media: { src: 'assets/img/projects/umbra.jpg', alt: 'Umbra con la cigarra verde: un reto de tres imágenes encadenadas con runas y la pantalla para resolver el primer nivel' },
+    links: [{ label: 'demo', href: 'https://kisnner26.github.io/umbra/' }, gh('umbra')],
+  },
+  {
     id: 'girasol',
     title: 'Girasol',
     line: 'la calibración aprende los ejes del reloj con cuaterniones: no asume cuál es "izquierda" ni "arriba"',
