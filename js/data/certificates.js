@@ -29,6 +29,8 @@ export const certificates = [
     org: 'TecdeMonterreyX · edX',
     date: 'febrero 2025',
     detail: '20 horas, certificado verificado',
+    image: img('consumidor-digital'),
+    alt: 'Certificado verificado de edX y el Tecnológico de Monterrey: El consumidor digital',
     verify: 'https://courses.edx.org/certificates/b5ed0d99271b4475b70e285c5a28536f',
   },
   {
@@ -36,6 +38,9 @@ export const certificates = [
     title: 'CS50P: Introduction to Programming with Python',
     org: 'Harvard University · edX',
     date: 'febrero 2025',
+    detail: 'nueve problem sets y proyecto final',
+    image: img('cs50p'),
+    alt: 'Certificado CS50P de Harvard a nombre de Kisnner Varony Obando',
   },
   {
     id: 'prompt-engineering',
