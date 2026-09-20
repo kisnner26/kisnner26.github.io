@@ -41,6 +41,7 @@ export const certificates = [
     detail: 'nueve problem sets y proyecto final',
     image: img('cs50p'),
     alt: 'Certificado CS50P de Harvard a nombre de Kisnner Varony Obando',
+    verify: 'https://cs50.harvard.edu/certificates/6ad4caef-6ca8-4b26-acbe-a8423c146223',
   },
   {
     id: 'prompt-engineering',
