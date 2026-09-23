@@ -4,6 +4,7 @@ import { toggleTheme, currentTheme } from '../lib/theme.js';
 const items = [
   { id: 'inicio', label: 'Inicio' },
   { id: 'proyectos', label: 'Proyectos' },
+  { id: 'writeups', label: 'Writeups' },
   { id: 'oss', label: 'Open source' },
   { id: 'certificados', label: 'Certificados' },
   { id: 'contacto', label: 'Contacto' },

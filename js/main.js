@@ -1,6 +1,7 @@
 import { profile } from './data/profile.js';
 import { projects } from './data/projects.js';
 import { contributions } from './data/oss.js';
+import { writeups } from './data/writeups.js';
 import { certificates } from './data/certificates.js';
 import { experience } from './data/experience.js';
 import { mountLoader } from './components/loader.js';
@@ -9,6 +10,7 @@ import { renderHero } from './components/hero.js';
 import { renderStats } from './components/stats.js';
 import { renderProjects } from './components/projects.js';
 import { renderOss } from './components/oss.js';
+import { renderWriteups } from './components/writeups.js';
 import { renderCertificates } from './components/certificates.js';
 import { renderExperience } from './components/experience.js';
 import { renderFooter } from './components/footer.js';
@@ -22,7 +24,7 @@ app.append(
   renderNav(),
   renderHero(profile),
   renderStats(profile.stats),
-  hMain(renderProjects(projects), renderOss(contributions), renderCertificates(certificates), renderExperience(experience)),
+  hMain(renderProjects(projects), renderWriteups(writeups), renderOss(contributions), renderCertificates(certificates), renderExperience(experience)),
   renderFooter(profile),
 );
 

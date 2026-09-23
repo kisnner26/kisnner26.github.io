@@ -1,0 +1,40 @@
+/* Artículo largo: una columna de lectura sobre el papel. */
+.wu { max-width: 720px; margin: 0 auto; padding: clamp(28px, 6vw, 64px) clamp(16px, 4vw, 28px) 96px; }
+
+.wu-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: clamp(36px, 7vw, 64px); }
+.wu-back { color: var(--mid); font-size: .95rem; text-decoration: none; }
+.wu-back:hover { color: var(--ink); }
+.wu-theme { min-height: 38px; padding: 6px 12px; border: 1px solid var(--faint); border-radius: var(--radius-sm); background: transparent; color: var(--mid); font: 600 .84rem/1 var(--serif); cursor: pointer; }
+.wu-theme:hover { color: var(--ink); background: var(--paper-dark); }
+
+.wu-head { margin-bottom: 36px; }
+.wu-eyebrow { display: block; margin-bottom: 10px; color: var(--accent); font-family: var(--script); font-size: 1.35rem; font-weight: 700; }
+.wu-title { font-size: clamp(2.1rem, 6vw, 3.3rem); line-height: 1.05; }
+.wu-meta { margin-top: 14px; color: var(--mid); font-size: .95rem; }
+.wu-meta a { color: var(--mid); }
+
+.wu-lead-fig { width: min(300px, 80%); margin: 0 auto 40px; }
+
+.wu-body { font-size: 1.12rem; line-height: 1.65; }
+.wu-body > * + * { margin-top: 1.05em; }
+.wu-body h2 { margin-top: 2.2em; font-size: clamp(1.6rem, 4vw, 2.1rem); line-height: 1.1; }
+.wu-body h2 + * { margin-top: .7em; }
+.wu-body ul, .wu-body ol { padding-left: 1.3em; }
+.wu-body li + li { margin-top: .4em; }
+.wu-body strong { font-weight: 600; }
+
+.wu-body code { padding: .08em .35em; border-radius: 5px; background: var(--paper-dark); font: .82em/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; overflow-wrap: anywhere; }
+.wu-body pre { overflow-x: auto; padding: 16px 18px; border: 1px solid var(--faint); border-radius: var(--radius-sm); background: var(--paper-dark); }
+.wu-body pre code { padding: 0; background: none; font-size: .8rem; line-height: 1.6; white-space: pre; overflow-wrap: normal; }
+
+.table-wrap { overflow-x: auto; border-top: 1px solid var(--faint); }
+.wu-body table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+.wu-body th, .wu-body td { padding: 10px 12px 10px 0; border-bottom: 1px solid var(--faint); text-align: left; vertical-align: top; }
+.wu-body th { color: var(--mid); font-weight: 600; white-space: nowrap; }
+
+/* las figuras vienen dibujadas sobre papel claro: en noche van dentro de una tarjeta clara */
+.wu-fig { margin-block: 1.8em; }
+.wu-fig a { display: block; overflow: hidden; border: 1px solid var(--faint); border-radius: var(--radius-sm); background: #f8f7f2; box-shadow: var(--shadow-sketch); }
+.wu-fig img { width: 100%; height: auto; }
+
+.wu-foot { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--faint); color: var(--mid); font-size: .95rem; }
