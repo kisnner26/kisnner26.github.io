@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AltStore couldn't sign in. Apple was sending back an HTML page. — Kisnner Obando</title>
+<meta name="description" content="How NSCocoaErrorDomain 3840 in AltServer turned out to be a 503 HTML page parsed as a plist, and how a 39-character string swap fixed sign-in on macOS and Windows.">
+<meta name="theme-color" content="#f5f0e8">
+<link rel="canonical" href="https://kisnner26.github.io/writeups/altstore/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23f5f0e8'/%3E%3Cpath d='M32 55V18M32 27C18 18 12 9 17 5c7 1 13 10 15 22M32 35c14-9 20-18 15-22-7 1-13 10-15 22' fill='none' stroke='%231a1208' stroke-linecap='round' stroke-width='3'/%3E%3C/svg%3E">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://kisnner26.github.io/writeups/altstore/">
+<meta property="og:title" content="AltStore couldn't sign in. Apple was sending back an HTML page.">
+<meta property="og:description" content="How NSCocoaErrorDomain 3840 in AltServer turned out to be a 503 HTML page parsed as a plist, and how a 39-character string swap fixed sign-in on macOS and Windows.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AltStore couldn't sign in. Apple was sending back an HTML page.">
+<meta name="twitter:description" content="How NSCocoaErrorDomain 3840 in AltServer turned out to be a 503 HTML page parsed as a plist, and how a 39-character string swap fixed sign-in on macOS and Windows.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=IM+Fell+English:ital@0;1&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../css/tokens.css">
+<link rel="stylesheet" href="../../css/base.css">
+<link rel="stylesheet" href="../../css/components/writeup.css">
+
+<script>
+  // aplica el tema guardado antes de pintar, para evitar el parpadeo
+  try { var t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+</script>
+</head>
+<body style="padding-bottom:0">
+<article class="wu">
+  <nav class="wu-top" aria-label="Navegación">
+    <a class="wu-back" href="../../#writeups">← portafolio</a>
+    <button class="wu-theme" type="button" id="theme" aria-label="Cambiar entre papel y noche">☾ Noche</button>
+  </nav>
+
+  <header class="wu-head">
+    <span class="wu-eyebrow">writeup</span>
+    <h1 class="wu-title">altstore couldn't sign in. apple was sending back an html page.</h1>
+    <p class="wu-meta">kisnner obando · september 2026 · altserver 1.6.2–1.7.5 · macos 27 / windows · <a href="https://github.com/altstoreio/AltStore/issues/1699" target="_blank" rel="noopener noreferrer">the thread</a></p>
+  </header>
+
+  <div class="wu-body">
+<p>a writeup of the september 2026 altstore sign-in breakage: how a "data is not in the correct format" error turned out to be an html 503 page fed into a plist parser, how i got a wrong answer from my own retries, and how the fix ended up as a 39-character string swap inside signed binaries on macos and windows.</p>
+<p>this was a community effort in <a href="https://github.com/altstoreio/AltStore/issues/1699" target="_blank" rel="noopener noreferrer" data-hovercard-type="issue" data-hovercard-url="/altstoreio/AltStore/issues/1699/hovercard">altstoreio/AltStore#1699</a>. the upstream fixes that shipped were written by other people, credited below. my part was the diagnosis, the binary patches for people who couldn't wait for a release, and a second, unrelated failure (<code>-80009</code>) that the first workaround introduced.</p>
+<h2>tl;dr</h2>
+<ul>
+<li>altserver couldn't sign in: <code>NSCocoaErrorDomain 3840</code>, "encountered unknown tag html on line 1".</li>
+<li>capturing the grandslam traffic showed the apple id login worked. the third request, <code>apptokens</code>, got a <strong>503 html page</strong>, and altsign parsed it as a plist.</li>
+<li>the trigger was a stale, mojave-era <code>User-Agent</code> hard-coded in altsign, made worse by retries reusing one pooled connection.</li>
+<li>the same string lived in the macos framework (two copies, one per cpu slice) and in <code>AltServer.exe</code> (utf-16le, one copy). swapping it for a same-length string fixed sign-in without a rebuild. on macos the app then has to be re-signed.</li>
+<li>the upstream fixes were merged in altsign between sep 8 and 10, and altserver 1.7.6 fixed it for everyone.</li>
+</ul>
+<h2>the symptom</h2>
+<pre><code>NSCocoaErrorDomain 3840
+Debug Description: Encountered unknown tag html on line 1
+AltServer could not sign in with your Apple ID. The data is not in the correct format.
+</code></pre>
+<p>it reads like a credentials problem. people were creating new apple ids, switching vpns, changing regions. none of it helped, because the message wasn't about their account at all.</p>
+<h2>1. look at the actual traffic</h2>
+<p>i injected a dylib into stock altserver to log its <code>NSURLSession</code> calls, and captured the grandslam exchange against <code>POST https://gsa.apple.com/grandslam/GsService2</code>:</p>
+<pre><code>Request.o=init       -&gt;  200  text/x-xml-plist
+Request.o=complete   -&gt;  200  text/x-xml-plist     &lt;-- srp auth succeeds
+Request.o=apptokens  -&gt;  503  text/html            &lt;-- "503 Service Temporarily Unavailable"
+</code></pre>
+<p>so apple accepted the password and the anisette data. only the third call was refused, and it came back as an html error page. altsign has no handling for a non-plist body, so the html goes straight into <code>PropertyListSerialization</code>, which fails on <code>&lt;html&gt;</code> at line 1. that's the whole error message.</p>
+<p>that also explained why nothing people tried mattered. i reproduced the same result on my home isp, an iphone hotspot and a us vpn exit, with six different anisette servers and two client identities. other reports in the thread added a brand-new apple id and windows with anisette from icloud for windows. same 503 every time.</p>
+<h2>2. my first conclusion was wrong</h2>
+<p>i added automatic retries: six attempts over about seven seconds, all 503. i posted that the refusal was deterministic.</p>
+<p>it wasn't. every retry reused the same <code>NSURLSession</code>, so every attempt went back over the same pooled connection, pinned to the same failing apple backend. six retries on one connection are one sample, not six. <a href="https://github.com/Calvin-Zikakis" target="_blank" rel="noopener noreferrer">@Calvin-Zikakis</a> had described exactly that bug in <a href="https://github.com/rileytestut/AltSign/pull/49" target="_blank" rel="noopener noreferrer" data-hovercard-type="pull_request" data-hovercard-url="/rileytestut/AltSign/pull/49/hovercard">AltSign#49</a>. i posted a correction in the thread, because "apple has closed this off" was the wrong thing for people to walk away with.</p>
+<h2>3. the cause: a user-agent from 2019</h2>
+<p><a href="https://github.com/FrakesH" target="_blank" rel="noopener noreferrer">@FrakesH</a> identified the trigger: altsign sends</p>
+<pre><code>akd/1.0 CFNetwork/978.0.7 Darwin/18.7.0
+</code></pre>
+<p>a macos mojave user-agent, hard-coded. apple's servers started refusing it on <code>apptokens</code>.</p>
+<p>to check that before touching any binary, i applied both fixes at runtime to <strong>stock altserver 1.7.2 (build 90)</strong> through the injected dylib. it rewrote <code>User-Agent</code> on <code>*.apple.com</code> requests and ran every request on a fresh ephemeral <code>URLSession</code>. sign-in and installation worked end to end. on macos 27 i also needed <a href="https://github.com/kimziro" target="_blank" rel="noopener noreferrer">@kimziro</a>'s <a href="https://github.com/kimziro/altserver-macos27-anisette-fix" target="_blank" rel="noopener noreferrer">anisette fix</a> for the <code>AOSKit -45070</code> / empty <code>machineID</code> stage.</p>
+<h2>4. patching the binaries</h2>
+<p>a dylib isn't something most people can use. the replacement string is the same length as the old one, 39 characters, so a straight byte swap works without moving anything:</p>
+<pre><code>akd/1.0 CFNetwork/978.0.7 Darwin/18.7.0
+AuthKit/1 (com.apple.dt.Xcode/3594.4.1)
+</code></pre>
+<h3>macos</h3>
+<p>the string isn't in <code>AltServer</code> itself. it's in the altsign framework, in ascii, <strong>twice</strong>: <code>AltSign-Dynamic</code> is a universal binary and each architecture slice has its own copy.</p>
+<pre><code>AltServer.app/Contents/Frameworks/AltSign-Dynamic.framework/Versions/A/AltSign-Dynamic
+  0x62920   -&gt; x86_64 slice
+  0x10E210  -&gt; arm64 slice
+</code></pre>
+<p>both sit next to <code>X-MMe-Client-Info</code>. the same layout holds in 1.6.2 and 1.7.2. i downloaded a stock 1.6.2 from apple's cdn to verify it.</p>
+<p>the catch is code signing. the stock app has a developer id signature with hardened runtime (<code>flags=0x10000(runtime)</code>). editing the framework invalidates it:</p>
+<pre><code>AltServer.app: invalid signature (code or signature have been modified)
+</code></pre>
+<p>so the patch has to end with an ad-hoc re-sign:</p>
+<pre><code>APP="/Applications/AltServer.app"
+F="$APP/Contents/Frameworks/AltSign-Dynamic.framework/Versions/A/AltSign-Dynamic"
+cp -R "$APP" ~/Desktop/AltServer-backup.app
+perl -pi -e 's/akd\/1\.0 CFNetwork\/978\.0\.7 Darwin\/18\.7\.0/AuthKit\/1 (com\.apple\.dt\.Xcode\/3594\.4\.1)/g' "$F"
+codesign --force --deep --sign - "$APP"
+codesign --verify --deep --strict "$APP" &amp;&amp; echo OK</code></pre>
+<p><a href="https://github.com/angel-knights" target="_blank" rel="noopener noreferrer">@angel-knights</a> confirmed it on 1.6.2 under macos 10.15, a combination i couldn't test.</p>
+<h3>windows</h3>
+<p>i'd said windows users had no path because altserver for windows isn't open source. that was wrong: a string swap doesn't need source. i don't have a windows machine, so i took the official installer apart instead (<code>altinstaller.zip</code> → <code>AltInstaller.msi</code> → embedded cab) and read <code>AltServer.exe</code> 1.7.4.0 directly:</p>
+<ul>
+<li>the stale user-agent is stored as <strong>utf-16le</strong> at offset <strong><code>0x14D6A8</code></strong>, exactly one occurrence</li>
+<li>it sits next to <code>/grandslam/GsService2</code> and <code>viewDeveloper.action</code>, the same endpoints from the macos capture</li>
+<li>the exe has <strong>no authenticode signature</strong> (empty certificate directory), so patching invalidates nothing</li>
+<li>after the swap it's still a valid pe32, with zero copies of the old string and one of the new</li>
+</ul>
+<p>i posted a powershell script that backs up the file, refuses to run unless it finds exactly one occurrence, and writes the new bytes in place. <a href="https://github.com/akgang-rgb" target="_blank" rel="noopener noreferrer">@akgang-rgb</a> and <a href="https://github.com/BorbushArtem" target="_blank" rel="noopener noreferrer">@BorbushArtem</a> confirmed it on windows. <a href="https://github.com/BorbushArtem" target="_blank" rel="noopener noreferrer">@BorbushArtem</a>'s version was better than mine: it checks both program files paths, asserts the length match before writing, and searches through an iso-8859-1 round-trip instead of my byte loop. i pointed people to theirs.</p>
+<p>the altstore app on the phone carries its own copy of altsign, so patching altserver fixes sign-in on the computer only. <a href="https://github.com/spaceace90" target="_blank" rel="noopener noreferrer">@spaceace90</a> found the equivalent swap inside the ipa.</p>
+<h2>5. the release that didn't fix it</h2>
+<p>altserver 1.7.5 shipped on sep 8. i pulled it from the official sparkle feed and checked:</p>
+<pre><code>AltServer.app/Contents/MacOS/AltServer
+  0x111070  -&gt; x86_64 slice   akd/1.0 CFNetwork/978.0.7 Darwin/18.7.0
+  0x27E6D0  -&gt; arm64 slice    akd/1.0 CFNetwork/978.0.7 Darwin/18.7.0
+</code></pre>
+<p>same stale string. altsign was now statically linked, so the patch target had moved from the framework to the main executable. and since sparkle replaces the whole app, updating silently undid anyone's patch. <a href="https://github.com/rileytestut/AltSign/pull/52" target="_blank" rel="noopener noreferrer" data-hovercard-type="pull_request" data-hovercard-url="/rileytestut/AltSign/pull/52/hovercard">AltSign#52</a>, the connection-reuse fix, had been merged seven hours after 1.7.5 was cut, so it wasn't in any release yet.</p>
+<h2>6. a second bug, caused by the workaround</h2>
+<p>some people who used a rebuilt altserver started getting <code>-80009 MID is invalid</code> instead. that's a different failure: apple doesn't accept the machine identity.</p>
+<p>i probed the three aoskit calls directly on macos 27:</p>
+<pre><code>retrieveOTPHeadersForDSID:  -&gt;  {}            (broken)
+machineSerialNumber         -&gt;  &lt;real serial&gt; (still works)
+machineUDID                 -&gt;  &lt;real udid&gt;   (still works)
+</code></pre>
+<p>only one of them was broken. the macos 27 anisette fix bundled in that build hooks only <code>retrieveOTPHeadersForDSID:</code> and provisions a synthetic identity, which on my machine had <code>serialNumber: "0"</code> and a random <code>deviceID</code>. altserver then sent that synthetic <code>machineID</code> next to the host mac's <strong>real</strong> serial and udid. the request described two different machines, and apple rejected it.</p>
+<p><a href="https://github.com/oddharsh" target="_blank" rel="noopener noreferrer">@oddharsh</a> had already found that gap in <a href="https://github.com/kimziro/altserver-macos27-anisette-fix/pull/4" target="_blank" rel="noopener noreferrer" data-hovercard-type="pull_request" data-hovercard-url="/kimziro/altserver-macos27-anisette-fix/pull/4/hovercard">anisette-fix#4</a>, which hooks the serial and udid too so the whole set describes one identity. the measurement showed why it was needed: hooking one call out of three leaves the identity half real and half synthetic.</p>
+<h2>how it ended</h2>
+<ul>
+<li>on sep 11, two people reported the patch had stopped working the same day. apple had most likely started filtering the spoofed xcode user-agent that the thread converged on. <a href="https://github.com/MeemeeLab" target="_blank" rel="noopener noreferrer">@MeemeeLab</a> reported that any <code>Xcode</code> in the client info seemed to trigger the 503.</li>
+<li>upstream, altsign merged <a href="https://github.com/rileytestut/AltSign/pull/52" target="_blank" rel="noopener noreferrer" data-hovercard-type="pull_request" data-hovercard-url="/rileytestut/AltSign/pull/52/hovercard">#52</a> (<a href="https://github.com/sshane" target="_blank" rel="noopener noreferrer">@sshane</a>), <a href="https://github.com/rileytestut/AltSign/pull/51" target="_blank" rel="noopener noreferrer" data-hovercard-type="pull_request" data-hovercard-url="/rileytestut/AltSign/pull/51/hovercard">#51</a> and <a href="https://github.com/rileytestut/AltSign/pull/54" target="_blank" rel="noopener noreferrer" data-hovercard-type="pull_request" data-hovercard-url="/rileytestut/AltSign/pull/54/hovercard">#54</a> (<a href="https://github.com/Calvin-Zikakis" target="_blank" rel="noopener noreferrer">@Calvin-Zikakis</a>) between sep 8 and 10, and altserver 1.7.6 was reported working.</li>
+<li>the manual patch was a stopgap for a few days, not the fix. the official release was.</li>
+</ul>
+<h2>mistakes i made in public</h2>
+<ul>
+<li><strong>"deterministic" from six retries on one pooled connection.</strong> corrected in the thread.</li>
+<li><strong>"no path on windows".</strong> a length-preserving string swap doesn't need source. corrected, then shipped the script.</li>
+<li><strong>linking <code>-22410</code> to the connection bug.</strong> the official error list documents <code>-22410</code> as "failed to write to disk", and i had mixed a symptom from altstore on ios with one from altserver on the pc. i said so when <a href="https://github.com/kswartz26" target="_blank" rel="noopener noreferrer">@kswartz26</a> pointed it out.</li>
+</ul>
+<h2>takeaways</h2>
+<ul>
+<li><strong>an error message can describe the parser, not the problem.</strong> "not in the correct format" meant a server error page was parsed as data. the first thing to capture is what actually came over the wire.</li>
+<li><strong>retries on the same connection are not independent samples.</strong> if the connection is pinned to a bad backend, you measure that backend six times.</li>
+<li><strong>length-preserving patches are cheap, re-signing is the real work.</strong> on macos, a patched binary with a broken signature fails before your change ever runs.</li>
+<li><strong>check releases, don't assume.</strong> 1.7.5 looked like the fix and wasn't. two string offsets proved it in a minute.</li>
+<li><strong>other people's testing is part of the result.</strong> the windows patch and the 10.15 path were confirmed by users on hardware i don't have.</li>
+</ul>
+<h2>links</h2>
+<ul>
+<li><a href="https://github.com/altstoreio/AltStore/issues/1699" target="_blank" rel="noopener noreferrer" data-hovercard-type="issue" data-hovercard-url="/altstoreio/AltStore/issues/1699/hovercard">altstoreio/AltStore#1699</a>, the main thread</li>
+<li><a href="https://github.com/rileytestut/AltSign/pull/51" target="_blank" rel="noopener noreferrer" data-hovercard-type="pull_request" data-hovercard-url="/rileytestut/AltSign/pull/51/hovercard">AltSign#51</a>, <a href="https://github.com/rileytestut/AltSign/pull/52" target="_blank" rel="noopener noreferrer" data-hovercard-type="pull_request" data-hovercard-url="/rileytestut/AltSign/pull/52/hovercard">#52</a> and <a href="https://github.com/rileytestut/AltSign/pull/54" target="_blank" rel="noopener noreferrer" data-hovercard-type="pull_request" data-hovercard-url="/rileytestut/AltSign/pull/54/hovercard">#54</a>, the merged upstream fixes</li>
+<li><a href="https://github.com/kimziro/altserver-macos27-anisette-fix" target="_blank" rel="noopener noreferrer">kimziro/altserver-macos27-anisette-fix</a> and <a href="https://github.com/kimziro/altserver-macos27-anisette-fix/pull/4" target="_blank" rel="noopener noreferrer" data-hovercard-type="pull_request" data-hovercard-url="/kimziro/altserver-macos27-anisette-fix/pull/4/hovercard">#4</a></li>
+</ul>  </div>
+
+  <footer class="wu-foot">
+    <p><a href="../../#writeups">← back to the portfolio</a> · <a href="https://github.com/kisnner26" target="_blank" rel="noopener noreferrer">github.com/kisnner26</a></p>
+  </footer>
+</article>
+
+<script type="module">
+  import { toggleTheme, currentTheme } from '../../js/lib/theme.js';
+  const btn = document.getElementById('theme');
+  const label = () => { btn.textContent = currentTheme() === 'night' ? '☀ Papel' : '☾ Noche'; };
+  label();
+  btn.addEventListener('click', () => { toggleTheme(); label(); });
+</script>
+</body>
+</html>
