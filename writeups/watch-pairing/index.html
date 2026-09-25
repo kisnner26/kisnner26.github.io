@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Apple Watch paired fine. Then it forgot. — Kisnner Obando</title>
+<meta name="description" content="Why an Apple Watch Ultra 2 vanished from Xcode 27 on watchOS 27: the pairing succeeds, but the watch comes back asking for a brand-new pairing instead of verifying. Logs from both sides, a listener experiment and an independent host. Still open.">
+<meta name="theme-color" content="#f5f0e8">
+<link rel="canonical" href="https://kisnner26.github.io/writeups/watch-pairing/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23f5f0e8'/%3E%3Cpath d='M32 55V18M32 27C18 18 12 9 17 5c7 1 13 10 15 22M32 35c14-9 20-18 15-22-7 1-13 10-15 22' fill='none' stroke='%231a1208' stroke-linecap='round' stroke-width='3'/%3E%3C/svg%3E">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://kisnner26.github.io/writeups/watch-pairing/">
+<meta property="og:title" content="My Apple Watch paired fine. Then it forgot.">
+<meta property="og:description" content="Why an Apple Watch Ultra 2 vanished from Xcode 27 on watchOS 27: the pairing succeeds, but the watch comes back asking for a brand-new pairing instead of verifying. Logs from both sides, a listener experiment and an independent host. Still open.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="My Apple Watch paired fine. Then it forgot.">
+<meta name="twitter:description" content="Why an Apple Watch Ultra 2 vanished from Xcode 27 on watchOS 27: the pairing succeeds, but the watch comes back asking for a brand-new pairing instead of verifying. Logs from both sides, a listener experiment and an independent host. Still open.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=IM+Fell+English:ital@0;1&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../css/tokens.css">
+<link rel="stylesheet" href="../../css/base.css">
+<link rel="stylesheet" href="../../css/components/writeup.css">
+
+<script>
+  // aplica el tema guardado antes de pintar, para evitar el parpadeo
+  try { var t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+</script>
+</head>
+<body style="padding-bottom:0">
+<article class="wu">
+  <nav class="wu-top" aria-label="Navegación">
+    <a class="wu-back" href="../../#writeups">← portafolio</a>
+    <button class="wu-theme" type="button" id="theme" aria-label="Cambiar entre papel y noche">☾ Noche</button>
+  </nav>
+
+  <header class="wu-head">
+    <span class="wu-eyebrow">writeup</span>
+    <h1 class="wu-title">my apple watch paired fine. then it forgot.</h1>
+    <p class="wu-meta">kisnner obando · september 2026 · watchos 27.2 · xcode 27 / device hub · macos 27.2 · <a href="https://github.com/kisnner26/watchos27-pairing-bug" target="_blank" rel="noopener noreferrer">the repo</a> · status: <strong>open</strong></p>
+  </header>
+
+  <div class="wu-body">
+<p>a writeup of an apple watch ultra 2 that disappeared from xcode 27 and never came back. this one isn't solved. what i have is a much narrower description of the failure than "it won't connect", built from logs on the mac and on the watch, one experiment that changed my theory, and a dead end with an independent pairing host. it's reported to apple as <strong>FB24924229</strong>.</p>
+<h2>tl;dr</h2>
+<ul>
+<li>the watch went <code>unavailable</code> in <code>devicectl</code>, then vanished. re-pairing it from device hub <strong>succeeds</strong> every time: srp pair-setup m1–m6, <code>setupManualPairing succeeded</code>.</li>
+<li>~30 ms later the channel closes. an iphone does exactly the same, then reconnects 1.4 s later with <code>verifyManualPairing</code>. the watch never does.</li>
+<li>watches pair <em>into</em> the mac, and the mac only listens while the pairing sheet is open. when i kept it listening, the watch <strong>came back</strong> 23 s later, but asked for a <strong>brand-new pairing</strong> instead of verifying the one it had just finished. it loops.</li>
+<li>so the mac side works. the watch doesn't keep, or doesn't use, its half of the pairing. that code lives in watchos, which i can't change.</li>
+</ul>
+<h2>the symptom</h2>
+<pre><code>$ xcrun devicectl list devices
+iPhone (2)   available (paired)   iPhone 15 Pro Max
+iPad         available (paired)   iPad Pro 12.9-inch
+             (no watch)
+$ xcrun devicectl manage pair --device &lt;watch&gt;
+The specified device was not found (1000)
+</code></pre>
+<p>device hub showed "currently unavailable — must be nearby". installing from the iphone's watch app filled halfway and stalled. bluetooth, wi-fi, the cable, developer mode and the app itself were all ruled out first. the full list is in <a href="https://github.com/kisnner26/watchos27-pairing-bug/blob/main/docs/what-i-tried.md" target="_blank" rel="noopener noreferrer">what-i-tried.md</a>.</p>
+<h2>1. the pairing succeeds, then the channel closes</h2>
+<p><code>remotepairingd</code> on the mac shows a complete, successful pairing, followed by a close:</p>
+<pre><code>22:21:41.314  PairSetup server done -- client authenticated
+22:21:41.314  tcp-79: Pairing session of kind setupManualPairing succeeded
+22:21:41.344  tcp-79: received error reading message        &lt;-- +30 ms
+22:21:41.345  tcp-79: authenticated -&gt; invalidated
+22:21:41.663  DeviceHub: Beaconing pairing session explicitly ended by client
+</code></pre>
+<p>my first write-up called that 30 ms close the bug. it wasn't.</p>
+<h2>2. a control: the iphone does the same thing</h2>
+<p>after resetting location &amp; privacy, the iphone also had to be re-paired, one minute before the watch, on the same mac:</p>
+<table>
+<tr><th></th><th>setup succeeded</th><th>channel closed</th><th>reconnect</th></tr>
+<tr><td>iphone</td><td>10:54:22.173</td><td>+36 ms</td><td><strong>+1.4 s</strong> <code>verifyManualPairing</code> → available</td></tr>
+<tr><td>watch</td><td>10:55:08.951</td><td>+29 ms</td><td><strong>none</strong></td></tr>
+</table>
+<p>the close is normal: setup ends, then the device reconnects on a verified session. what's missing is the watch's reconnect. i rewrote the repo and the apple report to say that. an earlier draft had used an ipad reconnect as the control, which wasn't a fresh setup, so it wasn't a fair comparison either.</p>
+<h2>3. watches pair into the mac</h2>
+<p>the mac finds an iphone by browsing <code>_remotepairing._tcp</code>. the watch never advertised that, and i'd listed "the watch doesn't announce itself" as the main hypothesis. reading a live <code>log stream</code> during pairing showed the flow is the other way round for a watch:</p>
+<pre><code>22:21:16  remotepairingd: Started listening for network pairing   &lt;-- sheet opened
+22:21:41  setupManualPairing succeeded
+22:21:41  DeviceHub: Beaconing pairing session explicitly ended  &lt;-- sheet closes itself
+</code></pre>
+<p>the watch connects <em>to</em> the mac's <code>_remotepairing-pairable-host._tcp</code> listener, and that listener exists only while device hub's <em>pair nearby device…</em> sheet is open. the sheet closes itself ~300–400 ms after setup. so the watch not advertising is probably by design, and a new theory showed up: maybe the watch tries to reconnect, but there's nothing left to connect to.</p>
+<h2>4. keeping the mac listening</h2>
+<p>reopening the sheet by hand left a 15 s gap and nothing came back. to close the gap i wrote <a href="https://github.com/kisnner26/watchos27-pairing-bug/blob/main/tools/watch-pair-keeper.sh" target="_blank" rel="noopener noreferrer">watch-pair-keeper.sh</a>: it tails <code>remotepairingd</code>, and the moment device hub drops the listener it clicks <em>pair nearby device…</em> again through system events, then reports whether the watch verified. before using it live i replayed a captured log through it to check the timings.</p>
+<pre><code>22:53:00.613  setupManualPairing succeeded (watch)     closed at +305 ms
+22:53:01.533  mac listening again                      gap: 615 ms
+22:53:23.502  Network pairing peers updated. Total count: 1   &lt;-- the watch is back
+22:53:23.558  PairingData(startNewSession: true, kind: setupManualPairing)
+22:53:23.559  DeviceHub: Presenting pairing challenge   &lt;-- a new code
+22:53:33.642  setupManualPairing succeeded (watch)     closed again at +286 ms
+</code></pre>
+<p>that disproved my theory and gave a better answer. the watch <strong>does</strong> reconnect. but it asks for a <strong>new pair-setup</strong>, not pair-verify, as if it had forgotten the pairing it finished 23 seconds earlier. the mac stored the pairing and was listening; the watch didn't use its side. setup, close, setup, close.</p>
+<p>one false positive worth noting: the script flagged a <code>verifyManualPairing</code> at 22:53:59. it was the ipad. the script only counts a verify when the next authenticated line carries the watch's udid prefix, which is why it didn't report success.</p>
+<h2>5. the watch's own logs</h2>
+<p>a watch sysdiagnose (crown + side button, then out through the iphone) showed <code>remotepairingdeviced</code> starting the pairing normally: it resolves the mac's advert, connects over wi-fi, <code>lockdownShouldDisableDevicePairing: NO</code>, "manual pairing in progress". then the archive has <strong>no lines from any process</strong> between 22:21:34.1 and 22:21:48, so the watch side of the close at 22:21:41 isn't there. (the first archive that came through was the iphone's. the filename says <code>iPhone-OS</code> vs <code>Watch-OS</code>; check it before digging in.)</p>
+<h2>6. an independent host</h2>
+<p>if the mac side can't be changed, maybe it can be replaced. pymobiledevice3 11.19.1 has <code>remote pair-host</code>, which advertises a pairable host and accepts a device-initiated pairing. the watch listed it under <em>developer ▸ paired macs ▸ other devices</em>, asked for the watch passcode, and then never opened a tcp connection.</p>
+<p>apple's host is reached over ipv6 link-local; pymobiledevice3 binds <code>0.0.0.0</code> and only publishes an a record. so i wrapped it (<a href="https://github.com/kisnner26/watchos27-pairing-bug/blob/main/tools/pair_host_dualstack.py" target="_blank" rel="noopener noreferrer">pair_host_dualstack.py</a>) to listen on both families and advertise the aaaa record too. same result: no connection, over either. device hub also runs a "beaconing" session that pymobiledevice3 doesn't. whether the watch needs it, i don't know yet.</p>
+<h2>where it stands</h2>
+<ul>
+<li>the fault is on the watch: after a successful setup it comes back asking for a new one.</li>
+<li>removing the mac on the watch (<em>developer ▸ unpair this device</em>) and pairing again doesn't change it.</li>
+<li>nothing on the mac side fixed it. the only step left untried is erasing the watch.</li>
+<li>the pairing-loop evidence went to apple as a follow-up to FB24924229.</li>
+</ul>
+<h2>mistakes i made along the way</h2>
+<ul>
+<li><strong>calling the 30 ms close the bug.</strong> an iphone control showed it's normal. corrected in the repo and the report.</li>
+<li><strong>"the watch doesn't announce itself" as the main hypothesis.</strong> watches pair into the mac. crossed out.</li>
+<li><strong>"the mac stops listening too early" as the fix.</strong> the experiment i built to prove it disproved it, and that's how the real finding showed up.</li>
+</ul>
+<h2>takeaways</h2>
+<ul>
+<li><strong>a control device is worth more than another theory.</strong> the iphone doing the same close in the same minute reframed the whole problem.</li>
+<li><strong>read who connects to whom.</strong> i assumed the mac finds the watch. it's the reverse, and that changed which absence mattered.</li>
+<li><strong>an experiment that fails to fix something can still be the result.</strong> keeping the listener open didn't fix pairing; it exposed the loop.</li>
+<li><strong>"can't be fixed from here" should come with evidence.</strong> apple's host, my listener fix and an independent host, all with timestamps.</li>
+</ul>
+<h2>links</h2>
+<ul>
+<li><a href="https://github.com/kisnner26/watchos27-pairing-bug" target="_blank" rel="noopener noreferrer">kisnner26/watchos27-pairing-bug</a>: sanitized logs, timeline, tools and the feedback assistant text</li>
+<li><a href="https://github.com/doronz88/pymobiledevice3" target="_blank" rel="noopener noreferrer">doronz88/pymobiledevice3</a>, the independent host used in step 6</li>
+</ul>
+  </div>
+
+  <footer class="wu-foot">
+    <p><a href="../../#writeups">← back to the portfolio</a> · <a href="https://github.com/kisnner26" target="_blank" rel="noopener noreferrer">github.com/kisnner26</a></p>
+  </footer>
+</article>
+
+<script type="module">
+  import { toggleTheme, currentTheme } from '../../js/lib/theme.js';
+  const btn = document.getElementById('theme');
+  const label = () => { btn.textContent = currentTheme() === 'night' ? '☀ Papel' : '☾ Noche'; };
+  label();
+  btn.addEventListener('click', () => { toggleTheme(); label(); });
+</script>
+</body>
+</html>
