@@ -14,6 +14,22 @@ export const projects = [
     links: [{ label: 'demo', href: 'https://kisnner26.github.io/lumora/' }, gh('lumora')],
   },
   {
+    id: 'opti-hub',
+    title: 'Opti Hub',
+    line: 'cada ajuste guarda su valor anterior y se deshace uno a uno; no toca Defender, UAC ni Windows Update',
+    tags: ['C#', '.NET Framework', 'Windows 11'],
+    media: { src: 'assets/img/projects/opti-hub.jpg', alt: 'Icono de Opti Hub: un velocímetro en trazo grueso con una flor rosa en la esquina' },
+    links: [gh('opti-hub')],
+  },
+  {
+    id: 'uam-class-watch',
+    title: 'UAM Class Watch',
+    line: 'login directo en el reloj con token de Moodle en el llavero: funciona sola, sin iPhone ni Mac cerca, y el PIN no se guarda',
+    tags: ['SwiftUI', 'watchOS', 'Moodle API'],
+    media: { src: 'assets/img/projects/uam-class-watch.jpg', alt: 'Tres pantallas de UAM Class Watch en un Apple Watch: inicio con el promedio en pétalos, contenido del curso y temporizador de estudio' },
+    links: [gh('uam-class-watch-standalone')],
+  },
+  {
     id: 'umbra',
     title: 'umbra',
     line: 'cada bit va a una posición que solo conoce quien tiene la clave, y con ±1 para no dejar rastro en el histograma',
