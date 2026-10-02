@@ -6,6 +6,14 @@ const gh = (repo) => ({ label: 'código', href: `https://github.com/kisnner26/${
 
 export const projects = [
   {
+    id: 'lumora',
+    title: 'lumora',
+    line: 'claude lee la letra antes de que suene y escribe el guion por verso; todo se dibuja con código en WebGL, sin una sola imagen',
+    tags: ['JavaScript', 'WebGL', 'Python', 'Spotify API'],
+    media: { src: 'assets/img/projects/lumora.jpg', alt: 'Lumora: toma de un videoclip en risografía con corazón, flor y reloj que se dibujan solos y la letra escrita a mano' },
+    links: [{ label: 'demo', href: 'https://kisnner26.github.io/lumora/' }, gh('lumora')],
+  },
+  {
     id: 'umbra',
     title: 'umbra',
     line: 'cada bit va a una posición que solo conoce quien tiene la clave, y con ±1 para no dejar rastro en el histograma',
@@ -36,30 +44,6 @@ export const projects = [
     tags: ['JavaScript', 'Three.js'],
     media: { src: 'assets/img/projects/2-player-web.jpg', alt: 'Menú principal de 2 Player Arcade con el juego Pong Neón' },
     links: [{ label: 'demo', href: 'https://kisnner26.github.io/2-player-web/' }, gh('2-player-web')],
-  },
-  {
-    id: 'uam-class',
-    title: 'UAM Class',
-    line: 'token de sesión en Keychain: el PIN nunca se guarda en disco',
-    tags: ['SwiftUI', 'macOS'],
-    media: { sketch: ['UAM Class', 'token en Keychain', 'multi-cuenta simultánea', 'sin cookies, solo API'] },
-    links: [gh('uam-class')],
-  },
-  {
-    id: 'aula-abierta',
-    title: 'Aula Abierta',
-    line: 'currículo que se congela y se clona: se escribe una vez y se enseña muchas',
-    tags: ['Laravel', 'React', 'PostgreSQL'],
-    media: { sketch: ['Aula Abierta', 'plataforma open source', 'para academias de idiomas', 'roles · rúbricas · reportes'] },
-    links: [gh('aula-abierta')],
-  },
-  {
-    id: 'lidless',
-    title: 'Lidless',
-    line: 'mide bytes de red por proceso, no solo CPU: Claude Code pasa el tiempo esperando la red',
-    tags: ['Swift', 'macOS', 'IOKit'],
-    media: { sketch: ['Lidless', 'mac despierto con la tapa cerrada', 'solo mientras Claude Code trabaja', 'batería · temperatura · tope de 6 h'] },
-    links: [gh('lidless')],
   },
   {
     id: 'tiktok-gesture-scroll',
