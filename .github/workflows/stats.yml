@@ -1,0 +1,29 @@
+name: estadísticas
+
+on:
+  schedule:
+    - cron: '23 */6 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['scripts/update-stats.sh', '.github/workflows/stats.yml']
+
+permissions:
+  contents: write
+
+jobs:
+  stats:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: consultar github
+        run: ./scripts/update-stats.sh kisnner26
+        env:
+          # con un secreto STATS_TOKEN (pat de lectura) también se cuentan las contribuciones privadas
+          GH_TOKEN: ${{ secrets.STATS_TOKEN || github.token }}
+      - name: guardar si cambió
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/stats.json
+          git diff --cached --quiet || (git commit -m "stats: actualiza cifras de github" && git push)

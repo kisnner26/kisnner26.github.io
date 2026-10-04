@@ -14,6 +14,14 @@ export const projects = [
     links: [{ label: 'demo', href: 'https://kisnner26.github.io/lumora/' }, gh('lumora')],
   },
   {
+    id: 'nexo',
+    title: 'Nexo',
+    line: 'un canal propio firmado con HMAC sobre Bonjour, sin servidores ni cuentas: el reloj llega a la Mac directo o a través del iPhone',
+    tags: ['SwiftUI', 'watchOS', 'Network.framework', 'Liquid Glass'],
+    media: { src: 'assets/img/projects/nexo.jpg', alt: 'Tres pantallas de Nexo en un iPhone: estado de la Mac con batería y reproductor, trackpad táctil y lista de apps con sus iconos' },
+    links: [gh('nexo')],
+  },
+  {
     id: 'opti-hub',
     title: 'Opti Hub',
     line: 'cada ajuste guarda su valor anterior y se deshace uno a uno; no toca Defender, UAC ni Windows Update',

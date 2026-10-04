@@ -1,5 +1,3 @@
-import { certificates } from './certificates.js';
-
 /** Datos personales. Edita aquí; ningún componente tiene texto escrito a mano. */
 export const profile = {
   name: 'Kisnner Obando',
@@ -15,10 +13,9 @@ export const profile = {
     email: 'kisnnerobando7@gmail.com',
   },
   freelanceSince: '2025-01-01',
-  // cifras de GitHub a 2026-09-20 (api graphql y `gh search prs`); los PRs cuentan los enviados a repos de otros, en cualquier estado
-  stats: [
-    { value: '289', label: 'contribuciones en GitHub en los últimos 12 meses' },
-    { value: '13', label: 'pull requests a proyectos ajenos: radare2, rizin y Apple; 2 ya mergeados' },
-    { value: String(certificates.length), label: 'certificaciones: Harvard, Cisco, Anthropic y más' },
-  ],
+  // últimos valores conocidos (2026-09-20): solo se usan si data/stats.json no carga; lo normal es que mande js/lib/liveStats.js
+  fallbackStats: {
+    contributions: { value: '289', label: 'contribuciones en GitHub en los últimos 12 meses' },
+    prs: { value: '13', label: 'pull requests a proyectos ajenos: radare2, rizin y Apple; 2 ya mergeados' },
+  },
 };

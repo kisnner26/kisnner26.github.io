@@ -6,6 +6,9 @@
 .oss-badge { border-radius: 999px; padding: 4px 9px; font-size: .78rem; font-weight: 600; white-space: nowrap; }
 .oss-badge--merged { background: #dfeadd; color: #294723; }
 .oss-badge--open { background: #f0e0bb; color: #735010; }
+.oss-badge--closed { background: #e6e1d8; color: #5d574b; }
+.oss-more { margin-top: 16px; color: var(--mid); font-size: .92rem; }
 :root[data-theme="night"] .oss-badge--merged { background: #294723; color: #dfeadd; }
 :root[data-theme="night"] .oss-badge--open { background: #735010; color: #f5e8c8; }
+:root[data-theme="night"] .oss-badge--closed { background: #3a362e; color: #cfc8b8; }
 @media (max-width: 600px) { .oss-row { grid-template-columns: 1fr; gap: 8px; } .oss-badge { justify-self: start; } }

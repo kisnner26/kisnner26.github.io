@@ -1,7 +1,7 @@
 import { h, extLink } from '../lib/dom.js';
 import { section } from './section.js';
 
-const STATUS = { merged: 'mergeado', open: 'abierto' };
+const STATUS = { merged: 'mergeado', open: 'abierto', closed: 'cerrado' };
 
 function row(c) {
   return h('div', { class: 'oss-row' },
@@ -14,9 +14,12 @@ function row(c) {
   );
 }
 
-export function renderOss(contributions) {
+export function renderOss(contributions, live = null) {
   return section(
     { id: 'oss', eyebrow: 'open source', title: 'Contribuciones', sub: 'pull requests a herramientas que uso, probados contra binarios y tests reales antes de enviarlos.' },
     h('div', { class: 'oss-list' }, contributions.map(row)),
+    live && live.prs.total > contributions.length && h('p', { class: 'oss-more' },
+      extLink(`https://github.com/pulls?q=author%3A${live.login}+-user%3A${live.login}+is%3Apr`, `ver los ${live.prs.total} pull requests en GitHub`),
+      ` · ${live.prs.merged} mergeados, ${live.prs.open} abiertos, ${live.prs.closed} cerrados · actualizado el ${live.updated}`),
   );
 }

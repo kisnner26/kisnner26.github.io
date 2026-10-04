@@ -15,6 +15,7 @@ import { renderCertificates } from './components/certificates.js';
 import { renderExperience } from './components/experience.js';
 import { renderFooter } from './components/footer.js';
 import { observeReveals } from './lib/reveal.js';
+import { loadLiveStats, buildStats, mergeContributions } from './lib/liveStats.js';
 
 const app = document.getElementById('app');
 const loading = document.getElementById('loading');
@@ -23,7 +24,7 @@ const hideLoader = mountLoader(loading);
 app.append(
   renderNav(),
   renderHero(profile),
-  renderStats(profile.stats),
+  renderStats(buildStats({ live: null, fallback: profile.fallbackStats, certificates })),
   hMain(renderProjects(projects), renderWriteups(writeups), renderOss(contributions), renderCertificates(certificates), renderExperience(experience)),
   renderFooter(profile),
 );
@@ -35,4 +36,15 @@ function hMain(...children) {
 }
 
 observeReveals(app);
+
+// cifras vivas: se pintan primero con el respaldo y se reemplazan cuando llega data/stats.json
+loadLiveStats().then((live) => {
+  if (!live) return;
+  const stats = app.querySelector('.stats')?.closest('.wrap');
+  if (stats) stats.replaceWith(renderStats(buildStats({ live, fallback: profile.fallbackStats, certificates })));
+  const oss = app.querySelector('#oss');
+  if (oss) oss.replaceWith(renderOss(mergeContributions(contributions, live), live));
+  observeReveals(app);
+  app.querySelectorAll('.stats, #oss').forEach((el) => el.classList.add('in'));
+});
 requestAnimationFrame(() => requestAnimationFrame(hideLoader));

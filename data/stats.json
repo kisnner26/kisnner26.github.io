@@ -1,0 +1,175 @@
+{
+  "updated": "2026-10-04",
+  "login": "kisnner26",
+  "contributions": 567,
+  "prs": {
+    "total": 17,
+    "merged": 3,
+    "open": 8,
+    "closed": 6,
+    "owners": [
+      "rizinorg",
+      "apple",
+      "NormanSMA",
+      "radareorg",
+      "drewster99",
+      "hoowertsg19",
+      "kimziro"
+    ],
+    "items": [
+      {
+        "repo": "ClaudeHub",
+        "owner": "NormanSMA",
+        "title": "feat: extension de Safari con limites del plan y chats activos",
+        "number": 2,
+        "url": "https://github.com/NormanSMA/ClaudeHub/pull/2",
+        "status": "open",
+        "createdAt": "2026-10-04T10:34:16Z"
+      },
+      {
+        "repo": "ClaudeHub",
+        "owner": "NormanSMA",
+        "title": "docs: probado a mano en macOS 27 (Apple Silicon) con capturas",
+        "number": 1,
+        "url": "https://github.com/NormanSMA/ClaudeHub/pull/1",
+        "status": "open",
+        "createdAt": "2026-10-04T10:20:00Z"
+      },
+      {
+        "repo": "swift-llm-kit",
+        "owner": "drewster99",
+        "title": "KeychainService: retry the update when a concurrent save wins SecItemAdd",
+        "number": 27,
+        "url": "https://github.com/drewster99/swift-llm-kit/pull/27",
+        "status": "merged",
+        "createdAt": "2026-09-25T15:54:56Z"
+      },
+      {
+        "repo": "rizin",
+        "owner": "rizinorg",
+        "title": "`rz-find`: fix string truncation in `-Z` mode",
+        "number": 6782,
+        "url": "https://github.com/rizinorg/rizin/pull/6782",
+        "status": "open",
+        "createdAt": "2026-09-22T03:12:54Z"
+      },
+      {
+        "repo": "rizin",
+        "owner": "rizinorg",
+        "title": "bin/pebble: expose header info via iH (bin_structure)",
+        "number": 6766,
+        "url": "https://github.com/rizinorg/rizin/pull/6766",
+        "status": "closed",
+        "createdAt": "2026-09-18T18:46:22Z"
+      },
+      {
+        "repo": "rizin",
+        "owner": "rizinorg",
+        "title": "bin/p9: expose header info via iH (bin_structure)",
+        "number": 6765,
+        "url": "https://github.com/rizinorg/rizin/pull/6765",
+        "status": "closed",
+        "createdAt": "2026-09-18T18:41:40Z"
+      },
+      {
+        "repo": "rizin",
+        "owner": "rizinorg",
+        "title": "bin/psxexe: expose header info via iH (bin_structure)",
+        "number": 6764,
+        "url": "https://github.com/rizinorg/rizin/pull/6764",
+        "status": "closed",
+        "createdAt": "2026-09-18T12:02:07Z"
+      },
+      {
+        "repo": "swift-nio-extras",
+        "owner": "apple",
+        "title": "NIOWritePCAPHandler: fall back to fake addresses for UDS channels",
+        "number": 327,
+        "url": "https://github.com/apple/swift-nio-extras/pull/327",
+        "status": "open",
+        "createdAt": "2026-09-18T11:56:49Z"
+      },
+      {
+        "repo": "swift-nio",
+        "owner": "apple",
+        "title": "NIOFileSystem: add FileInfo.onDiskSize",
+        "number": 3744,
+        "url": "https://github.com/apple/swift-nio/pull/3744",
+        "status": "open",
+        "createdAt": "2026-09-18T09:55:06Z"
+      },
+      {
+        "repo": "rizin",
+        "owner": "rizinorg",
+        "title": "rz-find: don't truncate strings in -Z mode",
+        "number": 6761,
+        "url": "https://github.com/rizinorg/rizin/pull/6761",
+        "status": "closed",
+        "createdAt": "2026-09-18T09:49:51Z"
+      },
+      {
+        "repo": "swift-argument-parser",
+        "owner": "apple",
+        "title": "Make displayed usage/error command name reflect the actual invoked binary",
+        "number": 972,
+        "url": "https://github.com/apple/swift-argument-parser/pull/972",
+        "status": "open",
+        "createdAt": "2026-09-18T04:26:37Z"
+      },
+      {
+        "repo": "radare2",
+        "owner": "radareorg",
+        "title": "core: trim 14 more help descriptions to fit within 80 columns",
+        "number": 26749,
+        "url": "https://github.com/radareorg/radare2/pull/26749",
+        "status": "merged",
+        "createdAt": "2026-09-18T03:57:47Z"
+      },
+      {
+        "repo": "radare2",
+        "owner": "radareorg",
+        "title": "core: trim 14 help descriptions to fit within 80 columns",
+        "number": 26745,
+        "url": "https://github.com/radareorg/radare2/pull/26745",
+        "status": "merged",
+        "createdAt": "2026-09-17T21:52:58Z"
+      },
+      {
+        "repo": "PeerBeam",
+        "owner": "hoowertsg19",
+        "title": "devex: add Docker-based local development workflow",
+        "number": 9,
+        "url": "https://github.com/hoowertsg19/PeerBeam/pull/9",
+        "status": "open",
+        "createdAt": "2026-09-17T21:29:47Z"
+      },
+      {
+        "repo": "altserver-macos27-anisette-fix",
+        "owner": "kimziro",
+        "title": "fix: replace blocked Xcode client identifier in anisette client-info",
+        "number": 11,
+        "url": "https://github.com/kimziro/altserver-macos27-anisette-fix/pull/11",
+        "status": "open",
+        "createdAt": "2026-09-17T21:05:29Z"
+      },
+      {
+        "repo": "rizin",
+        "owner": "rizinorg",
+        "title": "core: add gadget.bytes.length to limit table-mode gadget bytes column",
+        "number": 6723,
+        "url": "https://github.com/rizinorg/rizin/pull/6723",
+        "status": "closed",
+        "createdAt": "2026-09-09T03:59:49Z"
+      },
+      {
+        "repo": "rizin",
+        "owner": "rizinorg",
+        "title": "core: read past the block boundary for null/unprintable-delimited ps",
+        "number": 6722,
+        "url": "https://github.com/rizinorg/rizin/pull/6722",
+        "status": "closed",
+        "createdAt": "2026-09-09T03:29:55Z"
+      }
+    ]
+  }
+}
