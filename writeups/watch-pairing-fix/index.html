@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The watch wasn't broken. My iPhone was behind. — Kisnner Obando</title>
+<meta name="description" content="The fix for the Apple Watch that never reconnected on watchOS 27: the watch was on 27.2 while the iPhone was still on 27.0. Reconstructed from the iPhone's own analytics logs, with what they prove and what they don't.">
+<meta name="theme-color" content="#f5f0e8">
+<link rel="canonical" href="https://kisnner26.github.io/writeups/watch-pairing-fix/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23f5f0e8'/%3E%3Cpath d='M32 55V18M32 27C18 18 12 9 17 5c7 1 13 10 15 22M32 35c14-9 20-18 15-22-7 1-13 10-15 22' fill='none' stroke='%231a1208' stroke-linecap='round' stroke-width='3'/%3E%3C/svg%3E">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://kisnner26.github.io/writeups/watch-pairing-fix/">
+<meta property="og:title" content="The watch wasn't broken. My iPhone was behind.">
+<meta property="og:description" content="The fix for the Apple Watch that never reconnected on watchOS 27: the watch was on 27.2 while the iPhone was still on 27.0. Reconstructed from the iPhone's own analytics logs, with what they prove and what they don't.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="The watch wasn't broken. My iPhone was behind.">
+<meta name="twitter:description" content="The fix for the Apple Watch that never reconnected on watchOS 27: the watch was on 27.2 while the iPhone was still on 27.0. Reconstructed from the iPhone's own analytics logs, with what they prove and what they don't.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=IM+Fell+English:ital@0;1&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../css/tokens.css">
+<link rel="stylesheet" href="../../css/base.css">
+<link rel="stylesheet" href="../../css/components/writeup.css">
+
+<script>
+  // aplica el tema guardado antes de pintar, para evitar el parpadeo
+  try { var t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+</script>
+</head>
+<body style="padding-bottom:0">
+<article class="wu">
+  <nav class="wu-top" aria-label="Navegación">
+    <a class="wu-back" href="../../#writeups">← portafolio</a>
+    <button class="wu-theme" type="button" id="theme" aria-label="Cambiar entre papel y noche">☾ Noche</button>
+  </nav>
+
+  <header class="wu-head">
+    <span class="wu-eyebrow">writeup</span>
+    <h1 class="wu-title">the watch wasn't broken. my iphone was behind.</h1>
+    <p class="wu-meta">kisnner obando · october 2026 · ios 27.0 → 27.2 · watchos 27.2 · device hub · <a href="https://github.com/kisnner26/watchos27-pairing-bug/blob/main/docs/resolution.md" target="_blank" rel="noopener noreferrer">the resolution doc</a> · status: <strong>fixed on my setup, root cause unproven</strong></p>
+  </header>
+
+  <div class="wu-body">
+<p>this is the sequel to <a href="../watch-pairing/">my apple watch paired fine. then it forgot.</a>, where i ended with "the fault is on the watch" and "this needs a watchos fix". it didn't. what fixed it was updating the <strong>iphone</strong>. this writeup is how i checked that, because i couldn't prove it the way i wanted to, and what the evidence does and doesn't say.</p>
+<h2>tl;dr</h2>
+<ul>
+<li>the watch was on <strong>watchos 27.2</strong> the whole time. the iphone was on <strong>ios 27.0</strong>. updating only the watch (what i tried first) kept it newer than its companion.</li>
+<li>unpairing and re-pairing the watch in the watch app, still on ios 27.0, didn't help. device hub kept failing with <code>DeviceKitError 4002</code>.</li>
+<li>updating the iphone to <strong>ios 27.2</strong> and pairing from device hub worked. the iphone's analytics logs line up: the update finished at 00:26, after the re-pairing, with no further re-pairing after it.</li>
+<li>i can't see the coredevice side anymore, so the cause is a hypothesis (version mismatch), not a diagnosis. fb24924229 is still open.</li>
+</ul>
+<h2>the symptom that was left</h2>
+<p>after re-pairing, device hub's live view of the watch kept failing:</p>
+<pre><code>DeviceKitError  errorCode 4002
+"Live device view took longer than expected to connect."
+</code></pre>
+<p>the iphone ↔ watch link was healthy (mirroring worked). only the mac ↔ watch path through device hub was dead, which is the same shape as the original bug. nothing i tried on the mac changed it.</p>
+<h2>where i went looking</h2>
+<p>i wanted the pairing logs from the night i re-paired. the mac's unified log had nothing:</p>
+<pre><code>$ log show --last 24h --predicate 'process == "remotepairingd"' | wc -l
+0
+</code></pre>
+<p>those messages expire within hours. but the iphone keeps its own record, and it's much longer-lived: it keeps <code>.ips</code> diagnostic files for weeks (<em>settings ▸ privacy &amp; security ▸ analytics &amp; improvements ▸ analytics data</em>), and <code>devicectl</code> can copy them without any extra tool:</p>
+<pre><code>$ xcrun devicectl device info files --device &lt;iphone&gt; --domain-type systemCrashLogs
+$ xcrun devicectl device copy from  --device &lt;iphone&gt; --domain-type systemCrashLogs \
+      --source &lt;file&gt; --destination &lt;path&gt;
+</code></pre>
+<p>480 files, going back to at least the 27th of september. two of them mattered, and one trick: the header of every <code>JetsamEvent-*.ips</code> records the os build at that moment, so a pile of crash-ish files becomes a version history.</p>
+<h2>the timeline</h2>
+<p>local time, utc−6, all read from the iphone:</p>
+<table>
+<tr><th>when</th><th>what the files show</th></tr>
+<tr><td>until oct 2, 17:19</td><td>iphone on <strong>ios 27.0 (24A5418b)</strong></td></tr>
+<tr><td>oct 2, 22:06 → 22:41</td><td>the watch's pairing identity on the iphone changes: one <code>ProxiedDevice-*</code> folder stops, another starts</td></tr>
+<tr><td>oct 2, 23:45 – 23:54</td><td>a pairing performance report: activation ~11 s, passcode and unlock pairing, initial sync, no errors</td></tr>
+<tr><td>oct 3, 00:26</td><td><strong>iphone updated to ios 27.2 (24B5089g)</strong>; <code>ota_result_success</code></td></tr>
+<tr><td>from oct 3, 10:27</td><td>iphone on 27.2; the same watch identity until the end of the files, no further re-pairing</td></tr>
+</table>
+<p>the watch was on <strong>watchos 27.2 (24S5091f)</strong> under both identities. so for the whole failure the watch was newer than its iphone.</p>
+<p>after the update, <code>devicectl device info details</code> on the watch reads <code>pairingState: paired</code>, <code>transportType: localNetwork</code>, <code>authenticationType: manualPairing</code>, and installing apps on it worked again.</p>
+<h2>what this proves and what it doesn't</h2>
+<ul>
+<li><strong>it proves</strong> the mismatch existed (27.2 watch, 27.0 iphone), that the iphone ↔ watch pairing was clean, and that the improvement came with the iphone update, not with another re-pairing.</li>
+<li><strong>it doesn't prove</strong> why. <code>remotepairingd</code> and <code>verifyManualPairing</code> never land in these files, so the reason the watch asked for a brand-new pair-setup in a loop is still unexplained. "the companion and the watch must run matching versions" is my working hypothesis. i'd say it out loud as a hypothesis.</li>
+<li><strong>it can't tell me one detail:</strong> the identity switch is logged at 22:41 and the pairing report spans 23:45–23:54. either i made more than one attempt that night, or the report is written at the end. the files don't say.</li>
+</ul>
+<h2>mistakes i made along the way</h2>
+<ul>
+<li><strong>updating only the watch.</strong> it looked like the obvious thing ("retested on watchos 27.2: same behavior") and it widened the gap with the iphone.</li>
+<li><strong>writing "the fault is on the watch" with the iphone still on a different build.</strong> every control i ran compared the watch against the iphone, and never asked whether their versions matched. the first thing to check on a companion device is the companion's version.</li>
+<li><strong>looking for the evidence in the one log that expires.</strong> the mac's log had nothing; the iphone's kept it for weeks.</li>
+</ul>
+<h2>takeaways</h2>
+<ul>
+<li><strong>check that companions match before debugging the protocol.</strong> iphone and watch on the same release line. a minute of work that i did last.</li>
+<li><strong>analytics logs are a version history.</strong> every jetsam header carries the os build, and <code>devicectl ... systemCrashLogs</code> gets them off the phone.</li>
+<li><strong>capture before you pair.</strong> if it happens again: <code>log stream --predicate 'process == "remotepairingd" OR process == "CoreDeviceService"'</code> into a file, then pair.</li>
+<li><strong>a fix isn't a diagnosis.</strong> this one worked, and i still don't know the mechanism.</li>
+</ul>
+<h2>links</h2>
+<ul>
+<li><a href="https://github.com/kisnner26/watchos27-pairing-bug/blob/main/docs/resolution.md" target="_blank" rel="noopener noreferrer">docs/resolution.md</a>: the timeline above, the commands and the limits, in english and <a href="https://github.com/kisnner26/watchos27-pairing-bug/blob/main/docs/resolution.es.md" target="_blank" rel="noopener noreferrer">español</a></li>
+<li><a href="../watch-pairing/">the original investigation</a></li>
+<li><a href="https://github.com/kisnner26/watchos27-pairing-bug" target="_blank" rel="noopener noreferrer">kisnner26/watchos27-pairing-bug</a></li>
+</ul>
+  </div>
+
+  <footer class="wu-foot">
+    <p><a href="../../#writeups">← back to the portfolio</a> · <a href="https://github.com/kisnner26" target="_blank" rel="noopener noreferrer">github.com/kisnner26</a></p>
+  </footer>
+</article>
+
+<script type="module">
+  import { toggleTheme, currentTheme } from '../../js/lib/theme.js';
+  const btn = document.getElementById('theme');
+  const label = () => { btn.textContent = currentTheme() === 'night' ? '☀ Papel' : '☾ Noche'; };
+  label();
+  btn.addEventListener('click', () => { toggleTheme(); label(); });
+</script>
+</body>
+</html>

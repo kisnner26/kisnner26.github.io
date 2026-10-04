@@ -39,10 +39,11 @@
   <header class="wu-head">
     <span class="wu-eyebrow">writeup</span>
     <h1 class="wu-title">my apple watch paired fine. then it forgot.</h1>
-    <p class="wu-meta">kisnner obando · september 2026 · watchos 27.2 · xcode 27 / device hub · macos 27.2 · <a href="https://github.com/kisnner26/watchos27-pairing-bug" target="_blank" rel="noopener noreferrer">the repo</a> · status: <strong>open</strong></p>
+    <p class="wu-meta">kisnner obando · september 2026 · watchos 27.2 · xcode 27 / device hub · macos 27.2 · <a href="https://github.com/kisnner26/watchos27-pairing-bug" target="_blank" rel="noopener noreferrer">the repo</a> · status: <strong>fixed later, see <a href="../watch-pairing-fix/">the follow-up</a></strong></p>
   </header>
 
   <div class="wu-body">
+<p><strong>update, october 3:</strong> this turned out to be fixed by updating the <em>iphone</em> to ios 27.2, not by anything on the watch. the follow-up has the evidence and its limits: <a href="../watch-pairing-fix/">the watch wasn't broken. my iphone was behind.</a> what follows is the investigation as i wrote it at the time.</p>
 <p>a writeup of an apple watch ultra 2 that disappeared from xcode 27 and never came back. this one isn't solved. what i have is a much narrower description of the failure than "it won't connect", built from logs on the mac and on the watch, one experiment that changed my theory, and a dead end with an independent pairing host. it's reported to apple as <strong>FB24924229</strong>.</p>
 <h2>tl;dr</h2>
 <ul>

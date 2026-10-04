@@ -1,10 +1,19 @@
 /** Investigaciones escritas. `line` resume el hallazgo, no el tema. */
 export const writeups = [
   {
+    id: 'watch-pairing-fix',
+    date: 'oct 2026',
+    title: "the watch wasn't broken. my iphone was behind.",
+    line: 'La solución al caso del reloj: iba en watchOS 27.2 con el iPhone en 27.0. Lo reconstruí con los logs de analítica del iPhone (la versión de iOS en cada log y la hora exacta de la actualización). Funciona, pero la causa raíz sigue sin probarse',
+    tags: ['watchOS', 'iOS', 'devicectl', 'logs'],
+    lang: 'en',
+    href: 'writeups/watch-pairing-fix/',
+  },
+  {
     id: 'watch-pairing',
     date: 'sep 2026',
     title: 'my apple watch paired fine. then it forgot.',
-    line: 'watchOS 27: el emparejamiento con Device Hub sale bien, pero el reloj vuelve pidiendo uno nuevo en vez de verificarse. Lo acoté con logs de ambos lados, un listener propio y un host independiente. Sigue abierto (FB24924229)',
+    line: 'watchOS 27: el emparejamiento con Device Hub sale bien, pero el reloj vuelve pidiendo uno nuevo en vez de verificarse. Lo acoté con logs de ambos lados, un listener propio y un host independiente. Se resolvió después actualizando el iPhone; el reporte a Apple sigue abierto (FB24924229)',
     tags: ['watchOS', 'CoreDevice', 'logs', 'protocolos'],
     lang: 'en',
     href: 'writeups/watch-pairing/',
