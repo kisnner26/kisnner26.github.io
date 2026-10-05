@@ -23,6 +23,7 @@ function card(p) {
 export function renderProjects(projects) {
   return section(
     { id: 'proyectos', eyebrow: 'cuaderno de trabajo', title: 'Proyectos', sub: 'cada tarjeta cuenta la decisión técnica que más define al proyecto.' },
-    h('div', { class: 'grid' }, projects.map(card)),
+    h('p', { class: 'rail-hint', 'aria-hidden': 'true' }, 'desliza para ver más →'),
+    h('div', { class: 'grid rail' }, projects.map(card)),
   );
 }

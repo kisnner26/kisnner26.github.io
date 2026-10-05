@@ -23,3 +23,14 @@
   .hero-center { margin-bottom: 0; }
   .hero-plant { width: clamp(110px, 32vw, 150px); bottom: -28px; }
 }
+
+/* teléfonos: título grande en dos líneas y texto más compacto */
+@media (max-width: 640px) {
+  .hero-title { font-size: clamp(3.1rem, 17vw, 5rem); line-height: .9; }
+  .hero-kicker { font-size: clamp(1.5rem, 6.5vw, 2rem); margin-bottom: 14px; }
+  .hero-rule { margin: 22px auto 18px; }
+  .hero-lede { font-size: 1.08rem; line-height: 1.5; }
+  .hero-tagline { margin-top: 18px; font-size: .98rem; }
+  .btn-row { margin-top: 22px; }
+  .btn-row .btn { flex: 1 1 140px; max-width: 200px; }
+}

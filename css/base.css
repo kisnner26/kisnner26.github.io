@@ -6,7 +6,7 @@ body {
   background: var(--paper);
   color: var(--ink);
   font-family: var(--serif);
-  font-size: clamp(16px, 15px + .25vw, 18px);
+  font-size: clamp(17px, 16px + .25vw, 18px);
   line-height: 1.55;
   min-height: 100vh;
   min-height: 100dvh;
@@ -58,4 +58,12 @@ img { height: auto; }
   .card:hover { transform: none; box-shadow: 3px 3px 0 var(--paper-dark); }
   .card:hover .card-media img { transform: none; }
   .btn:hover { transform: none; }
+}
+
+/* Cormorant es fino y de x-height baja: en pantallas pequeñas pide más peso y contraste */
+@media (max-width: 640px) {
+  body { font-weight: 500; line-height: 1.5; }
+  :root { --mid: #46391f; }
+  :root[data-theme="night"] { --mid: #cbbd9d; }
+  .sec-sub, .card-line, .experience-org, .oss-meta { font-weight: 500; }
 }

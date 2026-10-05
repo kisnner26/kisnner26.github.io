@@ -28,6 +28,7 @@ function certificate(c) {
 export function renderCertificates(certificates) {
   return section(
     { id: 'certificados', eyebrow: 'aprendizaje continuo', title: 'Certificados', sub: 'cursos que terminé, con sus evidencias cuando están disponibles.' },
-    h('div', { class: 'certificates' }, certificates.map(certificate)),
+    h('p', { class: 'rail-hint', 'aria-hidden': 'true' }, 'desliza para ver más →'),
+    h('div', { class: 'certificates rail' }, certificates.map(certificate)),
   );
 }

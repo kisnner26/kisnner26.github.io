@@ -13,3 +13,10 @@
 .tag { border: 1px solid var(--faint); border-radius: 999px; padding: 3px 9px; color: var(--mid); font-size: .84rem; }
 .card-links { margin-top: auto; padding-top: 4px; }
 .card-links a { color: var(--accent); font-weight: 600; }
+
+@media (max-width: 640px) {
+  .card-body { gap: 11px; padding: 16px; }
+  .card-title { font-size: 1.5rem; }
+  .card-media { aspect-ratio: 16 / 9; }
+  .card-links a { display: inline-flex; align-items: center; min-height: 36px; }
+}

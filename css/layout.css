@@ -1,6 +1,6 @@
 .wrap { width: 100%; max-width: var(--wrap); margin: 0 auto; padding-inline: max(var(--gutter), var(--safe-l)) max(var(--gutter), var(--safe-r)); }
 
-.section { padding-block: clamp(56px, 10vw, 104px); }
+.section { padding-block: clamp(44px, 10vw, 104px); }
 .section + .section { border-top: 1px solid var(--faint); }
 
 .grid {
@@ -16,4 +16,13 @@
 /* pantallas muy angostas: Fold plegado, relojes de bolsillo */
 @media (max-width: 340px) {
   .grid, .certificates { grid-template-columns: 1fr; }
+}
+
+/* teléfonos: tarjetas en carrusel horizontal con snap, en vez de una columna interminable */
+.rail-hint { display: none; }
+@media (max-width: 640px) {
+  .rail-hint { display: block; margin: -12px 0 14px; color: var(--mid); font-size: .92rem; font-style: italic; }
+  .rail { display: flex; gap: 14px; margin-inline: calc(-1 * max(var(--gutter), var(--safe-l))); padding: 2px max(var(--gutter), var(--safe-l)) 14px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: max(var(--gutter), var(--safe-l)); overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .rail::-webkit-scrollbar { display: none; }
+  .rail > * { flex: 0 0 min(84%, 340px); scroll-snap-align: start; scroll-snap-stop: always; }
 }
