@@ -1,4 +1,4 @@
-.wrap { width: 100%; max-width: var(--wrap); margin: 0 auto; padding-inline: clamp(16px, 4vw, 28px); }
+.wrap { width: 100%; max-width: var(--wrap); margin: 0 auto; padding-inline: max(var(--gutter), var(--safe-l)) max(var(--gutter), var(--safe-r)); }
 
 .section { padding-block: clamp(56px, 10vw, 104px); }
 .section + .section { border-top: 1px solid var(--faint); }
@@ -7,4 +7,13 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 290px), 1fr));
   gap: clamp(18px, 3vw, 30px);
+}
+
+/* pantallas de doble panel (Surface Duo y similares): el contenido no cruza la bisagra */
+@media (horizontal-viewport-segments: 2) {
+  .wrap { max-width: calc(env(viewport-segment-width 0 0, 50vw) - 8px); margin-inline: 0; }
+}
+/* pantallas muy angostas: Fold plegado, relojes de bolsillo */
+@media (max-width: 340px) {
+  .grid, .certificates { grid-template-columns: 1fr; }
 }

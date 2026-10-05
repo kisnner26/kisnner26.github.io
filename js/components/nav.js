@@ -13,7 +13,7 @@ const items = [
 /** Barra inferior con botones de contorno. Marca la sección visible y alterna el tema. */
 export function renderNav() {
   const links = items.map(({ id, label }) =>
-    h('a', { class: 'nav-btn', href: `#${id}`, 'data-target': id }, h('span', {}, `✦ ${label}`)));
+    h('a', { class: 'nav-btn', href: `#${id}`, 'data-target': id }, h('span', {}, h('i', { class: 'nav-glyph', 'aria-hidden': 'true' }, '✦ '), label)));
 
   const themeLabel = h('span', {}, '');
   const setLabel = () => { themeLabel.textContent = currentTheme() === 'night' ? '☀ Papel' : '☾ Noche'; };

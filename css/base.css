@@ -1,14 +1,17 @@
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+html { scroll-behavior: smooth; scroll-padding-top: 24px; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; overflow-x: clip; }
 
 body {
   background: var(--paper);
   color: var(--ink);
   font-family: var(--serif);
-  font-size: 18px;
+  font-size: clamp(16px, 15px + .25vw, 18px);
   line-height: 1.55;
   min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: clip;
+  overflow-wrap: break-word;
   padding-bottom: calc(var(--nav-h) + env(safe-area-inset-bottom, 0px));
   transition: background .5s ease, color .5s ease;
   -webkit-font-smoothing: antialiased;
@@ -29,7 +32,8 @@ h1, h2, h3 { font-family: var(--display); font-weight: 400; text-wrap: balance; 
 p { text-wrap: pretty; }
 a { color: inherit; text-decoration-color: var(--faint); text-underline-offset: 4px; transition: text-decoration-color .2s; }
 a:hover { text-decoration-color: var(--ink); }
-img { display: block; max-width: 100%; }
+img, svg { display: block; max-width: 100%; }
+img { height: auto; }
 ::selection { background: var(--ink); color: var(--paper); }
 :focus-visible { outline: 1px dashed var(--ink); outline-offset: 4px; border-radius: 4px; }
 
@@ -47,4 +51,11 @@ img { display: block; max-width: 100%; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* hover solo donde existe puntero; en táctil queda el estado normal */
+@media (hover: none) {
+  .card:hover { transform: none; box-shadow: 3px 3px 0 var(--paper-dark); }
+  .card:hover .card-media img { transform: none; }
+  .btn:hover { transform: none; }
 }

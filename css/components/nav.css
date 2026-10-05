@@ -1,7 +1,23 @@
-.nav-bar { position: fixed; z-index: 20; left: 50%; bottom: max(12px, env(safe-area-inset-bottom)); transform: translateX(-50%); display: flex; align-items: center; gap: 4px; width: max-content; max-width: calc(100vw - 24px); padding: 5px; border: 1px solid var(--faint); border-radius: var(--radius); background: color-mix(in srgb, var(--paper) 92%, transparent); box-shadow: 0 8px 24px rgb(26 18 8 / .12); overflow-x: auto; scrollbar-width: none; }
+.nav-bar { position: fixed; z-index: 20; left: 50%; bottom: max(10px, env(safe-area-inset-bottom)); transform: translateX(-50%); display: flex; align-items: center; gap: 4px; width: max-content; max-width: calc(100vw - 20px - var(--safe-l) - var(--safe-r)); padding: 5px; border: 1px solid var(--faint); border-radius: var(--radius); background: color-mix(in srgb, var(--paper) 92%, transparent); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); box-shadow: 0 8px 24px rgb(26 18 8 / .12); overflow-x: auto; scrollbar-width: none; overscroll-behavior: contain; }
 .nav-bar::-webkit-scrollbar { display: none; }
-.nav-btn { display: inline-flex; flex: 0 0 auto; align-items: center; justify-content: center; min-height: 42px; padding: 7px 11px; border: 1px solid transparent; border-radius: var(--radius-sm); background: transparent; color: var(--mid); font: 600 .84rem/1 var(--serif); text-decoration: none; white-space: nowrap; cursor: pointer; }
+.nav-btn { display: inline-flex; flex: 0 0 auto; align-items: center; justify-content: center; min-height: 44px; padding: 7px 11px; border: 1px solid transparent; border-radius: var(--radius-sm); background: transparent; color: var(--mid); font: 600 .84rem/1 var(--serif); text-decoration: none; white-space: nowrap; cursor: pointer; touch-action: manipulation; }
+.nav-glyph { font-style: normal; }
 .nav-btn:hover, .nav-btn.active-nav { border-color: var(--faint); color: var(--ink); background: var(--paper-dark); text-decoration: none; }
 .nav-btn:active { transform: translateY(1px); }
 .nav-btn--theme { width: auto; padding-inline: 12px; }
-@media (max-width: 630px) { .nav-bar { gap: 2px; } .nav-btn { padding-inline: 9px; } }
+
+/* teléfonos y plegados: sin glifo, una fila ajustada */
+@media (max-width: 630px) { .nav-bar { gap: 2px; } .nav-btn { padding-inline: 9px; } .nav-glyph { display: none; } }
+
+/* muy angosto (Fold plegado, iPhone SE, Flip cubierta): cuadrícula 3 x 2, todo a la vista */
+@media (max-width: 520px) {
+  .nav-bar { display: grid; grid-template-columns: repeat(3, 1fr); width: calc(100vw - 20px - var(--safe-l) - var(--safe-r)); overflow: visible; }
+  .nav-btn { padding: 6px 4px; font-size: clamp(.74rem, 3.2vw, .84rem); }
+}
+
+/* móviles en horizontal: poca altura, una sola fila compacta */
+@media (max-height: 480px) and (orientation: landscape) {
+  .nav-bar { display: flex; width: max-content; overflow-x: auto; }
+  .nav-btn { min-height: 38px; padding-block: 5px; }
+  .nav-glyph { display: none; }
+}

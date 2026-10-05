@@ -13,7 +13,10 @@
 
   --radius: 18px;
   --radius-sm: 10px;
-  --nav-h: 56px;
+  --nav-h: 66px;
+  --gutter: clamp(14px, 4vw, 28px);
+  --safe-l: env(safe-area-inset-left, 0px);
+  --safe-r: env(safe-area-inset-right, 0px);
   --wrap: 1040px;
   --shadow-sketch: 4px 4px 0 var(--faint);
   --ease: cubic-bezier(.2, .7, .2, 1);
