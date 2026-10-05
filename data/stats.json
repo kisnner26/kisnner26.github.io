@@ -1,11 +1,11 @@
 {
-  "updated": "2026-10-04",
+  "updated": "2026-10-05",
   "login": "kisnner26",
-  "contributions": 570,
+  "contributions": 571,
   "prs": {
     "total": 17,
-    "merged": 3,
-    "open": 8,
+    "merged": 4,
+    "open": 7,
     "closed": 6,
     "owners": [
       "rizinorg",
@@ -32,7 +32,7 @@
         "title": "docs: probado a mano en macOS 27 (Apple Silicon) con capturas",
         "number": 1,
         "url": "https://github.com/NormanSMA/ClaudeHub/pull/1",
-        "status": "open",
+        "status": "merged",
         "createdAt": "2026-10-04T10:20:00Z"
       },
       {
