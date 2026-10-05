@@ -17,3 +17,9 @@
 }
 /* tablets: más aire y texto más ancho */
 @media (min-width: 768px) and (max-width: 1100px) { .hero-center { max-width: 640px; } }
+/* teléfonos: el hero ocupa lo que su contenido, sin hueco vacío bajo la frase final */
+@media (max-width: 620px) {
+  .hero { min-height: 0; padding-block: clamp(64px, 18vw, 96px) calc(112px + env(safe-area-inset-bottom)); }
+  .hero-center { margin-bottom: 0; }
+  .hero-plant { width: clamp(110px, 32vw, 150px); bottom: -28px; }
+}
