@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>The watch wasn't broken. My iPhone was behind. — Kisnner Obando</title>
 <meta name="description" content="The fix for the Apple Watch that never reconnected on watchOS 27: the watch was on 27.2 while the iPhone was still on 27.0. Reconstructed from the iPhone's own analytics logs, with what they prove and what they don't.">
 <meta name="theme-color" content="#f5f0e8">
@@ -70,14 +70,14 @@ $ xcrun devicectl device copy from  --device &lt;iphone&gt; --domain-type system
 <p>480 files, going back to at least the 27th of september. two of them mattered, and one trick: the header of every <code>JetsamEvent-*.ips</code> records the os build at that moment, so a pile of crash-ish files becomes a version history.</p>
 <h2>the timeline</h2>
 <p>local time, utc−6, all read from the iphone:</p>
-<table>
+<div class="table-wrap"><table>
 <tr><th>when</th><th>what the files show</th></tr>
 <tr><td>until oct 2, 17:19</td><td>iphone on <strong>ios 27.0 (24A5418b)</strong></td></tr>
 <tr><td>oct 2, 22:06 → 22:41</td><td>the watch's pairing identity on the iphone changes: one <code>ProxiedDevice-*</code> folder stops, another starts</td></tr>
 <tr><td>oct 2, 23:45 – 23:54</td><td>a pairing performance report: activation ~11 s, passcode and unlock pairing, initial sync, no errors</td></tr>
 <tr><td>oct 3, 00:26</td><td><strong>iphone updated to ios 27.2 (24B5089g)</strong>; <code>ota_result_success</code></td></tr>
 <tr><td>from oct 3, 10:27</td><td>iphone on 27.2; the same watch identity until the end of the files, no further re-pairing</td></tr>
-</table>
+</table></div>
 <p>the watch was on <strong>watchos 27.2 (24S5091f)</strong> under both identities. so for the whole failure the watch was newer than its iphone.</p>
 <p>after the update, <code>devicectl device info details</code> on the watch reads <code>pairingState: paired</code>, <code>transportType: localNetwork</code>, <code>authenticationType: manualPairing</code>, and installing apps on it worked again.</p>
 <h2>what this proves and what it doesn't</h2>

@@ -4,7 +4,7 @@
 .wu-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: clamp(36px, 7vw, 64px); }
 .wu-back { color: var(--mid); font-size: .95rem; text-decoration: none; }
 .wu-back:hover { color: var(--ink); }
-.wu-theme { min-height: 38px; padding: 6px 12px; border: 1px solid var(--faint); border-radius: var(--radius-sm); background: transparent; color: var(--mid); font: 600 .84rem/1 var(--serif); cursor: pointer; }
+.wu-theme { min-height: 44px; padding: 6px 12px; border: 1px solid var(--faint); border-radius: var(--radius-sm); background: transparent; color: var(--mid); font: 600 .84rem/1 var(--serif); cursor: pointer; }
 .wu-theme:hover { color: var(--ink); background: var(--paper-dark); }
 
 .wu-head { margin-bottom: 36px; }

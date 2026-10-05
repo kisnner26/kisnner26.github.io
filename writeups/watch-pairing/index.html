@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>My Apple Watch paired fine. Then it forgot. — Kisnner Obando</title>
 <meta name="description" content="Why an Apple Watch Ultra 2 vanished from Xcode 27 on watchOS 27: the pairing succeeds, but the watch comes back asking for a brand-new pairing instead of verifying. Logs from both sides, a listener experiment and an independent host. Still open.">
 <meta name="theme-color" content="#f5f0e8">
@@ -72,11 +72,11 @@ The specified device was not found (1000)
 <p>my first write-up called that 30 ms close the bug. it wasn't.</p>
 <h2>2. a control: the iphone does the same thing</h2>
 <p>after resetting location &amp; privacy, the iphone also had to be re-paired, one minute before the watch, on the same mac:</p>
-<table>
+<div class="table-wrap"><table>
 <tr><th></th><th>setup succeeded</th><th>channel closed</th><th>reconnect</th></tr>
 <tr><td>iphone</td><td>10:54:22.173</td><td>+36 ms</td><td><strong>+1.4 s</strong> <code>verifyManualPairing</code> → available</td></tr>
 <tr><td>watch</td><td>10:55:08.951</td><td>+29 ms</td><td><strong>none</strong></td></tr>
-</table>
+</table></div>
 <p>the close is normal: setup ends, then the device reconnects on a verified session. what's missing is the watch's reconnect. i rewrote the repo and the apple report to say that. an earlier draft had used an ipad reconnect as the control, which wasn't a fresh setup, so it wasn't a fair comparison either.</p>
 <h2>3. watches pair into the mac</h2>
 <p>the mac finds an iphone by browsing <code>_remotepairing._tcp</code>. the watch never advertised that, and i'd listed "the watch doesn't announce itself" as the main hypothesis. reading a live <code>log stream</code> during pairing showed the flow is the other way round for a watch:</p>

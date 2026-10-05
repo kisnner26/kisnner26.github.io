@@ -9,15 +9,15 @@
 /* teléfonos y plegados: sin glifo, una fila ajustada */
 @media (max-width: 630px) { .nav-bar { gap: 2px; } .nav-btn { padding-inline: 9px; } .nav-glyph { display: none; } }
 
-/* muy angosto (Fold plegado, iPhone SE, Flip cubierta): cuadrícula 3 x 2, todo a la vista */
+/* muy angosto (Fold plegado, iPhone SE, Flip cubierta): filas ajustadas, todo a la vista */
 @media (max-width: 520px) {
-  .nav-bar { display: grid; grid-template-columns: repeat(3, 1fr); width: calc(100vw - 20px - var(--safe-l) - var(--safe-r)); overflow: visible; }
-  .nav-btn { padding: 6px 4px; font-size: clamp(.74rem, 3.2vw, .84rem); }
+  .nav-bar { flex-wrap: wrap; width: calc(100vw - 20px - var(--safe-l) - var(--safe-r)); overflow: visible; }
+  .nav-btn { flex: 1 1 auto; padding: 6px 7px; font-size: clamp(.74rem, 3.2vw, .84rem); }
 }
 
 /* móviles en horizontal: poca altura, una sola fila compacta */
 @media (max-height: 480px) and (orientation: landscape) {
-  .nav-bar { display: flex; width: max-content; overflow-x: auto; }
+  .nav-bar { flex-wrap: nowrap; width: max-content; overflow-x: auto; }
   .nav-btn { min-height: 38px; padding-block: 5px; }
   .nav-glyph { display: none; }
 }
