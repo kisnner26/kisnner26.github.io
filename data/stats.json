@@ -1,11 +1,11 @@
 {
   "updated": "2026-10-06",
   "login": "kisnner26",
-  "contributions": 612,
+  "contributions": 1045,
   "prs": {
     "total": 33,
-    "merged": 4,
-    "open": 23,
+    "merged": 5,
+    "open": 22,
     "closed": 6,
     "owners": [
       "rizinorg",
@@ -165,7 +165,7 @@
         "title": "fix nested memory references in numeric expressions ##util",
         "number": 26920,
         "url": "https://github.com/radareorg/radare2/pull/26920",
-        "status": "open",
+        "status": "merged",
         "createdAt": "2026-10-06T05:09:35Z"
       },
       {
