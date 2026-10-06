@@ -1,22 +1,173 @@
 {
   "updated": "2026-10-06",
   "login": "kisnner26",
-  "contributions": 584,
+  "contributions": 612,
   "prs": {
-    "total": 17,
+    "total": 33,
     "merged": 4,
-    "open": 7,
+    "open": 23,
     "closed": 6,
     "owners": [
       "rizinorg",
       "apple",
-      "NormanSMA",
+      "erocarrera",
+      "eliben",
       "radareorg",
+      "NormanSMA",
+      "fox-it",
+      "ronaldoussoren",
+      "construct",
       "drewster99",
       "hoowertsg19",
-      "kimziro"
+      "http-party",
+      "kimziro",
+      "python-intelhex"
     ],
     "items": [
+      {
+        "repo": "intelhex",
+        "owner": "python-intelhex",
+        "title": "document the hex2bin conversion function",
+        "number": 76,
+        "url": "https://github.com/python-intelhex/intelhex/pull/76",
+        "status": "open",
+        "createdAt": "2026-10-06T06:18:18Z"
+      },
+      {
+        "repo": "macholib",
+        "owner": "ronaldoussoren",
+        "title": "stop lc string values at the first nul byte",
+        "number": 52,
+        "url": "https://github.com/ronaldoussoren/macholib/pull/52",
+        "status": "open",
+        "createdAt": "2026-10-06T06:09:01Z"
+      },
+      {
+        "repo": "macholib",
+        "owner": "ronaldoussoren",
+        "title": "support modern mach-o load commands",
+        "number": 51,
+        "url": "https://github.com/ronaldoussoren/macholib/pull/51",
+        "status": "open",
+        "createdAt": "2026-10-06T06:05:31Z"
+      },
+      {
+        "repo": "pefile",
+        "owner": "erocarrera",
+        "title": "document lightweight source checkout",
+        "number": 620,
+        "url": "https://github.com/erocarrera/pefile/pull/620",
+        "status": "open",
+        "createdAt": "2026-10-06T06:00:52Z"
+      },
+      {
+        "repo": "dissect.cstruct",
+        "owner": "fox-it",
+        "title": "reject noninteger array dimensions",
+        "number": 171,
+        "url": "https://github.com/fox-it/dissect.cstruct/pull/171",
+        "status": "open",
+        "createdAt": "2026-10-06T05:58:07Z"
+      },
+      {
+        "repo": "dissect.util",
+        "owner": "fox-it",
+        "title": "support negative offsets in relative streams",
+        "number": 142,
+        "url": "https://github.com/fox-it/dissect.util/pull/142",
+        "status": "open",
+        "createdAt": "2026-10-06T05:51:38Z"
+      },
+      {
+        "repo": "construct",
+        "owner": "construct",
+        "title": "document public container classes in the api reference",
+        "number": 1192,
+        "url": "https://github.com/construct/construct/pull/1192",
+        "status": "open",
+        "createdAt": "2026-10-06T05:43:06Z"
+      },
+      {
+        "repo": "pefile",
+        "owner": "erocarrera",
+        "title": "support nibble wildcards in peid signature matching",
+        "number": 619,
+        "url": "https://github.com/erocarrera/pefile/pull/619",
+        "status": "open",
+        "createdAt": "2026-10-06T05:39:06Z"
+      },
+      {
+        "repo": "pefile",
+        "owner": "erocarrera",
+        "title": "fix signature generation for python 3 byte buffers",
+        "number": 618,
+        "url": "https://github.com/erocarrera/pefile/pull/618",
+        "status": "open",
+        "createdAt": "2026-10-06T05:36:28Z"
+      },
+      {
+        "repo": "pefile",
+        "owner": "erocarrera",
+        "title": "allow configuring repeated import address threshold",
+        "number": 617,
+        "url": "https://github.com/erocarrera/pefile/pull/617",
+        "status": "open",
+        "createdAt": "2026-10-06T05:33:53Z"
+      },
+      {
+        "repo": "pyelftools",
+        "owner": "eliben",
+        "title": "add architecture-specific powerpc dynamic tags",
+        "number": 675,
+        "url": "https://github.com/eliben/pyelftools/pull/675",
+        "status": "open",
+        "createdAt": "2026-10-06T05:29:55Z"
+      },
+      {
+        "repo": "swift-nio-extras",
+        "owner": "apple",
+        "title": "add length adjustment to the length field frame decoder",
+        "number": 329,
+        "url": "https://github.com/apple/swift-nio-extras/pull/329",
+        "status": "open",
+        "createdAt": "2026-10-06T05:26:50Z"
+      },
+      {
+        "repo": "http-server",
+        "owner": "http-party",
+        "title": "fix default extension files shadowed by same-name directories",
+        "number": 978,
+        "url": "https://github.com/http-party/http-server/pull/978",
+        "status": "open",
+        "createdAt": "2026-10-06T05:20:10Z"
+      },
+      {
+        "repo": "pyelftools",
+        "owner": "eliben",
+        "title": "fix readme path in package metadata and manifest",
+        "number": 674,
+        "url": "https://github.com/eliben/pyelftools/pull/674",
+        "status": "open",
+        "createdAt": "2026-10-06T05:15:02Z"
+      },
+      {
+        "repo": "pyelftools",
+        "owner": "eliben",
+        "title": "fix dwarf v2 reference size for gnu implicit pointers",
+        "number": 673,
+        "url": "https://github.com/eliben/pyelftools/pull/673",
+        "status": "open",
+        "createdAt": "2026-10-06T05:14:07Z"
+      },
+      {
+        "repo": "radare2",
+        "owner": "radareorg",
+        "title": "fix nested memory references in numeric expressions ##util",
+        "number": 26920,
+        "url": "https://github.com/radareorg/radare2/pull/26920",
+        "status": "open",
+        "createdAt": "2026-10-06T05:09:35Z"
+      },
       {
         "repo": "ClaudeHub",
         "owner": "NormanSMA",
