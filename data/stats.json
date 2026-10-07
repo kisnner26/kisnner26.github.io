@@ -4,9 +4,9 @@
   "contributions": 1108,
   "prs": {
     "total": 33,
-    "merged": 5,
-    "open": 22,
-    "closed": 6,
+    "merged": 6,
+    "open": 20,
+    "closed": 7,
     "owners": [
       "rizinorg",
       "apple",
@@ -147,7 +147,7 @@
         "title": "fix readme path in package metadata and manifest",
         "number": 674,
         "url": "https://github.com/eliben/pyelftools/pull/674",
-        "status": "open",
+        "status": "merged",
         "createdAt": "2026-10-06T05:15:02Z"
       },
       {
@@ -156,7 +156,7 @@
         "title": "fix dwarf v2 reference size for gnu implicit pointers",
         "number": 673,
         "url": "https://github.com/eliben/pyelftools/pull/673",
-        "status": "open",
+        "status": "closed",
         "createdAt": "2026-10-06T05:14:07Z"
       },
       {
