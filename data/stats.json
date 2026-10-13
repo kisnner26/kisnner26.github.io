@@ -1,11 +1,11 @@
 {
-  "updated": "2026-10-12",
+  "updated": "2026-10-13",
   "login": "kisnner26",
-  "contributions": 1469,
+  "contributions": 1565,
   "prs": {
-    "total": 33,
+    "total": 37,
     "merged": 7,
-    "open": 19,
+    "open": 23,
     "closed": 7,
     "owners": [
       "rizinorg",
@@ -20,10 +20,48 @@
       "drewster99",
       "hoowertsg19",
       "http-party",
+      "hugsy",
       "kimziro",
+      "nodejs",
       "python-intelhex"
     ],
     "items": [
+      {
+        "repo": "gef",
+        "owner": "hugsy",
+        "title": "fix(arch): detect MIPS N32 binaries as 64-bit",
+        "number": 1235,
+        "url": "https://github.com/hugsy/gef/pull/1235",
+        "status": "open",
+        "createdAt": "2026-10-12T19:47:19Z"
+      },
+      {
+        "repo": "node",
+        "owner": "nodejs",
+        "title": "doc: correct QuicStream direction and id types",
+        "number": 66687,
+        "url": "https://github.com/nodejs/node/pull/66687",
+        "status": "open",
+        "createdAt": "2026-10-12T19:33:46Z"
+      },
+      {
+        "repo": "rizin",
+        "owner": "rizinorg",
+        "title": "doc(om): clarify default physical offset",
+        "number": 6876,
+        "url": "https://github.com/rizinorg/rizin/pull/6876",
+        "status": "open",
+        "createdAt": "2026-10-12T19:25:24Z"
+      },
+      {
+        "repo": "rizin",
+        "owner": "rizinorg",
+        "title": "doc(rizin): document missing environment variables",
+        "number": 6875,
+        "url": "https://github.com/rizinorg/rizin/pull/6875",
+        "status": "open",
+        "createdAt": "2026-10-12T19:15:52Z"
+      },
       {
         "repo": "intelhex",
         "owner": "python-intelhex",
