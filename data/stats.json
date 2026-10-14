@@ -1,11 +1,11 @@
 {
-  "updated": "2026-10-13",
+  "updated": "2026-10-14",
   "login": "kisnner26",
-  "contributions": 1695,
+  "contributions": 1696,
   "prs": {
     "total": 37,
-    "merged": 7,
-    "open": 23,
+    "merged": 8,
+    "open": 22,
     "closed": 7,
     "owners": [
       "rizinorg",
@@ -41,7 +41,7 @@
         "title": "doc: correct QuicStream direction and id types",
         "number": 66687,
         "url": "https://github.com/nodejs/node/pull/66687",
-        "status": "open",
+        "status": "merged",
         "createdAt": "2026-10-12T19:33:46Z"
       },
       {
