@@ -45,7 +45,7 @@
   <figure class="wu-fig wu-lead-fig"><a href="../../assets/img/writeups/altstore-80045/error-503-html.jpg"><img src="../../assets/img/writeups/altstore-80045/error-503-html.jpg" alt="altserver on macos 27 showing the error: the data is not in the correct format"></a></figure>
 
   <div class="wu-body">
-<p>sequel to <a href="../altstore/">altstore couldn't sign in. apple was sending back an html page.</a>. in october 2026 altserver on macos 27 stopped signing in again, first with <code>-80045</code> and, two days later, with an html page that altserver tried to read as a plist. this is how i traced both, what i measured at apple's edge without credentials, and the fix i proposed. the long version, with diagrams, is in <a href="https://kisnner26.github.io/altserver-80045/" target="_blank" rel="noopener noreferrer">the field report</a>.</p>
+<p>sequel to <a href="../altstore/">altstore couldn't sign in. apple was sending back an html page.</a> in october 2026 altserver on macos 27 stopped signing in again, first with <code>-80045</code> and, two days later, with an html page that altserver tried to read as a plist. this is how i traced both, what i measured at apple's edge without credentials, and the fix i proposed. the long version, with diagrams, is in <a href="https://kisnner26.github.io/altserver-80045/" target="_blank" rel="noopener noreferrer">the field report</a>.</p>
 <h2>tl;dr</h2>
 <ul>
 <li><strong>oct 12:</strong> every sign-in failed at the first grandslam request with <code>-80045</code>. altserver on macos 27 generated android anisette data while sending a mac client info. apple started rejecting the mismatch.</li>
