@@ -1,11 +1,11 @@
 {
-  "updated": "2026-10-14",
+  "updated": "2026-10-15",
   "login": "kisnner26",
-  "contributions": 1696,
+  "contributions": 1700,
   "prs": {
-    "total": 37,
+    "total": 39,
     "merged": 8,
-    "open": 22,
+    "open": 24,
     "closed": 7,
     "owners": [
       "rizinorg",
@@ -16,6 +16,7 @@
       "NormanSMA",
       "fox-it",
       "ronaldoussoren",
+      "altstoreio",
       "construct",
       "drewster99",
       "hoowertsg19",
@@ -23,9 +24,28 @@
       "hugsy",
       "kimziro",
       "nodejs",
-      "python-intelhex"
+      "python-intelhex",
+      "rileytestut"
     ],
     "items": [
+      {
+        "repo": "AltStore",
+        "owner": "altstoreio",
+        "title": "Fix AltServer sign-in (-80045 / HTTP 503) on macOS 27 with Windows anisette data",
+        "number": 1834,
+        "url": "https://github.com/altstoreio/AltStore/pull/1834",
+        "status": "open",
+        "createdAt": "2026-10-15T04:54:24Z"
+      },
+      {
+        "repo": "AltSign",
+        "owner": "rileytestut",
+        "title": "Send GrandSlam requests with the anisette provider's client identity",
+        "number": 61,
+        "url": "https://github.com/rileytestut/AltSign/pull/61",
+        "status": "open",
+        "createdAt": "2026-10-15T04:54:02Z"
+      },
       {
         "repo": "gef",
         "owner": "hugsy",
