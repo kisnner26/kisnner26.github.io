@@ -1,6 +1,15 @@
 /** Investigaciones escritas. `line` resume el hallazgo, no el tema. */
 export const writeups = [
   {
+    id: 'altstore-80045',
+    date: 'oct 2026',
+    title: 'apple blocked altserver twice in a week. i proposed the fix.',
+    line: 'AltServer en macOS 27 dejó de iniciar sesión: primero -80045 y dos días después un 503 en HTML. Sondeé el borde de Apple sin credenciales, aislé un crash que era un framework vacío de Xcode 27 y propuse el arreglo a AltStore (PR #1834), probado en iPad y iPhone. Sigue sin fusionarse y no sirve a todas las cuentas',
+    tags: ['AltServer', 'anisette', 'GrandSlam', 'ingeniería inversa'],
+    lang: 'en',
+    href: 'writeups/altstore-80045/',
+  },
+  {
     id: 'watch-pairing-fix',
     date: 'oct 2026',
     title: "the watch wasn't broken. my iphone was behind.",
