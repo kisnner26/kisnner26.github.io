@@ -41,4 +41,4 @@
 
 .hero-facts { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 18px; margin: 18px 0 24px; padding: 0; list-style: none; color: var(--mid); font-size: .95rem; }
 .hero-facts li + li::before { content: '·'; margin-right: 18px; color: var(--mid); }
-@media (max-width: 520px) { .hero-facts { gap: 4px 12px; } .hero-facts li + li::before { margin-right: 12px; } }
+@media (max-width: 520px) { .hero-facts { gap: 4px 16px; } .hero-facts li + li::before { display: none; } }
