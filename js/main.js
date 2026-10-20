@@ -20,7 +20,7 @@ import { observeReveals } from './lib/reveal.js';
 import { loadLiveStats, buildStats, mergeContributions } from './lib/liveStats.js';
 import { setLang, t } from './lib/i18n.js';
 
-const TITLE = { es: 'Kisnner Obando — Desarrollador de software', en: 'Kisnner Obando — Software developer' };
+const TITLE = { es: 'Kisnner Obando — Desarrollador full-stack JavaScript', en: 'Kisnner Obando — Full-stack JavaScript developer' };
 
 const app = document.getElementById('app');
 const loading = document.getElementById('loading');
