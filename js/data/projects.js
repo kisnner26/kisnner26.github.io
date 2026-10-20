@@ -6,6 +6,14 @@ const gh = (repo) => ({ label: 'código', href: `https://github.com/kisnner26/${
 
 export const projects = [
   {
+    id: 'frutiger-aero-islands',
+    title: 'Frutiger Aero Islands',
+    line: 'una isla decorable dibujada con PixiJS bajo ventanas de Windows Vista hechas en HTML, y un planeta en Three.js donde se ven las islas de otros jugadores; los datos viven en Supabase con seguridad por fila',
+    tags: ['React', 'TypeScript', 'PixiJS', 'Three.js', 'Supabase'],
+    media: { src: 'assets/img/projects/frutiger-aero-islands.jpg', alt: 'Frutiger Aero Islands: una isla verde con palmeras, fuente y pabellón de vidrio sobre un lago, con burbujas, peces y una ventana de decoraciones al estilo Windows Vista' },
+    links: [{ label: 'demo', href: 'https://kisnner26.github.io/frutiger-aero-islands/' }, gh('frutiger-aero-islands')],
+  },
+  {
     id: 'lumora',
     title: 'lumora',
     line: 'claude lee la letra antes de que suene y escribe el guion por verso; todo se dibuja con código en WebGL, sin una sola imagen',
