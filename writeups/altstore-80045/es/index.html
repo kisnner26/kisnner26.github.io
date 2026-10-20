@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Apple bloqueó AltServer dos veces en una semana. Propuse el arreglo. — Kisnner Obando</title>
+<meta name="description" content="por qué altserver dejó de iniciar sesión con apple en macos 27 (-80045 y luego un 503 en html), qué medí en el borde de apple y el arreglo que propuse a altstore, con lo que cubre y lo que no.">
+<meta name="theme-color" content="#f5f0e8">
+<link rel="canonical" href="https://kisnner26.github.io/writeups/altstore-80045/es/">
+<link rel="alternate" hreflang="es" href="https://kisnner26.github.io/writeups/altstore-80045/es/">
+<link rel="alternate" hreflang="en" href="https://kisnner26.github.io/writeups/altstore-80045/">
+<link rel="alternate" hreflang="x-default" href="https://kisnner26.github.io/writeups/altstore-80045/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23f5f0e8'/%3E%3Cpath d='M32 55V18M32 27C18 18 12 9 17 5c7 1 13 10 15 22M32 35c14-9 20-18 15-22-7 1-13 10-15 22' fill='none' stroke='%231a1208' stroke-linecap='round' stroke-width='3'/%3E%3C/svg%3E">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://kisnner26.github.io/writeups/altstore-80045/es/">
+<meta property="og:title" content="Apple bloqueó AltServer dos veces en una semana. Propuse el arreglo.">
+<meta property="og:description" content="por qué altserver dejó de iniciar sesión con apple en macos 27 (-80045 y luego un 503 en html), qué medí en el borde de apple y el arreglo que propuse a altstore, con lo que cubre y lo que no.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Apple bloqueó AltServer dos veces en una semana. Propuse el arreglo.">
+<meta name="twitter:description" content="por qué altserver dejó de iniciar sesión con apple en macos 27 (-80045 y luego un 503 en html), qué medí en el borde de apple y el arreglo que propuse a altstore, con lo que cubre y lo que no.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=IM+Fell+English:ital@0;1&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../css/tokens.css">
+<link rel="stylesheet" href="../../../css/base.css">
+<link rel="stylesheet" href="../../../css/components/writeup.css">
+
+<script>
+  // aplica el tema guardado antes de pintar, para evitar el parpadeo
+  try { var t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+</script>
+</head>
+<body style="padding-bottom:0">
+<article class="wu">
+  <nav class="wu-top" aria-label="Navegación">
+    <a class="wu-back" href="../../../#writeups">← portafolio</a>
+    <a class="wu-back" href="../" hreflang="en" lang="en">english</a>
+    <button class="wu-theme" type="button" id="theme" aria-label="Cambiar entre papel y noche">☾ Noche</button>
+  </nav>
+
+  <header class="wu-head">
+    <span class="wu-eyebrow">writeup</span>
+    <h1 class="wu-title">apple bloqueó altserver dos veces en una semana. propuse el arreglo.</h1>
+    <p class="wu-meta">kisnner obando · octubre de 2026 · altserver · macos 27.2 · ipados 27.2 · <a href="https://github.com/altstoreio/AltStore/pull/1834" target="_blank" rel="noopener noreferrer">altstore#1834</a> · estado: <strong>propuesto, sin fusionar</strong></p>
+  </header>
+
+  <figure class="wu-fig wu-lead-fig"><a href="../../../assets/img/writeups/altstore-80045/error-503-html.jpg"><img src="../../../assets/img/writeups/altstore-80045/error-503-html.jpg" alt="altserver en macos 27 mostrando el error: los datos no están en el formato correcto"></a></figure>
+
+  <div class="wu-body">
+<p>continuación de <a href="../../altstore/es/">altstore no podía iniciar sesión. apple devolvía una página html.</a> en octubre de 2026 altserver en macos 27 volvió a dejar de iniciar sesión, primero con <code>-80045</code> y, dos días después, con una página html que altserver intentaba leer como plist. así rastreé los dos fallos, qué medí en el borde de apple sin credenciales y el arreglo que propuse. la versión larga, con diagramas, está en <a href="https://kisnner26.github.io/altserver-80045/" target="_blank" rel="noopener noreferrer">el informe de campo</a> (en inglés).</p>
+<h2>resumen</h2>
+<ul>
+<li><strong>12 de oct:</strong> todos los inicios de sesión fallaban en la primera petición de grandslam con <code>-80045</code>. altserver en macos 27 generaba datos de anisette de android mientras mandaba la información de cliente de un mac. apple empezó a rechazar esa diferencia.</li>
+<li><strong>14 de oct, hacia las 20:50 utc:</strong> apple empezó a responder con una página html <code>503</code> a cualquier información de cliente de android. altserver lo mostraba como "los datos no están en el formato correcto" (<code>NSCocoaErrorDomain 3840</code>). eso también acabó con el arreglo del pixel 7, que había funcionado unas horas.</li>
+<li><strong>lo que pasa:</strong> datos de anisette de windows desde un servidor de anisette v3, con la información de cliente y el user agent que ese servidor informa. el arreglo inicia sesión así.</li>
+<li><strong>probado</strong> en macos 27.2 con un apple id gratuito con 2fa: inicio de sesión, instalación de altstore en un ipad pro y en un iphone 15 pro max, y un refresco de altstore. <strong>no probado:</strong> refrescar otras apps instaladas por sideload, y nadie lo ha confirmado todavía; un usuario reportó después que inició sesión y reinstaló una app con la build (<a href="https://github.com/altstoreio/AltStore/issues/1828#issuecomment-6219925549" target="_blank" rel="noopener noreferrer">#1828</a>).</li>
+<li><strong>no es universal:</strong> algunas cuentas siguen recibiendo <code>-80045</code> con la identidad de windows. y el 15 de oct jkcoxson publicó un servidor de anisette con identidad de mac que, según dice, funciona sin parches. no lo he probado.</li>
+</ul>
+<h2>la regla que explica los dos bloqueos</h2>
+<p>los datos de anisette y la cabecera <code>X-MMe-Client-Info</code> tienen que describir el mismo dispositivo. altserver pedía anisette local (coreadi de android) y luego se declaraba mac. esa diferencia es el primer bloqueo. el segundo es el borde de apple rechazando android por completo.</p>
+<h2>sondear el borde sin credenciales</h2>
+<p>para separar "el servidor rechaza esta identidad" de "mi inicio de sesión está mal", mandé peticiones sin credenciales a <code>GsService2</code> con un cuerpo plist vacío y cambiando solo la información de cliente. muestran cómo enruta el borde una petición, no si un inicio de sesión funcionaría.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>información de cliente</th><th>respuesta</th><th>lectura</th></tr></thead>
+<tbody>
+<tr><td><code>&lt;Pixel 7&gt; &lt;Android;14;…&gt;</code></td><td>503 html, 6 de 6</td><td>bloqueado en el borde</td></tr>
+<tr><td>variantes de pixel 5 y pixel 8</td><td>503 html, 6 de 6</td><td>igual</td></tr>
+<tr><td><code>&lt;MacBookPro…&gt; &lt;macOS;27.2;…&gt;</code> akd</td><td>404 / 429</td><td>llega al servicio (mi ip ya estaba limitada)</td></tr>
+<tr><td><code>&lt;PC&gt; &lt;Windows;6.2(0,0);9200&gt;</code> itunes</td><td>404</td><td>llega al servicio</td></tr>
+</tbody></table></div>
+<p>la única receta confirmada después del 503 fue la que traían iloader 2.3.8 e isideload 0.4.6: anisette de windows desde un servidor de anisette v3.</p>
+<h2>un crash que no era el error</h2>
+<p>llevar el arreglo a altserver implicó compilarlo con xcode 27. la primera build que llegó a apple se cayó sola: la llamada que fallaba era <code>alt_ccsrp_gp_rfc5054_2048</code>, un símbolo que altsign enlaza por el espacio de nombres plano, y no estaba definido en ningún framework. el producto <code>AltSign-Dynamic</code> de swiftpm salía vacío con xcode 27.</p>
+<pre><code>$ nm -arch arm64 AltSign.framework/Versions/A/AltSign | grep rfc5054
+                 U _alt_ccsrp_gp_rfc5054_2048</code></pre>
+<p>reconstruir solo ese dylib desde <code>libcorecrypto_static.a</code> con <code>-force_load</code> eliminó el crash. es un problema de compilación, así que a propósito no forma parte del pull request.</p>
+<h2>el arreglo</h2>
+<p>seis commits, tres en altstore y tres en altsign. se apoyan en el arreglo de 2fa de altsign#59 y reutilizan el cliente de anisette remota de altstore#1806.</p>
+<div class="table-wrap"><table>
+<thead><tr><th></th><th>antes</th><th>después</th></tr></thead>
+<tbody>
+<tr><td>anisette</td><td>coreadi de android, local (anisettekit)</td><td>adi de windows, servidor de anisette v3</td></tr>
+<tr><td>user-agent</td><td>cadena fija de authkit con xcode 26</td><td>el <code>user_agent</code> del servidor</td></tr>
+<tr><td>errores http</td><td>error de lectura de plist 3840</td><td>código http legible</td></tr>
+</tbody></table></div>
+<p>tu contraseña y tu código 2fa van directos a apple. el servidor de anisette solo ve la identidad de un dispositivo.</p>
+<h2>evidencia</h2>
+<p>instalar altstore desde la build descargada funcionó en un ipad pro y en un iphone 15 pro max, y refrescar altstore desde la app también: 26 peticiones durante una instalación y 6 durante un refresco, todas http 200, de vuelta a 7 días restantes, con un app id usado. el código 2fa vino de un dispositivo de confianza, porque el sms falla ahora mismo por parte de apple.</p>
+<figure class="wu-fig"><a href="../../../assets/img/writeups/altstore-80045/altstore-iphone.jpg"><img src="../../../assets/img/writeups/altstore-80045/altstore-iphone.jpg" alt="altstore en un iphone después del refresco, 7 días restantes" loading="lazy"></a></figure>
+<h2>qué prueba esto y qué no</h2>
+<ul>
+<li><strong>prueba</strong> que en mi cuenta y mi red el inicio de sesión, la instalación y un refresco de altstore funcionan con anisette de windows, y que el borde de apple rechaza la identidad de android.</li>
+<li><strong>no prueba</strong> que funcione para todos: algunas cuentas siguen recibiendo <code>-80045</code> con la identidad de windows, al parecer según la cuenta o la red. no sé por qué.</li>
+<li><strong>depende</strong> de un servidor de anisette de la comunidad, y apple puede cambiar las reglas otra vez: el primer arreglo duró menos de un día.</li>
+<li><strong>no es el único arreglo:</strong> un servidor con identidad de mac publicado el 15 de oct podría hacer innecesario el parche. sin probar de mi lado.</li>
+</ul>
+<h2>errores que cometí en el camino</h2>
+<ul>
+<li><strong>leer el primer fallo como si fuera todo el error.</strong> el arreglo de la cabecera del pixel 7 quitó el <code>-80045</code> durante unas horas y hizo parecer que estaba resuelto. el 503 era un segundo bloqueo, aparte.</li>
+<li><strong>culpar a la compilación.</strong> el segfault parecía mi parche. era un framework vacío de xcode 27.</li>
+</ul>
+<h2>lo que me llevo</h2>
+<ul>
+<li><strong>sondear primero sin credenciales.</strong> una petición con cuerpo vacío y una sola cabecera cambiada te dice cómo te enruta el borde y no puede bloquear tu cuenta.</li>
+<li><strong>la identidad debe coincidir de punta a punta.</strong> anisette, información de cliente y user agent tienen que venir del mismo dispositivo.</li>
+<li><strong>decir lo que no probaste.</strong> el arreglo no está fusionado y no es universal, y este informe y el release lo dicen.</li>
+</ul>
+<h2>enlaces</h2>
+<ul>
+<li><a href="https://kisnner26.github.io/altserver-80045/" target="_blank" rel="noopener noreferrer">el informe de campo</a>, con la cronología y diagramas (en inglés)</li>
+<li><a href="https://github.com/altstoreio/AltStore/pull/1834" target="_blank" rel="noopener noreferrer">altstore#1834</a> y <a href="https://github.com/rileytestut/AltSign/pull/61" target="_blank" rel="noopener noreferrer">altsign#61</a></li>
+<li><a href="https://github.com/altstoreio/AltStore/issues/1828" target="_blank" rel="noopener noreferrer">el issue de seguimiento, #1828</a></li>
+<li><a href="https://github.com/kisnner26/AltStore/releases/tag/v1.8-windows-anisette-unofficial" target="_blank" rel="noopener noreferrer">build no oficial, temporal</a></li>
+<li><a href="../../altstore/es/">el informe de septiembre sobre el inicio de sesión</a></li>
+</ul>
+  </div>
+
+  <footer class="wu-foot">
+    <p><a href="../../../#writeups">← volver al portafolio</a> · <a href="https://github.com/kisnner26" target="_blank" rel="noopener noreferrer">github.com/kisnner26</a></p>
+  </footer>
+</article>
+
+<script type="module">
+  import { toggleTheme, currentTheme } from '../../../js/lib/theme.js';
+  const btn = document.getElementById('theme');
+  const label = () => { btn.textContent = currentTheme() === 'night' ? '☀ Papel' : '☾ Noche'; };
+  label();
+  btn.addEventListener('click', () => { toggleTheme(); label(); });
+</script>
+</body>
+</html>
