@@ -13,9 +13,9 @@ export const profile = {
     email: 'kisnnerobando7@gmail.com',
   },
   freelanceSince: '2025-01-01',
-  // últimos valores conocidos (2026-09-20): solo se usan si data/stats.json no carga; lo normal es que mande js/lib/liveStats.js
+  // últimos valores conocidos (2026-10-20): solo se usan si data/stats.json no carga; lo normal es que mande js/lib/liveStats.js
   fallbackStats: {
-    contributions: { value: '289', label: 'contribuciones en GitHub en los últimos 12 meses' },
-    prs: { value: '13', label: 'pull requests a proyectos ajenos: radare2, rizin y Apple; 2 ya mergeados' },
+    contributions: { value: '2090', label: 'contribuciones en GitHub en los últimos 12 meses' },
+    prs: { value: '42', label: 'pull requests a proyectos ajenos: radare2, rizin y Apple; 9 ya mergeados' },
   },
 };
