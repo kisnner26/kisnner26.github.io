@@ -97,6 +97,7 @@ export const UI = {
     swipe: { es: 'desliza para ver más →', en: 'swipe to see more →' },
     verify: { es: 'Verificar certificado →', en: 'Verify certificate →' },
     expand: { es: 'Ver los {n} certificados', en: 'Show all {n} certificates' },
+    expandProjects: { es: 'Ver los {n} proyectos', en: 'Show all {n} projects' },
     collapse: { es: 'Mostrar menos', en: 'Show fewer' },
     zoom: { es: 'Ampliar certificado: {title}', en: 'Enlarge certificate: {title}' },
     zoomed: { es: 'Vista ampliada: {title}', en: 'Enlarged view: {title}' },
