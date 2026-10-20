@@ -15,6 +15,7 @@ export const profile = {
     github: 'https://github.com/kisnner26',
     linkedin: 'https://www.linkedin.com/in/kisnner-obando-16014029b/',
     email: 'kisnnerobando7@gmail.com',
+    phone: '+505 8927 1455',
     cv: 'assets/cv/Kisnner_Obando_CV.pdf',
   },
   freelanceSince: '2025-01-01',

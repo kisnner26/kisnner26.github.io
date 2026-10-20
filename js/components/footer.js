@@ -12,6 +12,7 @@ export function renderFooter(profile) {
       ),
       h('div', { class: 'footer-links' },
         h('a', { href: `mailto:${profile.links.email}` }, ui('footer.write')),
+        h('a', { href: `tel:${profile.links.phone.replace(/\s/g, '')}` }, profile.links.phone),
         h('a', { href: profile.links.cv, download: 'Kisnner_Obando_CV.pdf' }, ui('footer.cv')),
         extLink(profile.links.github, 'GitHub'),
         extLink(profile.links.linkedin, 'LinkedIn'),
