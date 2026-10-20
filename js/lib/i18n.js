@@ -85,6 +85,7 @@ export const UI = {
     },
   },
   hero: {
+    factsLabel: { es: 'Disponibilidad', en: 'Availability' },
     available: { es: 'Disponible para trabajo remoto', en: 'Available for remote work' },
     cv: { es: 'Descargar CV', en: 'Download CV' },
     contact: { es: 'Contactar', en: 'Get in touch' },

@@ -25,6 +25,7 @@ export function renderHero(profile) {
       h('h1', { class: 'hero-title' }, h('span', { class: 'hero-kicker' }, t(kicker)), h('br'), name),
       h('div', { class: 'hero-rule' }),
       h('p', { class: 'hero-lede', html: t(lede) }),
+      h('ul', { class: 'hero-facts', 'aria-label': ui('hero.factsLabel') }, t(profile.availability).map((f) => h('li', {}, f))),
       h('div', { class: 'btn-row' },
         h('a', { class: 'btn btn--solid', href: links.cv, download: 'Kisnner_Obando_CV.pdf' }, h('span', {}, ui('hero.cv'))),
         h('a', { class: 'btn', href: `mailto:${links.email}` }, h('span', {}, ui('hero.contact'))),
