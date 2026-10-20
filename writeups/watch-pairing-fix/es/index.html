@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>El reloj no estaba roto. Mi iPhone iba atrasado. — Kisnner Obando</title>
+<meta name="description" content="el arreglo del Apple Watch que no reconectaba en watchOS 27: el Mac y el reloj estaban en 27.2 y el iPhone seguía en 27.0. Reconstruido con los logs de analítica del iPhone, con lo que prueban y lo que no.">
+<meta name="theme-color" content="#f5f0e8">
+<link rel="canonical" href="https://kisnner26.github.io/writeups/watch-pairing-fix/es/">
+<link rel="alternate" hreflang="es" href="https://kisnner26.github.io/writeups/watch-pairing-fix/es/">
+<link rel="alternate" hreflang="en" href="https://kisnner26.github.io/writeups/watch-pairing-fix/">
+<link rel="alternate" hreflang="x-default" href="https://kisnner26.github.io/writeups/watch-pairing-fix/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23f5f0e8'/%3E%3Cpath d='M32 55V18M32 27C18 18 12 9 17 5c7 1 13 10 15 22M32 35c14-9 20-18 15-22-7 1-13 10-15 22' fill='none' stroke='%231a1208' stroke-linecap='round' stroke-width='3'/%3E%3C/svg%3E">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://kisnner26.github.io/writeups/watch-pairing-fix/es/">
+<meta property="og:title" content="El reloj no estaba roto. Mi iPhone iba atrasado.">
+<meta property="og:description" content="el arreglo del Apple Watch que no reconectaba en watchOS 27: el Mac y el reloj estaban en 27.2 y el iPhone seguía en 27.0. Reconstruido con los logs de analítica del iPhone, con lo que prueban y lo que no.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="El reloj no estaba roto. Mi iPhone iba atrasado.">
+<meta name="twitter:description" content="el arreglo del Apple Watch que no reconectaba en watchOS 27: el Mac y el reloj estaban en 27.2 y el iPhone seguía en 27.0. Reconstruido con los logs de analítica del iPhone, con lo que prueban y lo que no.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=IM+Fell+English:ital@0;1&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../css/tokens.css">
+<link rel="stylesheet" href="../../../css/base.css">
+<link rel="stylesheet" href="../../../css/components/writeup.css">
+
+<script>
+  // aplica el tema guardado antes de pintar, para evitar el parpadeo
+  try { var t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+</script>
+</head>
+<body style="padding-bottom:0">
+<article class="wu">
+  <nav class="wu-top" aria-label="Navegación">
+    <a class="wu-back" href="../../../#writeups">← portafolio</a>
+    <a class="wu-back" href="../" hreflang="en" lang="en">english</a>
+    <button class="wu-theme" type="button" id="theme" aria-label="Cambiar entre papel y noche">☾ Noche</button>
+  </nav>
+
+  <header class="wu-head">
+    <span class="wu-eyebrow">writeup</span>
+    <h1 class="wu-title">el reloj no estaba roto. mi iphone iba atrasado.</h1>
+    <p class="wu-meta">kisnner obando · octubre de 2026 · ios 27.0 → 27.2 · watchos 27.2 · device hub · <a href="https://github.com/kisnner26/watchos27-pairing-bug/blob/main/docs/resolution.md" target="_blank" rel="noopener noreferrer">el documento de resolución</a> · estado: <strong>resuelto en mi equipo, causa raíz sin probar</strong></p>
+  </header>
+
+  <div class="wu-body">
+<p>esta es la continuación de <a href="../../watch-pairing/es/">mi apple watch se emparejó bien. luego lo olvidó.</a>, donde terminé con "la falla está en el reloj" y "esto necesita un arreglo de watchos". no fue así. lo que lo arregló fue actualizar el <strong>iphone</strong>. este informe es cómo lo comprobé, porque no pude demostrarlo como quería, y lo que la evidencia dice y no dice.</p>
+<h2>resumen</h2>
+<ul>
+<li>el mac estuvo en <strong>macos 27.2</strong> todo el tiempo y el iphone en <strong>ios 27.0</strong>. el reloj estuvo primero en 27.0 y luego en <strong>27.2</strong>. falló en ambas configuraciones. actualizar solo el reloj (lo primero que probé) dejó al iphone como único dispositivo atrasado.</li>
+<li>restablecer el reloj y emparejarlo de nuevo (mismo apple id) desde la app watch, con ios 27.0 todavía, no ayudó. device hub seguía fallando con <code>DeviceKitError 4002</code>.</li>
+<li>actualizar el iphone a <strong>ios 27.2</strong>, de modo que mac, iphone y reloj estuvieran todos en 27.2, y emparejar desde device hub funcionó. los logs de analítica del iphone cuadran: la actualización terminó a las 00:26, después del re-emparejamiento, sin más re-emparejamientos después.</li>
+<li>ya no puedo ver el lado de coredevice, así que la causa es una hipótesis (versiones mezcladas), no un diagnóstico. apple respondió a fb24924229 el 12 de oct pidiendo más logs; mi respuesta está abajo.</li>
+</ul>
+<h2>el síntoma que quedaba</h2>
+<p>tras volver a emparejar, la vista en vivo del reloj en device hub seguía fallando:</p>
+<pre><code>DeviceKitError  errorCode 4002
+"Live device view took longer than expected to connect."
+</code></pre>
+<p>el enlace iphone ↔ reloj estaba sano (el mirroring funcionaba). solo el camino mac ↔ reloj por device hub estaba muerto, que es la misma forma del bug original. nada de lo que probé en el mac lo cambió.</p>
+<h2>dónde fui a buscar</h2>
+<p>quería los logs de emparejamiento de la noche en que volví a emparejar. el log unificado del mac no tenía nada:</p>
+<pre><code>$ log show --last 24h --predicate 'process == "remotepairingd"' | wc -l
+0
+</code></pre>
+<p>esos mensajes caducan en horas. pero el iphone guarda su propio registro, mucho más duradero: conserva archivos de diagnóstico <code>.ips</code> durante semanas (<em>ajustes ▸ privacidad y seguridad ▸ analítica y mejoras ▸ datos de analítica</em>), y <code>devicectl</code> puede copiarlos sin herramientas extra:</p>
+<pre><code>$ xcrun devicectl device info files --device &lt;iphone&gt; --domain-type systemCrashLogs
+$ xcrun devicectl device copy from  --device &lt;iphone&gt; --domain-type systemCrashLogs \
+      --source &lt;file&gt; --destination &lt;path&gt;
+</code></pre>
+<p>480 archivos, que llegan al menos hasta el 27 de septiembre. dos importaron, y un truco: el encabezado de cada <code>JetsamEvent-*.ips</code> registra la build del sistema en ese momento, así que un montón de archivos tipo crash se convierte en un historial de versiones.</p>
+<h2>la cronología</h2>
+<p>hora local, utc−6, todo leído del iphone:</p>
+<div class="table-wrap"><table>
+<tr><th>cuándo</th><th>qué muestran los archivos</th></tr>
+<tr><td>hasta el 2 de oct, 17:19</td><td>iphone en <strong>ios 27.0 (24A5418b)</strong></td></tr>
+<tr><td>2 de oct, 22:06 → 22:41</td><td>cambia la identidad de emparejamiento del reloj en el iphone: una carpeta <code>ProxiedDevice-*</code> se detiene y empieza otra</td></tr>
+<tr><td>2 de oct, 23:45 – 23:54</td><td>un reporte de rendimiento del emparejamiento: activación ~11 s, emparejamiento con código y desbloqueo, sincronización inicial, sin errores</td></tr>
+<tr><td>3 de oct, 00:26</td><td><strong>iphone actualizado a ios 27.2 (24B5089g)</strong>; <code>ota_result_success</code></td></tr>
+<tr><td>desde el 3 de oct, 10:27</td><td>iphone en 27.2; la misma identidad del reloj hasta el final de los archivos, sin más re-emparejamientos</td></tr>
+</table></div>
+<p>el reloj estuvo en <strong>watchos 27.2 (24S5091f)</strong> con las dos identidades.</p>
+<p>primero escribí que "durante todo el fallo el reloj fue más nuevo que su iphone". eso solo describe la segunda fase. el cuadro completo, según el reporte que presenté el 24 de sept y los logs de arriba:</p>
+<div class="table-wrap"><table>
+<tr><th>fase</th><th>mac</th><th>iphone</th><th>reloj</th><th>resultado</th></tr>
+<tr><td>24 de sept, al presentar el reporte (antes de actualizar el reloj)</td><td>macos 27.2</td><td>ios 27.0</td><td>watchos 27.0</td><td>falla</td></tr>
+<tr><td>tras actualizar solo el reloj</td><td>macos 27.2</td><td>ios 27.0</td><td>watchos 27.2</td><td>falla, también tras el restablecimiento y el re-emparejamiento del 2 de oct</td></tr>
+<tr><td>tras actualizar el iphone (3 de oct, 00:26)</td><td>macos 27.2</td><td>ios 27.2</td><td>watchos 27.2</td><td>funciona</td></tr>
+</table></div>
+<p>así que la versión exacta es: los dispositivos estaban en versiones distintas en las dos fases en que falló y en la misma versión cuando funcionó.</p>
+<p>tras la actualización, <code>devicectl device info details</code> en el reloj lee <code>pairingState: paired</code>, <code>transportType: localNetwork</code>, <code>authenticationType: manualPairing</code>, y volvió a funcionar instalar apps en él.</p>
+<h2>qué prueba esto y qué no</h2>
+<ul>
+<li><strong>prueba</strong> que las versiones estuvieron mezcladas durante todo el fallo, que el emparejamiento iphone ↔ reloj estuvo limpio y que la mejora llegó con la actualización del iphone, no con otro re-emparejamiento del reloj.</li>
+<li><strong>no separa</strong> la actualización del iphone del nuevo emparejamiento por device hub que hice justo después, y no anoté si el iphone estaba por usb en ese momento. usé el mismo apple id todo el tiempo y nunca probé otro. es un solo caso y no lo repetí.</li>
+<li><strong>no prueba</strong> por qué. <code>remotepairingd</code> y <code>verifyManualPairing</code> nunca aparecen en estos archivos, así que la razón por la que el reloj pedía un pair-setup nuevo en bucle sigue sin explicarse. "el compañero y el reloj deben tener versiones iguales" es mi hipótesis de trabajo. la diría en voz alta como hipótesis.</li>
+<li><strong>no me dice un detalle:</strong> el cambio de identidad queda registrado a las 22:41 y el reporte del emparejamiento abarca 23:45–23:54. o hice más de un intento esa noche, o el reporte se escribe al final. los archivos no lo dicen.</li>
+</ul>
+<h2>errores míos en el camino</h2>
+<ul>
+<li><strong>actualizar solo el reloj.</strong> parecía lo obvio ("reprobado en watchos 27.2: mismo comportamiento") y ensanchó la brecha con el iphone.</li>
+<li><strong>escribir "la falla está en el reloj" con el iphone todavía en otra build.</strong> cada control que hice comparaba el reloj con el iphone, y nunca preguntó si sus versiones coincidían. lo primero que hay que revisar en un dispositivo acompañante es la versión de su compañero.</li>
+<li><strong>buscar la evidencia en el único log que caduca.</strong> el log del mac no tenía nada; el del iphone lo conservó semanas.</li>
+</ul>
+<h2>lo que respondió apple</h2>
+<p>el 12 de oct apple respondió en fb24924229 que el problema "parece ser una desconexión del dispositivo" (red inestable o cable degradado) y pidió logs del mac y del dispositivo tomados justo después del incidente, idealmente con el perfil de logging de coredevice en ambos lados, además de <code>xcrun devicectl diagnose</code> y un sysdiagnose de cada uno. feedback assistant ahora marca el reporte como "investigación completada — no se puede diagnosticar con la información actual".</p>
+<p>nunca tuve el perfil de logging instalado ni ejecuté <code>devicectl diagnose</code> mientras fallaba, y el sysdiagnose del reloj que sí tomé no tiene líneas de log entre las 22:21:34 y las 22:21:48, donde se cierra el canal. lo dije en mi respuesta, junto con la red que había descartado, la tabla de versiones de arriba y el bucle de pair-setup, y que enviaré los logs del perfil y un diagnose completo si vuelve a pasar.</p>
+<h2>lo que me llevo</h2>
+<ul>
+<li><strong>comprueba que todos los dispositivos coinciden antes de depurar el protocolo.</strong> mac, iphone y reloj en la misma línea de versión. un minuto de trabajo que hice al final.</li>
+<li><strong>los logs de analítica son un historial de versiones.</strong> cada encabezado de jetsam lleva la build del sistema, y <code>devicectl ... systemCrashLogs</code> los saca del teléfono.</li>
+<li><strong>captura antes de emparejar.</strong> instala el perfil de logging de coredevice en los tres dispositivos, luego <code>log stream --predicate 'process == "remotepairingd" OR process == "CoreDeviceService"'</code> a un archivo, empareja y ejecuta <code>xcrun devicectl diagnose</code> justo después de un fallo.</li>
+<li><strong>un arreglo no es un diagnóstico.</strong> este funcionó, y sigo sin conocer el mecanismo.</li>
+</ul>
+<h2>enlaces</h2>
+<ul>
+<li><a href="https://github.com/kisnner26/watchos27-pairing-bug/blob/main/docs/resolution.md" target="_blank" rel="noopener noreferrer">docs/resolution.md</a>: la cronología de arriba, los comandos y los límites, en inglés y <a href="https://github.com/kisnner26/watchos27-pairing-bug/blob/main/docs/resolution.es.md" target="_blank" rel="noopener noreferrer">español</a></li>
+<li><a href="../../watch-pairing/es/">la investigación original</a></li>
+<li><a href="https://github.com/kisnner26/watchos27-pairing-bug" target="_blank" rel="noopener noreferrer">kisnner26/watchos27-pairing-bug</a></li>
+</ul>
+  </div>
+
+  <footer class="wu-foot">
+    <p><a href="../../../#writeups">← volver al portafolio</a> · <a href="https://github.com/kisnner26" target="_blank" rel="noopener noreferrer">github.com/kisnner26</a></p>
+  </footer>
+</article>
+
+<script type="module">
+  import { toggleTheme, currentTheme } from '../../../js/lib/theme.js';
+  const btn = document.getElementById('theme');
+  const label = () => { btn.textContent = currentTheme() === 'night' ? '☀ Papel' : '☾ Noche'; };
+  label();
+  btn.addEventListener('click', () => { toggleTheme(); label(); });
+</script>
+</body>
+</html>
