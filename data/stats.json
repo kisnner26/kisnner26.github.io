@@ -1,11 +1,11 @@
 {
   "updated": "2026-10-20",
   "login": "kisnner26",
-  "contributions": 2040,
+  "contributions": 2081,
   "prs": {
     "total": 42,
-    "merged": 8,
-    "open": 27,
+    "merged": 9,
+    "open": 26,
     "closed": 7,
     "owners": [
       "rizinorg",
@@ -53,7 +53,7 @@
         "title": "Fix 6 wrong Windows 2.2091 addresses and add CustomSFXCell ctor",
         "number": 1396,
         "url": "https://github.com/geode-sdk/bindings/pull/1396",
-        "status": "open",
+        "status": "merged",
         "createdAt": "2026-10-19T23:23:43Z"
       },
       {
