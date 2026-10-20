@@ -1,12 +1,12 @@
 import { h } from '../lib/dom.js';
-import { t } from '../lib/i18n.js';
+import { t, lang } from '../lib/i18n.js';
 import { section } from './section.js';
 
 function row(w) {
   return h('article', { class: 'wu-row' },
     h('span', { class: 'wu-row-date' }, t(w.date)),
     h('div', {},
-      h('h3', { class: 'wu-row-title' }, h('a', { href: w.href }, w.title)),
+      h('h3', { class: 'wu-row-title' }, h('a', { href: lang() === 'es' ? `${w.href}es/` : w.href }, t(w.title))),
       h('p', { class: 'wu-row-line' }, t(w.line)),
       h('p', { class: 'wu-row-tags' }, w.tags.map(t).join(' · ')),
     ),
