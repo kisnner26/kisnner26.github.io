@@ -10,23 +10,26 @@ export function renderNav({ onLang } = {}) {
   const links = items.map(({ id, label }) =>
     h('a', { class: 'nav-btn', href: `#${id}`, 'data-target': id }, h('span', {}, h('i', { class: 'nav-glyph', 'aria-hidden': 'true' }, '✦ '), label())));
 
+  let themeBtn;
   const themeLabel = h('span', {}, '');
-  const setLabel = () => { themeLabel.textContent = currentTheme() === 'night' ? ui('common.light') : ui('common.night'); };
-  setLabel();
-  const themeBtn = h('button', {
-    class: 'nav-btn nav-btn--theme', type: 'button', 'aria-label': ui('common.theme'),
+  const setLabel = () => {
+    themeLabel.textContent = currentTheme() === 'night' ? ui('common.light') : ui('common.night');
+    themeBtn?.setAttribute('aria-label', `${themeLabel.textContent}: ${ui('common.theme')}`);
+  };
+  themeBtn = h('button', {
+    class: 'nav-btn nav-btn--theme', type: 'button',
     onClick: () => { toggleTheme(); setLabel(); },
   }, themeLabel);
+  setLabel();
 
   const current = h('span', { class: 'nav-current' }, items[0].label());
 
   const langBtn = h('button', {
-    class: 'nav-btn nav-btn--lang', type: 'button', 'aria-label': ui('common.language'), lang: lang() === 'es' ? 'en' : 'es',
+    class: 'nav-btn nav-btn--lang', type: 'button', 'aria-label': `${lang() === 'es' ? 'EN' : 'ES'}: ${ui('common.language')}`, lang: lang() === 'es' ? 'en' : 'es',
     onClick: () => onLang?.(lang() === 'es' ? 'en' : 'es'),
   }, lang() === 'es' ? 'EN' : 'ES');
   const menuBtn = h('button', {
     class: 'nav-menu', type: 'button', 'aria-expanded': 'false', 'aria-controls': 'nav-links',
-    'aria-label': ui('common.openSections'),
   }, h('span', { class: 'nav-menu-glyph', 'aria-hidden': 'true' }, '✦'), current, h('span', { class: 'nav-chevron', 'aria-hidden': 'true' }, '▴'));
 
   const sheet = h('div', { class: 'nav-links', id: 'nav-links' }, ...links);
