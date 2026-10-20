@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sidecar decía que el Wi-Fi de mi iPad estaba apagado. Era iCloud. — Kisnner Obando</title>
+<meta name="description" content="cómo rastreé SidecarErrorDomain -203 en macOS 27 desde un diálogo engañoso hasta un bit de Bluetooth y de ahí al estado de confianza del llavero de iCloud del iPad.">
+<meta name="theme-color" content="#f5f0e8">
+<link rel="canonical" href="https://kisnner26.github.io/writeups/sidecar/es/">
+<link rel="alternate" hreflang="es" href="https://kisnner26.github.io/writeups/sidecar/es/">
+<link rel="alternate" hreflang="en" href="https://kisnner26.github.io/writeups/sidecar/">
+<link rel="alternate" hreflang="x-default" href="https://kisnner26.github.io/writeups/sidecar/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23f5f0e8'/%3E%3Cpath d='M32 55V18M32 27C18 18 12 9 17 5c7 1 13 10 15 22M32 35c14-9 20-18 15-22-7 1-13 10-15 22' fill='none' stroke='%231a1208' stroke-linecap='round' stroke-width='3'/%3E%3C/svg%3E">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://kisnner26.github.io/writeups/sidecar/es/">
+<meta property="og:title" content="Sidecar decía que el Wi-Fi de mi iPad estaba apagado. Era iCloud.">
+<meta property="og:description" content="cómo rastreé SidecarErrorDomain -203 en macOS 27 desde un diálogo engañoso hasta un bit de Bluetooth y de ahí al estado de confianza del llavero de iCloud del iPad.">
+<meta property="og:image" content="https://kisnner26.github.io/assets/img/writeups/sidecar/cadena-de-causas.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Sidecar decía que el Wi-Fi de mi iPad estaba apagado. Era iCloud.">
+<meta name="twitter:description" content="cómo rastreé SidecarErrorDomain -203 en macOS 27 desde un diálogo engañoso hasta un bit de Bluetooth y de ahí al estado de confianza del llavero de iCloud del iPad.">
+<meta name="twitter:image" content="https://kisnner26.github.io/assets/img/writeups/sidecar/cadena-de-causas.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=IM+Fell+English:ital@0;1&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../css/tokens.css">
+<link rel="stylesheet" href="../../../css/base.css">
+<link rel="stylesheet" href="../../../css/components/writeup.css">
+
+<script>
+  // aplica el tema guardado antes de pintar, para evitar el parpadeo
+  try { var t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+</script>
+</head>
+<body style="padding-bottom:0">
+<article class="wu">
+  <nav class="wu-top" aria-label="Navegación">
+    <a class="wu-back" href="../../../#writeups">← portafolio</a>
+    <a class="wu-back" href="../" hreflang="en" lang="en">english</a>
+    <button class="wu-theme" type="button" id="theme" aria-label="Cambiar entre papel y noche">☾ Noche</button>
+  </nav>
+
+  <header class="wu-head">
+    <span class="wu-eyebrow">writeup</span>
+    <h1 class="wu-title">sidecar decía que el wi-fi de mi ipad estaba apagado. era icloud.</h1>
+    <p class="wu-meta">kisnner obando · septiembre de 2026 · macos 27 / ipados 27 · <a href="https://github.com/kisnner26/sidecar-wifi-macos27" target="_blank" rel="noopener noreferrer">código y evidencia</a></p>
+  </header>
+
+  <figure class="wu-fig wu-lead-fig"><a href="../../../assets/img/writeups/sidecar/error-dialogo.png"><img src="../../../assets/img/writeups/sidecar/error-dialogo.png" alt="diálogo de macos: sidecar no puede conectarse de forma inalámbrica porque el wi-fi de tu ipad no está disponible"></a></figure>
+
+  <div class="wu-body">
+<p>cómo rastreé <code>SidecarErrorDomain -203</code> en macos 27 desde un diálogo engañoso hasta un solo bit de bluetooth, y de ese bit al estado de confianza del llavero de icloud del ipad. sin parches, sin tocar sip, sin modificar procesos de apple: solo logs, un framework privado leído desde una pequeña sonda y mucha medición.</p>
+<h2>resumen</h2>
+<ul>
+<li>el diálogo culpa al wi-fi. el wi-fi estuvo bien todo el tiempo.</li>
+<li>el mac decide en 25 ms, en local, según un bit de estado que el ipad anuncia por bluetooth: <code>0x200</code> (<code>WiFiP2P</code>). sin bit, no hay sidecar inalámbrico.</li>
+<li>el ipad registra por qué retiene ese bit, cada ~100 ms: <code>Manatee: NO</code>.</li>
+<li>manatee (el cifrado de extremo a extremo del llavero de icloud) estaba caído porque la cuenta de apple del ipad había salido del círculo de confianza (<code>RenewCredentials</code> pendiente en ajustes).</li>
+<li>completar el aviso de la cuenta de apple en el ipad devolvió manatee, el bit volvió 5 s después y sidecar conectó.</li>
+</ul>
+<figure class="wu-fig"><a href="../../../assets/img/writeups/sidecar/cadena-de-causas.png"><img src="../../../assets/img/writeups/sidecar/cadena-de-causas.png" alt="cadena de causas, desde el inicio de sesión de icloud hasta el error -203" loading="lazy"></a></figure>
+<h2>entorno</h2>
+<div class="table-wrap"><table>
+<tbody>
+<tr><td>mac</td><td><code>MacBookPro17,1</code> (m1, 2020), macos 27.0 <code>26A5425a</code>, luego 27.2 beta 1 <code>26B5086k</code></td></tr>
+<tr><td>ipad</td><td><code>iPad13,10</code> (ipad pro de 12,9", 5.ª gen), ipados 27.0 <code>24A435</code>, luego 27.2 <code>24B5084k</code></td></tr>
+<tr><td>red</td><td>el mismo wi-fi de casa, mac en 5 ghz canal 44 todo el tiempo</td></tr>
+<tr><td>cable usb</td><td>sidecar siempre funcionó</td></tr>
+</tbody>
+</table></div>
+<p>el problema apareció el 6 de septiembre con macos 27.0. pasé dos días en el lado del mac, restablecí los ajustes de red del ipad (empeoró: el cable también dejó de funcionar hasta reconstruir la confianza) y me rendí. volví el 21 de septiembre con otro enfoque: dejar de adivinar, construir una sonda y medir.</p>
+<h2>1. el error nunca toca la red</h2>
+<p>el log del mac en un intento fallido:</p>
+<pre><code>SidecarRelay: Connecting to IDS &lt;ipad&gt; 'com.apple.sidecar.display'
+SidecarRelay: Open Session Failed: SidecarErrorDomain (-203)
+SidecarDisplayAgent: Encountered unrecoverable error: SidecarErrorDomain Code=-203 "SidecarErrorDeviceWiFiNotEnabled"
+</code></pre>
+<p>25 ms entre la primera y la segunda línea. no se puede abrir una sesión de red y fallarla en 25 ms: es una comprobación local.</p>
+<p>el error viene de <code>/usr/libexec/SidecarRelay</code> (swift, <code>arm64e</code>). en la build <code>26B5086k</code> una sola instrucción carga el código: <code>mov x2, #-0xcb</code> en <code>0x100046908</code>. se llega por <code>tbz w22, #0x0, 0x100046900</code>, desde un bloque que enmascara las banderas del dispositivo (<code>and</code> + <code>cmp</code>/<code>ccmp</code>) y, cuando no coinciden, llama a <code>String.hasPrefix</code> para elegir entre dos errores. el binario también trae las cadenas <code>RapportStatusFlags</code>, <code>WiFiP2P</code>, <code>WiFiOff</code>, <code>WiFiHostAP</code>, <code>iWiFi</code>, <code>ForceAWDL</code> y <code>ForceUSB</code>.</p>
+<p>no decodifiqué del todo qué significa cada máscara. lo que puedo decir del desensamblado es que la decisión es una comprobación de banderas. cuál importa lo salió de medir, abajo.</p>
+<h2>2. medir la bandera</h2>
+<p><code>SidecarCore</code> es un framework privado. su <code>SidecarDisplayManager</code> expone <code>sharedManager</code>, <code>devices</code>, <code>connectToDevice:withConfig:completion:</code> y una propiedad <code>status</code> en cada <code>SidecarDevice</code>. esa propiedad es la máscara de estado de rapport que el ipad anuncia por bluetooth. el mismo número aparece en <code>sharingd</code> como <code>SF 0x…</code> y en <code>SidecarRelay</code> como <code>Device Changed &lt;…&gt;</code>.</p>
+<p>escribí <a href="https://github.com/kisnner26/sidecar-wifi-macos27/blob/master/tools/sidecar-probe.swift" target="_blank" rel="noopener noreferrer"><code>sidecar-probe</code></a>, una pequeña herramienta en swift que carga el framework, lee esa propiedad, la imprime una vez por segundo y puede disparar la misma llamada de conexión que usa el menú de pantallas. eso convirtió "sidecar está roto" en algo que podía observar:</p>
+<div class="table-wrap"><table>
+<thead><tr><th><code>status</code></th><th>banderas</th><th>sidecar inalámbrico</th></tr></thead>
+<tbody>
+<tr><td><code>0x880102</code></td><td><code>BLE DuetSync Owner ApplePay</code></td><td>falla, <code>-203</code></td></tr>
+<tr><td><code>0x880302</code></td><td><code>BLE DuetSync WiFiP2P Owner ApplePay</code></td><td>conecta</td></tr>
+</tbody>
+</table></div>
+<p>un solo bit: <strong><code>0x200</code>, <code>WiFiP2P</code></strong>. por usb el ipad anuncia <code>iWiFi … USB</code> y el bit no hace falta, por eso el cable siempre funcionó.</p>
+<p>esto también explica un detalle confuso: universal control abría conexiones awdl (apple wireless direct link) con el mismo ipad mientras sidecar se negaba. <code>rapportd</code> levanta awdl bajo demanda con eventos <code>NeedsAWDL</code> e ignora dispositivos "que no tienen las banderas esperadas". universal control pasa por una ruta forzada (<code>ForceAWDL</code>). sidecar no.</p>
+<p>así que la pregunta pasó de "por qué sidecar está roto" a "por qué el ipad no anuncia <code>WiFiP2P</code>".</p>
+<h2>3. el bit apareció solo</h2>
+<p>con la sonda corriendo, a las <strong>03:06:45</strong> el ipad pasó de <code>BLE DuetSync Owner ApplePay</code> a <code>BLE DuetSync WiFiP2P Owner ApplePay … MultiUserDevice</code>. sidecar conectó a las 03:10. a las 04:07 el ipad se reinició para instalar una actualización, el bit desapareció otra vez y sidecar volvió a <code>-203</code>.</p>
+<p>eso me dio una ventana con el bit y otra sin él. cada conexión exitosa cayó dentro de la ventana con el bit, y cada fallo fuera de ella.</p>
+<figure class="wu-fig"><a href="../../../assets/img/writeups/sidecar/linea-de-tiempo.png"><img src="../../../assets/img/writeups/sidecar/linea-de-tiempo.png" alt="línea de tiempo del bit WiFiP2P y los intentos de sidecar" loading="lazy"></a></figure>
+<p>quien usa el ipad recordó que hacia las 03:06 una alerta de icloud pidió el código del ipad y luego el del iphone. esa fue la primera pista real.</p>
+<h2>4. el ipad dice por qué</h2>
+<p>el mac solo ve el resultado. el ipad conoce la razón, así que saqué sus logs por cable:</p>
+<pre><code>sudo log collect --device-udid &lt;UDID&gt; --last 10h --output /tmp/ipad.logarchive</code></pre>
+<p>1,1 gb. en <code>sharingd</code> (<code>SDNearbyAgentCore</code>), cada ~100 ms:</p>
+<pre><code>WiFiP2P bit is not set, WiFi state: Connected, hostAP: NO, NearbyAction scan: on, Manatee: NO
+</code></pre>
+<p>el ipad decide con cuatro entradas: estado del wi-fi, si es un punto de acceso, si el escaneo de nearby action está activo y si manatee está disponible. tres estuvieron bien toda la noche. lo único negativo fue <code>Manatee: NO</code>.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>periodo</th><th><code>WiFi state</code></th><th><code>hostAP</code></th><th><code>scan</code></th><th><code>Manatee</code></th><th>bit</th></tr></thead>
+<tbody>
+<tr><td>horas antes de las 03:06</td><td><code>Connected</code></td><td><code>NO</code></td><td><code>on</code></td><td><strong><code>NO</code></strong></td><td>no</td></tr>
+<tr><td>03:06:45 a 04:07</td><td><code>Connected</code></td><td><code>NO</code></td><td><code>on</code></td><td>disponible</td><td><strong>sí</strong></td></tr>
+<tr><td>tras el reinicio</td><td><code>Connected</code></td><td><code>NO</code></td><td><code>on</code></td><td><strong><code>NO</code></strong></td><td>no</td></tr>
+</tbody>
+</table></div>
+<p>esta línea también descartó, desde el punto de vista del propio ipad, dos cosas en las que perdí días: el wi-fi (<code>Connected</code>) y el punto de acceso personal (<code>hostAP: NO</code>).</p>
+<h2>5. por qué manatee estaba caído</h2>
+<p>manatee es la capa de cifrado de extremo a extremo del llavero de icloud y otros datos protegidos. depende de que el dispositivo sea de confianza en el círculo de confianza octagon de la cuenta. los logs del ipad mostraron toda la cadena:</p>
+<ul>
+<li><code>cdpd</code> / <code>CDPManateeStateController</code>: <code>Manatee not available due to circle failure with error: CDPStateError Code=-5403</code></li>
+<li><code>securityd</code>: <code>trust status: (excluded)</code>, <code>updated account trust state: UNTRUSTED</code>, desde las 23:00, la primera línea capturada</li>
+<li><code>rapportd</code>: bandera de error <code>0x100 &lt; NoManatee &gt;</code></li>
+<li>ajustes: seguimiento <code>com.apple.AAFollowUpIdentifier.RenewCredentials</code> pendiente cada vez que ajustes leía su lista (00:22, 00:25, 02:14, 02:15). abrir ajustes no lo quitaba.</li>
+</ul>
+<p>y el momento en que se arregló, al milisegundo:</p>
+<pre><code>03:06:37  securityd  new syncing policy (views include Manatee)
+03:06:40  securityd  updated account trust state: TRUSTED      (.134)
+03:06:40  sharingd   Manatee is available                      (.119)
+03:06:40  rapportd   Error flags changed: 0x100 &lt; NoManatee &gt; -&gt; 0x0
+03:06:45  mac        ipad starts advertising WiFiP2P
+03:06:52  settings   RenewCredentials no longer pending
+</code></pre>
+<h2>6. reproducirlo</h2>
+<p>una correlación de un solo evento es una historia. quería que la cadena se rompiera y se curara otra vez.</p>
+<ul>
+<li><strong>04:07</strong>, el ipad se reinicia por la actualización. <strong>04:10:37</strong> la confianza vuelve a <code>UNTRUSTED</code>, 04:10:38 manatee a no disponible, 04:10:57 el bit desaparece. sidecar falla. <code>RenewCredentials</code> vuelve a ajustes a las 04:17.</li>
+<li><strong>~04:51</strong>, se introduce la contraseña de la cuenta de apple en el ipad. <strong>04:51:42</strong> vuelve el bit. <strong>04:52:22</strong> sidecar conecta por wi-fi directo (<code>[AWDL]</code>).</li>
+</ul>
+<h2>callejones sin salida</h2>
+<p>cada uno se probó y el fallo continuó. lo que mató cada hipótesis fue una medición, no un argumento.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>hipótesis</th><th>por qué es falsa</th></tr></thead>
+<tbody>
+<tr><td>wi-fi, bluetooth o awdl caídos en el mac</td><td>wi-fi en 5 ghz, bluetooth encendido, <code>awdl0</code> arriba; el mac lee <code>WiFiP2P</code> de otro dispositivo; universal control abre awdl con este mismo ipad</td></tr>
+<tr><td>punto de acceso personal en el ipad</td><td>el ipad registra <code>hostAP: NO</code> en cada línea</td></tr>
+<tr><td>vpn</td><td>apagada en ambos, sin cambio</td></tr>
+<tr><td>2,4 vs 5 ghz</td><td>ipad en 5 ghz, mismo ssid que el mac: bit ausente en 75 de 75 lecturas de un segundo</td></tr>
+<tr><td>versiones distintas del sistema</td><td>conectó con ipad 27.0 y mac 27.2; falló con ambos en 27.2</td></tr>
+<tr><td>cargador</td><td>conectó con el ipad desenchufado; falló enchufado durante más de 20 min</td></tr>
+<tr><td>estado viejo en el mac</td><td>reinicié <code>rapportd</code>, <code>sharingd</code>, <code>SidecarRelay</code>, <code>identityservicesd</code>: vuelve el mismo <code>0x880102</code> en vivo desde el ipad</td></tr>
+<tr><td>restablecer los ajustes de red del ipad</td><td>empeoró</td></tr>
+<tr><td>reiniciar el ipad</td><td>no lo arregla; la cuenta vuelve a pedir credenciales y el bit se pierde</td></tr>
+</tbody>
+</table></div>
+<h2>el arreglo</h2>
+<p>en el ipad:</p>
+<ol>
+<li><strong>ajustes → tu nombre</strong>. si pide actualizar los ajustes de la cuenta de apple o volver a iniciar sesión, termínalo (contraseña, código de verificación, códigos de los dispositivos si los pide).</li>
+<li><strong>icloud → contraseñas y llavero</strong> debe estar activado.</li>
+<li>si no basta, cierra sesión de la cuenta de apple y vuelve a iniciarla.</li>
+</ol>
+<p>para confirmar: <code>./sidecar-probe status</code> debe reportar <code>WiFiP2P</code> presente y salir con <code>0</code>, y <code>./sidecar-probe connect</code> debe conectar.</p>
+<h2>lo que no sé</h2>
+<ul>
+<li><strong>por qué la cuenta estaba en <code>RenewCredentials</code> desde el principio.</strong> ya estaba así en la primera hora de logs capturados.</li>
+<li><strong>por qué un reinicio lo deshizo una vez.</strong> tras el segundo arreglo (con la contraseña) el bit se quedó.</li>
+<li><strong>si otras entradas pueden quitar <code>WiFiP2P</code> de la misma forma.</strong> solo manatee cambió mientras todo lo demás era constante, así que solo manatee está probado.</li>
+<li><strong>qué tan general es.</strong> un mac y un ipad. no he visto otros modelos.</li>
+<li>no capturé los logs del ipad a las 04:51. ese momento solo está observado desde el mac y por lo que contó quien usa el ipad.</li>
+<li>no reinicié el ipad después del arreglo final para ver si aguanta.</li>
+</ul>
+<h2>lo que me llevo</h2>
+<ul>
+<li><strong>el mensaje de error es genérico.</strong> el diálogo <code>-203</code> sale por cualquier motivo por el que falle la comprobación. aquí me mandó dos días a los ajustes de wi-fi y de punto de acceso.</li>
+<li><strong>encuentra dónde se toma la decisión y mide su entrada.</strong> una vez que supe que era una comprobación local de banderas, una sonda que leía la bandera cada segundo sirvió más que cualquier cantidad de reinicios.</li>
+<li><strong>el otro dispositivo suele saberlo.</strong> el ipad registraba la razón exacta diez veces por segundo. el mac no tenía forma de verla.</li>
+<li><strong>anota los callejones sin salida con la medición que los mató.</strong> varias de mis explicaciones intermedias eran falsas. la tabla es lo que me impidió volver a ellas.</li>
+</ul>
+<p>apple podría arreglarlo con poco: cuando el ipad retiene <code>WiFiP2P</code> por <code>NoManatee</code>, el diálogo podría decir "inicia sesión en icloud en tu ipad" en lugar de "activa el wi-fi".</p>
+<h2>archivos</h2>
+<ul>
+<li><a href="https://github.com/kisnner26/sidecar-wifi-macos27/blob/master/tools/sidecar-probe.swift" target="_blank" rel="noopener noreferrer"><code>tools/sidecar-probe.swift</code></a>: lee <code>SidecarDevice.status</code>, lo vigila y conecta sin la interfaz (api privada, solo para diagnóstico)</li>
+<li><a href="https://github.com/kisnner26/sidecar-wifi-macos27/blob/master/tools/ipad-why.sh" target="_blank" rel="noopener noreferrer"><code>tools/ipad-why.sh</code></a>: extrae las líneas relevantes de un archivo de logs del ipad y enmascara datos personales</li>
+<li><a href="https://github.com/kisnner26/sidecar-wifi-macos27/tree/master/evidence" target="_blank" rel="noopener noreferrer"><code>evidence/</code></a>: extractos de logs enmascarados de ambos dispositivos</li>
+<li><a href="https://github.com/kisnner26/sidecar-wifi-macos27/tree/master/notes" target="_blank" rel="noopener noreferrer"><code>notes/</code></a>: notas originales de la investigación (en español)</li>
+</ul>
+<p>los datos personales (correo de la cuenta, identificadores de cuenta, udid, direcciones) están enmascarados en cada extracto. los logs sin procesar no se publican.</p>
+  </div>
+
+  <footer class="wu-foot">
+    <p><a href="../../../#writeups">← volver al portafolio</a> · <a href="https://github.com/kisnner26" target="_blank" rel="noopener noreferrer">github.com/kisnner26</a></p>
+  </footer>
+</article>
+
+<script type="module">
+  import { toggleTheme, currentTheme } from '../../../js/lib/theme.js';
+  const btn = document.getElementById('theme');
+  const label = () => { btn.textContent = currentTheme() === 'night' ? '☀ Papel' : '☾ Noche'; };
+  label();
+  btn.addEventListener('click', () => { toggleTheme(); label(); });
+</script>
+</body>
+</html>
