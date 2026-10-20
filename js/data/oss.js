@@ -1,8 +1,17 @@
-/** Contribuciones a proyectos de terceros. */
+/** Contribuciones a proyectos de terceros. Primero lo mergeado; el estado y el título se actualizan solos con data/stats.json. */
 export const contributions = [
-  { repo: 'radare2', title: 'core: trim help descriptions to fit within 80 columns', number: 26745, meta: 'herramientas de ingeniería inversa', url: 'https://github.com/radareorg/radare2/pull/26745', status: 'merged' },
+  { repo: 'bindings', title: 'Fix 6 wrong Windows 2.2091 addresses and add CustomSFXCell ctor', number: 1396, meta: 'Geode · direcciones de Windows 2.2091 corregidas', url: 'https://github.com/geode-sdk/bindings/pull/1396', status: 'merged' },
+  { repo: 'radare2', title: 'fix nested memory references in numeric expressions', number: 26920, meta: 'herramientas de ingeniería inversa · expresiones con referencias anidadas', url: 'https://github.com/radareorg/radare2/pull/26920', status: 'merged' },
+  { repo: 'node', title: 'doc: correct QuicStream direction and id types', number: 66687, meta: 'Node.js · documentación de QuicStream', url: 'https://github.com/nodejs/node/pull/66687', status: 'merged' },
+  { repo: 'pyelftools', title: 'fix readme path in package metadata and manifest', number: 674, meta: 'ELF y DWARF en Python · empaquetado', url: 'https://github.com/eliben/pyelftools/pull/674', status: 'merged' },
+  { repo: 'swift-llm-kit', title: 'KeychainService: retry the update when a concurrent save wins SecItemAdd', number: 27, meta: 'Swift · carrera de Keychain con guardados concurrentes', url: 'https://github.com/drewster99/swift-llm-kit/pull/27', status: 'merged' },
+  { repo: 'ClaudeHub', title: 'docs: probado a mano en macOS 27 (Apple Silicon) con capturas', number: 1, meta: 'documentación probada a mano en macOS 27', url: 'https://github.com/NormanSMA/ClaudeHub/pull/1', status: 'merged' },
+  { repo: 'PeerBeam', title: 'devex: add Docker-based local development workflow', number: 9, meta: 'entorno de desarrollo con Docker', url: 'https://github.com/hoowertsg19/PeerBeam/pull/9', status: 'merged' },
   { repo: 'radare2', title: 'core: trim 14 more help descriptions to fit within 80 columns', number: 26749, meta: 'herramientas de ingeniería inversa', url: 'https://github.com/radareorg/radare2/pull/26749', status: 'merged' },
-  { repo: 'swift-nio', title: 'NIOFileSystem: add FileInfo.onDiskSize', number: 3744, meta: 'Apple', url: 'https://github.com/apple/swift-nio/pull/3744', status: 'open' },
+  { repo: 'radare2', title: 'core: trim 14 help descriptions to fit within 80 columns', number: 26745, meta: 'herramientas de ingeniería inversa', url: 'https://github.com/radareorg/radare2/pull/26745', status: 'merged' },
+  { repo: 'AltStore', title: 'Fix AltServer sign-in (-80045 / HTTP 503) on macOS 27 with Windows anisette data', number: 1834, meta: 'AltStore · arreglo propuesto del inicio de sesión de AltServer en macOS 27', url: 'https://github.com/altstoreio/AltStore/pull/1834', status: 'open' },
+  { repo: 'AltSign', title: 'Send GrandSlam requests with the anisette provider\'s client identity', number: 61, meta: 'AltSign · base del arreglo; el PR #1835 de AltStore depende de él', url: 'https://github.com/rileytestut/AltSign/pull/61', status: 'open' },
+  { repo: 'geode', title: 'Fix Windows 2.2091 layouts of CCKeyboardDispatcher, CCApplication, CCParticleSystem and CCMotionStreak', number: 2253, meta: 'Geode · layouts de clases de cocos2d en Windows 2.2091', url: 'https://github.com/geode-sdk/geode/pull/2253', status: 'open' },
   { repo: 'swift-nio-extras', title: 'NIOWritePCAPHandler: fall back to fake addresses for UDS channels', number: 327, meta: 'Apple · corrige un crash real', url: 'https://github.com/apple/swift-nio-extras/pull/327', status: 'open' },
-  { repo: 'swift-argument-parser', title: 'Usage reflects the invoked binary name', number: 972, meta: 'Apple', url: 'https://github.com/apple/swift-argument-parser/pull/972', status: 'open' },
+  { repo: 'swift-nio', title: 'NIOFileSystem: add FileInfo.onDiskSize', number: 3744, meta: 'Apple', url: 'https://github.com/apple/swift-nio/pull/3744', status: 'open' },
 ];
