@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mi Apple Watch se emparejó bien. Luego lo olvidó. — Kisnner Obando</title>
+<meta name="description" content="por qué un Apple Watch Ultra 2 desapareció de Xcode 27 en watchOS 27: el emparejamiento funciona, pero el reloj vuelve pidiendo uno nuevo en lugar de verificar. Logs de ambos lados, un experimento con el listener y un host independiente.">
+<meta name="theme-color" content="#f5f0e8">
+<link rel="canonical" href="https://kisnner26.github.io/writeups/watch-pairing/es/">
+<link rel="alternate" hreflang="es" href="https://kisnner26.github.io/writeups/watch-pairing/es/">
+<link rel="alternate" hreflang="en" href="https://kisnner26.github.io/writeups/watch-pairing/">
+<link rel="alternate" hreflang="x-default" href="https://kisnner26.github.io/writeups/watch-pairing/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23f5f0e8'/%3E%3Cpath d='M32 55V18M32 27C18 18 12 9 17 5c7 1 13 10 15 22M32 35c14-9 20-18 15-22-7 1-13 10-15 22' fill='none' stroke='%231a1208' stroke-linecap='round' stroke-width='3'/%3E%3C/svg%3E">
+
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://kisnner26.github.io/writeups/watch-pairing/es/">
+<meta property="og:title" content="Mi Apple Watch se emparejó bien. Luego lo olvidó.">
+<meta property="og:description" content="por qué un Apple Watch Ultra 2 desapareció de Xcode 27 en watchOS 27: el emparejamiento funciona, pero el reloj vuelve pidiendo uno nuevo en lugar de verificar. Logs de ambos lados, un experimento con el listener y un host independiente.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Mi Apple Watch se emparejó bien. Luego lo olvidó.">
+<meta name="twitter:description" content="por qué un Apple Watch Ultra 2 desapareció de Xcode 27 en watchOS 27: el emparejamiento funciona, pero el reloj vuelve pidiendo uno nuevo en lugar de verificar. Logs de ambos lados, un experimento con el listener y un host independiente.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=IM+Fell+English:ital@0;1&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../css/tokens.css">
+<link rel="stylesheet" href="../../../css/base.css">
+<link rel="stylesheet" href="../../../css/components/writeup.css">
+
+<script>
+  // aplica el tema guardado antes de pintar, para evitar el parpadeo
+  try { var t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+</script>
+</head>
+<body style="padding-bottom:0">
+<article class="wu">
+  <nav class="wu-top" aria-label="Navegación">
+    <a class="wu-back" href="../../../#writeups">← portafolio</a>
+    <a class="wu-back" href="../" hreflang="en" lang="en">english</a>
+    <button class="wu-theme" type="button" id="theme" aria-label="Cambiar entre papel y noche">☾ Noche</button>
+  </nav>
+
+  <header class="wu-head">
+    <span class="wu-eyebrow">writeup</span>
+    <h1 class="wu-title">mi apple watch se emparejó bien. luego lo olvidó.</h1>
+    <p class="wu-meta">kisnner obando · septiembre de 2026 · watchos 27.2 · xcode 27 / device hub · macos 27.2 · <a href="https://github.com/kisnner26/watchos27-pairing-bug" target="_blank" rel="noopener noreferrer">el repo</a> · estado: <strong>resuelto después, mira <a href="../../watch-pairing-fix/es/">el seguimiento</a></strong></p>
+  </header>
+
+  <div class="wu-body">
+<p><strong>actualización, 3 de octubre:</strong> resultó que se arregló actualizando el <em>iphone</em> a ios 27.2, no con nada en el reloj. el seguimiento tiene la evidencia y sus límites: <a href="../../watch-pairing-fix/es/">el reloj no estaba roto. mi iphone iba atrasado.</a> lo que sigue es la investigación tal como la escribí en su momento.</p>
+<p>un informe de un apple watch ultra 2 que desapareció de xcode 27 y no volvió. este no está resuelto. lo que tengo es una descripción mucho más estrecha del fallo que "no conecta", construida con logs del mac y del reloj, un experimento que cambió mi teoría y un callejón sin salida con un host de emparejamiento independiente. está reportado a apple como <strong>FB24924229</strong>.</p>
+<h2>resumen</h2>
+<ul>
+<li>el reloj pasó a <code>unavailable</code> en <code>devicectl</code> y luego desapareció. volver a emparejarlo desde device hub <strong>funciona</strong> siempre: srp pair-setup m1–m6, <code>setupManualPairing succeeded</code>.</li>
+<li>~30 ms después el canal se cierra. un iphone hace exactamente lo mismo y reconecta 1,4 s después con <code>verifyManualPairing</code>. el reloj nunca.</li>
+<li>los relojes se emparejan <em>hacia</em> el mac, y el mac solo escucha mientras la hoja de emparejamiento está abierta. cuando lo mantuve escuchando, el reloj <strong>volvió</strong> 23 s después, pero pidió un <strong>emparejamiento nuevo</strong> en vez de verificar el que acababa de terminar. entra en bucle.</li>
+<li>así que el lado del mac funciona. el reloj no conserva, o no usa, su mitad del emparejamiento. ese código vive en watchos, que no puedo cambiar.</li>
+</ul>
+<h2>el síntoma</h2>
+<pre><code>$ xcrun devicectl list devices
+iPhone (2)   available (paired)   iPhone 15 Pro Max
+iPad         available (paired)   iPad Pro 12.9-inch
+             (no watch)
+$ xcrun devicectl manage pair --device &lt;watch&gt;
+The specified device was not found (1000)
+</code></pre>
+<p>device hub mostraba "no disponible por ahora — debe estar cerca". instalar desde la app watch del iphone avanzaba hasta la mitad y se atascaba. antes descarté bluetooth, wi-fi, el cable, el modo desarrollador y la propia app. la lista completa está en <a href="https://github.com/kisnner26/watchos27-pairing-bug/blob/main/docs/what-i-tried.md" target="_blank" rel="noopener noreferrer">what-i-tried.md</a>.</p>
+<h2>1. el emparejamiento funciona y luego el canal se cierra</h2>
+<p><code>remotepairingd</code> en el mac muestra un emparejamiento completo y exitoso, seguido de un cierre:</p>
+<pre><code>22:21:41.314  PairSetup server done -- client authenticated
+22:21:41.314  tcp-79: Pairing session of kind setupManualPairing succeeded
+22:21:41.344  tcp-79: received error reading message        &lt;-- +30 ms
+22:21:41.345  tcp-79: authenticated -&gt; invalidated
+22:21:41.663  DeviceHub: Beaconing pairing session explicitly ended by client
+</code></pre>
+<p>mi primer informe llamó a ese cierre de 30 ms el bug. no lo era.</p>
+<h2>2. un control: el iphone hace lo mismo</h2>
+<p>tras restablecer ubicación y privacidad, el iphone también tuvo que volver a emparejarse, un minuto antes que el reloj, en el mismo mac:</p>
+<div class="table-wrap"><table>
+<tr><th></th><th>setup exitoso</th><th>canal cerrado</th><th>reconexión</th></tr>
+<tr><td>iphone</td><td>10:54:22.173</td><td>+36 ms</td><td><strong>+1,4 s</strong> <code>verifyManualPairing</code> → available</td></tr>
+<tr><td>reloj</td><td>10:55:08.951</td><td>+29 ms</td><td><strong>ninguna</strong></td></tr>
+</table></div>
+<p>el cierre es normal: termina el setup y el dispositivo reconecta con una sesión verificada. lo que falta es la reconexión del reloj. reescribí el repo y el reporte a apple para decir eso. un borrador anterior usó la reconexión de un ipad como control, que no era un setup nuevo, así que tampoco era una comparación justa.</p>
+<h2>3. los relojes se emparejan hacia el mac</h2>
+<p>el mac encuentra un iphone buscando <code>_remotepairing._tcp</code>. el reloj nunca anunció eso, y yo tenía "el reloj no se anuncia" como hipótesis principal. leer un <code>log stream</code> en vivo durante el emparejamiento mostró que el flujo es al revés para un reloj:</p>
+<pre><code>22:21:16  remotepairingd: Started listening for network pairing   &lt;-- sheet opened
+22:21:41  setupManualPairing succeeded
+22:21:41  DeviceHub: Beaconing pairing session explicitly ended  &lt;-- sheet closes itself
+</code></pre>
+<p>el reloj se conecta <em>al</em> listener <code>_remotepairing-pairable-host._tcp</code> del mac, y ese listener existe solo mientras la hoja <em>emparejar dispositivo cercano…</em> de device hub está abierta. la hoja se cierra sola ~300–400 ms después del setup. así que probablemente el reloj no se anuncia por diseño, y apareció una teoría nueva: quizá el reloj intenta reconectar, pero ya no queda nada a lo que conectarse.</p>
+<h2>4. mantener al mac escuchando</h2>
+<p>reabrir la hoja a mano dejaba un hueco de 15 s y no volvía nada. para cerrar el hueco escribí <a href="https://github.com/kisnner26/watchos27-pairing-bug/blob/main/tools/watch-pair-keeper.sh" target="_blank" rel="noopener noreferrer">watch-pair-keeper.sh</a>: sigue <code>remotepairingd</code> y, en cuanto device hub suelta el listener, vuelve a pulsar <em>emparejar dispositivo cercano…</em> mediante system events, y luego reporta si el reloj verificó. antes de usarlo en vivo le pasé un log capturado para comprobar los tiempos.</p>
+<pre><code>22:53:00.613  setupManualPairing succeeded (watch)     closed at +305 ms
+22:53:01.533  mac listening again                      gap: 615 ms
+22:53:23.502  Network pairing peers updated. Total count: 1   &lt;-- the watch is back
+22:53:23.558  PairingData(startNewSession: true, kind: setupManualPairing)
+22:53:23.559  DeviceHub: Presenting pairing challenge   &lt;-- a new code
+22:53:33.642  setupManualPairing succeeded (watch)     closed again at +286 ms
+</code></pre>
+<p>eso refutó mi teoría y dio una respuesta mejor. el reloj <strong>sí</strong> reconecta. pero pide un <strong>pair-setup nuevo</strong>, no un pair-verify, como si hubiera olvidado el emparejamiento que terminó 23 segundos antes. el mac guardó el emparejamiento y estaba escuchando; el reloj no usó su parte. setup, cierre, setup, cierre.</p>
+<p>un falso positivo que vale la pena mencionar: el script marcó un <code>verifyManualPairing</code> a las 22:53:59. era el ipad. el script solo cuenta un verify cuando la siguiente línea autenticada lleva el prefijo del udid del reloj, y por eso no reportó éxito.</p>
+<h2>5. los logs propios del reloj</h2>
+<p>un sysdiagnose del reloj (corona + botón lateral, y luego por el iphone) mostró a <code>remotepairingdeviced</code> iniciando el emparejamiento con normalidad: resuelve el anuncio del mac, conecta por wi-fi, <code>lockdownShouldDisableDevicePairing: NO</code>, "manual pairing in progress". luego el archivo <strong>no tiene líneas de ningún proceso</strong> entre las 22:21:34.1 y las 22:21:48, así que el lado del reloj del cierre de las 22:21:41 no está. (el primer archivo que salió era el del iphone. el nombre dice <code>iPhone-OS</code> o <code>Watch-OS</code>; compruébalo antes de ponerte a analizar.)</p>
+<h2>6. un host independiente</h2>
+<p>si el lado del mac no se puede cambiar, quizá se pueda reemplazar. pymobiledevice3 11.19.1 trae <code>remote pair-host</code>, que anuncia un host emparejable y acepta un emparejamiento iniciado por el dispositivo. el reloj lo listó en <em>desarrollador ▸ macs emparejados ▸ otros dispositivos</em>, pidió el código del reloj y luego nunca abrió una conexión tcp.</p>
+<p>al host de apple se llega por ipv6 link-local; pymobiledevice3 se enlaza a <code>0.0.0.0</code> y solo publica un registro a. así que lo envolví (<a href="https://github.com/kisnner26/watchos27-pairing-bug/blob/main/tools/pair_host_dualstack.py" target="_blank" rel="noopener noreferrer">pair_host_dualstack.py</a>) para escuchar en ambas familias y anunciar también el registro aaaa. mismo resultado: ninguna conexión, por ninguna de las dos. device hub además ejecuta una sesión "beaconing" que pymobiledevice3 no tiene. si el reloj la necesita, todavía no lo sé.</p>
+<h2>dónde está</h2>
+<ul>
+<li>la falla está en el reloj: tras un setup exitoso vuelve pidiendo uno nuevo.</li>
+<li>quitar el mac en el reloj (<em>desarrollador ▸ desvincular este dispositivo</em>) y emparejar de nuevo no cambia nada.</li>
+<li>nada del lado del mac lo arregló. el único paso sin probar es borrar el reloj.</li>
+<li>la evidencia del bucle de emparejamiento fue a apple como seguimiento de FB24924229.</li>
+</ul>
+<h2>errores míos en el camino</h2>
+<ul>
+<li><strong>llamar bug al cierre de 30 ms.</strong> un control con el iphone mostró que es normal. corregido en el repo y en el reporte.</li>
+<li><strong>"el reloj no se anuncia" como hipótesis principal.</strong> los relojes se emparejan hacia el mac. tachada.</li>
+<li><strong>"el mac deja de escuchar demasiado pronto" como arreglo.</strong> el experimento que armé para probarlo lo refutó, y así apareció el hallazgo real.</li>
+</ul>
+<h2>lo que me llevo</h2>
+<ul>
+<li><strong>un dispositivo de control vale más que otra teoría.</strong> que el iphone hiciera el mismo cierre en el mismo minuto replanteó todo el problema.</li>
+<li><strong>lee quién se conecta a quién.</strong> asumí que el mac encuentra al reloj. es al revés, y eso cambió qué ausencia importaba.</li>
+<li><strong>un experimento que no arregla algo puede ser igual el resultado.</strong> mantener el listener abierto no arregló el emparejamiento; expuso el bucle.</li>
+<li><strong>"no se puede arreglar desde aquí" debe venir con evidencia.</strong> el host de apple, mi arreglo del listener y un host independiente, todo con marcas de tiempo.</li>
+</ul>
+<h2>enlaces</h2>
+<ul>
+<li><a href="https://github.com/kisnner26/watchos27-pairing-bug" target="_blank" rel="noopener noreferrer">kisnner26/watchos27-pairing-bug</a>: logs depurados, cronología, herramientas y el texto del asistente de feedback</li>
+<li><a href="https://github.com/doronz88/pymobiledevice3" target="_blank" rel="noopener noreferrer">doronz88/pymobiledevice3</a>, el host independiente del paso 6</li>
+</ul>
+  </div>
+
+  <footer class="wu-foot">
+    <p><a href="../../../#writeups">← volver al portafolio</a> · <a href="https://github.com/kisnner26" target="_blank" rel="noopener noreferrer">github.com/kisnner26</a></p>
+  </footer>
+</article>
+
+<script type="module">
+  import { toggleTheme, currentTheme } from '../../../js/lib/theme.js';
+  const btn = document.getElementById('theme');
+  const label = () => { btn.textContent = currentTheme() === 'night' ? '☀ Papel' : '☾ Noche'; };
+  label();
+  btn.addEventListener('click', () => { toggleTheme(); label(); });
+</script>
+</body>
+</html>
