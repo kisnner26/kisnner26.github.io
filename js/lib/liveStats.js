@@ -8,49 +8,24 @@ export async function loadLiveStats() {
   }
 }
 
-/** Nombre corto de cada dueño de repo, en el orden en que se muestran. */
-const OWNER_NAMES = { radareorg: 'radare2', rizinorg: 'rizin', apple: 'Apple' };
-const OWNER_PRIORITY = Object.keys(OWNER_NAMES);
-
-function listEs(items) {
-  return items.length < 2 ? items.join('') : `${items.slice(0, -1).join(', ')} y ${items.at(-1)}`;
-}
-
-/** Une los dueños conocidos con otros hasta 3 nombres; si sobran, termina en "y más". */
-function ownersLabel(owners) {
-  const known = OWNER_PRIORITY.filter((o) => owners.includes(o));
-  const rest = owners.filter((o) => !OWNER_PRIORITY.includes(o));
-  const names = [...known, ...rest].map((o) => OWNER_NAMES[o] ?? o);
-  return names.length > 3 ? `${names.slice(0, 3).join(', ')} y más` : listEs(names);
-}
-
-/** Orgs de las certificaciones: primero las de más renombre, luego por frecuencia. */
-const CERT_PRESTIGE = ['Harvard', 'Cisco', 'Anthropic'];
-const shortOrg = (org) => org.split(' · ')[0].replace(/ (University|Networking Academy|Learning)$/, '');
-
-export function certificatesLabel(certificates) {
-  const counts = new Map();
-  certificates.forEach((c) => counts.set(shortOrg(c.org), (counts.get(shortOrg(c.org)) ?? 0) + 1));
-  const orgs = [...counts.keys()];
-  const ordered = [
-    ...CERT_PRESTIGE.filter((o) => counts.has(o)),
-    ...orgs.filter((o) => !CERT_PRESTIGE.includes(o)).sort((a, b) => counts.get(b) - counts.get(a)),
-  ];
-  const shown = ordered.slice(0, 3);
-  const n = certificates.length;
-  return `${n === 1 ? 'certificación' : 'certificaciones'}: ${shown.join(', ')}${ordered.length > 3 ? ' y más' : ''}`;
-}
-
 /** Las tres cifras de la franja. Sin datos vivos usa los últimos valores conocidos (`fallback`). */
-export function buildStats({ live, fallback, certificates }) {
-  const certs = { value: String(certificates.length), label: certificatesLabel(certificates) };
-  if (!live) return [fallback.contributions, fallback.prs, certs];
+export function buildStats({ live, fallback, writeups }) {
+  const reports = {
+    value: String(writeups.length),
+    label: { es: 'informes técnicos, con lo que probé y lo que no', en: 'technical write-ups, with what I tested and what I didn\'t' },
+  };
+  if (!live) return [fallback.merged, fallback.prs, reports];
   const { prs } = live;
-  const merged = `${prs.merged} ya mergeado${prs.merged === 1 ? '' : 's'}`;
   return [
-    { value: String(live.contributions), label: 'contribuciones en GitHub en los últimos 12 meses' },
-    { value: String(prs.total), label: `pull requests a proyectos ajenos: ${ownersLabel(prs.owners)}; ${merged}` },
-    certs,
+    {
+      value: String(prs.merged),
+      label: { es: 'pull requests mergeados en proyectos ajenos: radare2, Node.js, Geode y más', en: 'pull requests merged into other people\'s projects: radare2, Node.js, Geode and more' },
+    },
+    {
+      value: String(prs.total),
+      label: { es: `pull requests enviados en total, ${prs.open} abiertos en revisión`, en: `pull requests sent in total, ${prs.open} open and under review` },
+    },
+    reports,
   ];
 }
 

@@ -1,25 +1,23 @@
 import { h, extLink } from '../lib/dom.js';
+import { t, ui, fill, UI } from '../lib/i18n.js';
 import { section } from './section.js';
-
-const STATUS = { merged: 'mergeado', open: 'abierto', closed: 'cerrado' };
 
 function row(c) {
   return h('div', { class: 'oss-row' },
     h('span', { class: 'oss-repo' }, c.repo),
     h('div', {},
       h('div', { class: 'oss-title' }, extLink(c.url, c.title)),
-      h('div', { class: 'oss-meta' }, `#${c.number} · ${c.meta}`),
+      h('div', { class: 'oss-meta' }, `#${c.number} · ${t(c.meta)}`),
     ),
-    h('span', { class: `oss-badge oss-badge--${c.status}` }, STATUS[c.status] ?? c.status),
+    h('span', { class: `oss-badge oss-badge--${c.status}` }, t(UI.status[c.status]) ?? c.status),
   );
 }
 
 export function renderOss(contributions, live = null) {
-  return section(
-    { id: 'oss', eyebrow: 'open source', title: 'Contribuciones', sub: 'pull requests a herramientas que uso, probados contra binarios y tests reales antes de enviarlos.' },
+  return section('oss',
     h('div', { class: 'oss-list' }, contributions.map(row)),
     live && live.prs.total > contributions.length && h('p', { class: 'oss-more' },
-      extLink(`https://github.com/pulls?q=author%3A${live.login}+-user%3A${live.login}+is%3Apr`, `ver los ${live.prs.total} pull requests en GitHub`),
-      ` · ${live.prs.merged} mergeados, ${live.prs.open} abiertos, ${live.prs.closed} cerrados · actualizado el ${live.updated}`),
+      extLink(`https://github.com/pulls?q=author%3A${live.login}+-user%3A${live.login}+is%3Apr`,
+        fill(UI.ossMore, { total: live.prs.total, merged: live.prs.merged, open: live.prs.open, closed: live.prs.closed, updated: live.updated }))),
   );
 }

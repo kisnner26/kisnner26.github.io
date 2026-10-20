@@ -1,37 +1,36 @@
 import { h } from '../lib/dom.js';
 import { toggleTheme, currentTheme } from '../lib/theme.js';
+import { lang, ui } from '../lib/i18n.js';
 
-const items = [
-  { id: 'inicio', label: 'Inicio' },
-  { id: 'proyectos', label: 'Proyectos' },
-  { id: 'writeups', label: 'Writeups' },
-  { id: 'oss', label: 'Open source' },
-  { id: 'certificados', label: 'Certificados' },
-  { id: 'contacto', label: 'Contacto' },
-];
+const items = ['inicio', 'proyectos', 'oss', 'writeups', 'experiencia', 'certificados', 'contacto'].map((id) => ({ id, label: () => ui(`nav.${id}`) }));
 
 /** Barra inferior. En pantallas anchas muestra todos los enlaces; en teléfonos queda colapsada
  *  en una pastilla con la sección actual y abre el resto como una hoja hacia arriba. */
-export function renderNav() {
+export function renderNav({ onLang } = {}) {
   const links = items.map(({ id, label }) =>
-    h('a', { class: 'nav-btn', href: `#${id}`, 'data-target': id }, h('span', {}, h('i', { class: 'nav-glyph', 'aria-hidden': 'true' }, '✦ '), label)));
+    h('a', { class: 'nav-btn', href: `#${id}`, 'data-target': id }, h('span', {}, h('i', { class: 'nav-glyph', 'aria-hidden': 'true' }, '✦ '), label())));
 
   const themeLabel = h('span', {}, '');
-  const setLabel = () => { themeLabel.textContent = currentTheme() === 'night' ? '☀ Papel' : '☾ Noche'; };
+  const setLabel = () => { themeLabel.textContent = currentTheme() === 'night' ? ui('common.light') : ui('common.night'); };
   setLabel();
   const themeBtn = h('button', {
-    class: 'nav-btn nav-btn--theme', type: 'button', 'aria-label': 'Cambiar entre papel y noche',
+    class: 'nav-btn nav-btn--theme', type: 'button', 'aria-label': ui('common.theme'),
     onClick: () => { toggleTheme(); setLabel(); },
   }, themeLabel);
 
-  const current = h('span', { class: 'nav-current' }, items[0].label);
+  const current = h('span', { class: 'nav-current' }, items[0].label());
+
+  const langBtn = h('button', {
+    class: 'nav-btn nav-btn--lang', type: 'button', 'aria-label': ui('common.language'), lang: lang() === 'es' ? 'en' : 'es',
+    onClick: () => onLang?.(lang() === 'es' ? 'en' : 'es'),
+  }, lang() === 'es' ? 'EN' : 'ES');
   const menuBtn = h('button', {
     class: 'nav-menu', type: 'button', 'aria-expanded': 'false', 'aria-controls': 'nav-links',
-    'aria-label': 'Abrir secciones',
+    'aria-label': ui('common.openSections'),
   }, h('span', { class: 'nav-menu-glyph', 'aria-hidden': 'true' }, '✦'), current, h('span', { class: 'nav-chevron', 'aria-hidden': 'true' }, '▴'));
 
   const sheet = h('div', { class: 'nav-links', id: 'nav-links' }, ...links);
-  const nav = h('nav', { class: 'nav-bar', 'aria-label': 'Secciones' }, menuBtn, sheet, themeBtn);
+  const nav = h('nav', { class: 'nav-bar', 'aria-label': ui('common.sections') }, menuBtn, sheet, langBtn, themeBtn);
 
   const setOpen = (open) => {
     nav.classList.toggle('open', open);
@@ -44,7 +43,7 @@ export function renderNav() {
 
   // resalta el enlace de la sección que está en pantalla y lo muestra en la pastilla
   const byId = new Map(links.map((a) => [a.dataset.target, a]));
-  const labels = new Map(items.map(({ id, label }) => [id, label]));
+  const labels = new Map(items.map(({ id, label }) => [id, label()]));
   const io = new IntersectionObserver((entries) => {
     for (const entry of entries) {
       if (!entry.isIntersecting) continue;

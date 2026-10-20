@@ -7,6 +7,7 @@
 .nav-btn:hover, .nav-btn.active-nav { border-color: var(--faint); color: var(--ink); background: var(--paper-dark); text-decoration: none; }
 .nav-btn:active { transform: translateY(1px); }
 .nav-btn--theme { width: auto; padding-inline: 12px; }
+.nav-btn--lang { padding-inline: 10px; letter-spacing: .04em; }
 
 /* anchos medios: una fila sin glifo */
 @media (max-width: 760px) { .nav-bar { gap: 2px; } .nav-btn { padding-inline: 9px; } .nav-glyph { display: none; } }

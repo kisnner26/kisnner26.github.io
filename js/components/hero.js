@@ -1,4 +1,5 @@
 import { h, fromSvg } from '../lib/dom.js';
+import { t, ui } from '../lib/i18n.js';
 import { plantLeft, plantRight, petal } from './botanicals.js';
 
 function petals(count = 10) {
@@ -20,14 +21,16 @@ export function renderHero(profile) {
     fromSvg(plantRight, { class: 'hero-plant hero-plant--right', 'aria-hidden': 'true' }),
     petals(),
     h('div', { class: 'hero-center' },
-      h('h1', { class: 'hero-title' }, h('span', { class: 'hero-kicker' }, kicker), h('br'), name),
+      h('p', { class: 'hero-status' }, h('span', { class: 'hero-dot', 'aria-hidden': 'true' }), ui('hero.available')),
+      h('h1', { class: 'hero-title' }, h('span', { class: 'hero-kicker' }, t(kicker)), h('br'), name),
       h('div', { class: 'hero-rule' }),
-      h('p', { class: 'hero-lede', html: lede }),
+      h('p', { class: 'hero-lede', html: t(lede) }),
       h('div', { class: 'btn-row' },
-        h('a', { class: 'btn btn--solid', href: '#proyectos' }, h('span', {}, 'Ver proyectos')),
-        h('a', { class: 'btn', href: links.github, target: '_blank', rel: 'noopener noreferrer' }, h('span', {}, 'GitHub')),
+        h('a', { class: 'btn btn--solid', href: links.cv, download: 'Kisnner_Obando_CV.pdf' }, h('span', {}, ui('hero.cv'))),
+        h('a', { class: 'btn', href: `mailto:${links.email}` }, h('span', {}, ui('hero.contact'))),
+        h('a', { class: 'btn', href: '#proyectos' }, h('span', {}, ui('hero.projects'))),
       ),
-      h('p', { class: 'hero-tagline' }, tagline),
+      h('p', { class: 'hero-tagline' }, t(tagline)),
     ),
   );
 }

@@ -1,0 +1,8 @@
+/* Caso destacado: tres hechos y los enlaces que los respaldan. */
+.featured { padding: clamp(20px, 3vw, 32px); border: 1px solid var(--faint); border-radius: var(--radius); background: var(--paper-dark); box-shadow: var(--shadow-sketch); }
+.featured-facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(18px, 3vw, 34px); }
+.featured-fact dt { margin-bottom: 8px; color: var(--accent); font-family: var(--script); font-size: 1.35rem; font-weight: 700; }
+.featured-fact dd { color: var(--ink); font-size: 1.05rem; line-height: 1.45; }
+.featured-links { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--faint); }
+.featured-links a { color: var(--accent); font-weight: 600; }
+@media (max-width: 760px) { .featured-facts { grid-template-columns: 1fr; gap: 20px; } }

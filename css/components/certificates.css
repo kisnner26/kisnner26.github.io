@@ -13,3 +13,9 @@
 .certificate-dialog::backdrop { background: rgb(26 18 8 / .66); }
 .certificate-dialog img { max-height: calc(90dvh - 2px); object-fit: contain; }
 .dialog-close { position: absolute; top: 8px; right: 8px; z-index: 1; width: 42px; height: 42px; border: 1px solid var(--faint); border-radius: 50%; background: var(--paper); color: var(--ink); font-size: 1.8rem; line-height: 1; cursor: pointer; }
+.certificates:not(.expanded) .certificate--extra { display: none; }
+.certificates-toggle { cursor: pointer; background: transparent; font-family: inherit; font-size: 1rem; }
+.certificates-toggle:hover { background: var(--paper-dark); }
+.certificates ~ .btn-row, .rail-hint + .certificates + .btn-row { margin-top: 22px; }
+/* teléfonos: el carrusel gana a la rejilla (este archivo se carga después de layout.css) */
+@media (max-width: 640px) { .certificates.rail { display: flex; } }
