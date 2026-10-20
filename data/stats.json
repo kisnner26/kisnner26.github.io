@@ -1,17 +1,18 @@
 {
-  "updated": "2026-10-19",
+  "updated": "2026-10-20",
   "login": "kisnner26",
-  "contributions": 2035,
+  "contributions": 2040,
   "prs": {
-    "total": 39,
+    "total": 42,
     "merged": 8,
-    "open": 24,
+    "open": 27,
     "closed": 7,
     "owners": [
       "rizinorg",
       "apple",
       "erocarrera",
       "eliben",
+      "geode-sdk",
       "radareorg",
       "NormanSMA",
       "fox-it",
@@ -28,6 +29,33 @@
       "rileytestut"
     ],
     "items": [
+      {
+        "repo": "geode",
+        "owner": "geode-sdk",
+        "title": "Fix Windows 2.2091 layouts of CCKeyboardDispatcher, CCApplication, CCParticleSystem and CCMotionStreak",
+        "number": 2253,
+        "url": "https://github.com/geode-sdk/geode/pull/2253",
+        "status": "open",
+        "createdAt": "2026-10-19T23:23:56Z"
+      },
+      {
+        "repo": "bindings",
+        "owner": "geode-sdk",
+        "title": "Fix GameManager member layout on Windows 2.2091",
+        "number": 1397,
+        "url": "https://github.com/geode-sdk/bindings/pull/1397",
+        "status": "open",
+        "createdAt": "2026-10-19T23:23:49Z"
+      },
+      {
+        "repo": "bindings",
+        "owner": "geode-sdk",
+        "title": "Fix 6 wrong Windows 2.2091 addresses and add CustomSFXCell ctor",
+        "number": 1396,
+        "url": "https://github.com/geode-sdk/bindings/pull/1396",
+        "status": "open",
+        "createdAt": "2026-10-19T23:23:43Z"
+      },
       {
         "repo": "AltStore",
         "owner": "altstoreio",
