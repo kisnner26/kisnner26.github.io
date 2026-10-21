@@ -5,8 +5,8 @@
   "prs": {
     "total": 42,
     "merged": 9,
-    "open": 24,
-    "closed": 9,
+    "open": 23,
+    "closed": 10,
     "owners": [
       "rizinorg",
       "apple",
@@ -62,7 +62,7 @@
         "title": "Fix AltServer sign-in (-80045 / HTTP 503) on macOS 27 with Windows anisette data",
         "number": 1834,
         "url": "https://github.com/altstoreio/AltStore/pull/1834",
-        "status": "open",
+        "status": "closed",
         "createdAt": "2026-10-15T04:54:24Z"
       },
       {
