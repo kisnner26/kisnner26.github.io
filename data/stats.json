@@ -1,12 +1,12 @@
 {
   "updated": "2026-10-21",
   "login": "kisnner26",
-  "contributions": 2159,
+  "contributions": 2173,
   "prs": {
     "total": 42,
     "merged": 9,
-    "open": 26,
-    "closed": 7,
+    "open": 24,
+    "closed": 9,
     "owners": [
       "rizinorg",
       "apple",
@@ -35,7 +35,7 @@
         "title": "Fix Windows 2.2091 layouts of CCKeyboardDispatcher, CCApplication, CCParticleSystem and CCMotionStreak",
         "number": 2253,
         "url": "https://github.com/geode-sdk/geode/pull/2253",
-        "status": "open",
+        "status": "closed",
         "createdAt": "2026-10-19T23:23:56Z"
       },
       {
@@ -44,7 +44,7 @@
         "title": "Fix GameManager member layout on Windows 2.2091",
         "number": 1397,
         "url": "https://github.com/geode-sdk/bindings/pull/1397",
-        "status": "open",
+        "status": "closed",
         "createdAt": "2026-10-19T23:23:49Z"
       },
       {
