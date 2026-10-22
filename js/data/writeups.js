@@ -3,8 +3,8 @@ export const writeups = [
   {
     id: 'altstore-80045',
     date: { es: 'oct 2026', en: 'Oct 2026' },
-    title: { es: 'apple bloqueó altserver dos veces en una semana. propuse el arreglo.', en: 'apple blocked altserver twice in a week. i proposed the fix.' },
-    line: { es: 'AltServer en macOS 27 dejó de iniciar sesión: primero -80045 y dos días después un 503 en HTML. Sondeé el borde de Apple sin credenciales, aislé un crash que era un framework vacío de Xcode 27 y propuse el arreglo a AltStore (PR #1834), probado en iPad y iPhone. Sigue sin fusionarse y no sirve a todas las cuentas', en: 'AltServer on macOS 27 stopped signing in: first -80045, then an HTML 503 two days later. I probed Apple\'s edge without credentials, isolated a crash that turned out to be an empty Xcode 27 framework, and proposed the fix to AltStore (PR #1834), tested on iPad and iPhone. It is still not merged and doesn\'t work for every account' },
+    title: { es: 'apple bloqueó altserver dos veces en una semana. propuse el arreglo y lo integraron.', en: 'apple blocked altserver twice in a week. i proposed the fix and it was merged.' },
+    line: { es: 'AltServer en macOS 27 dejó de iniciar sesión: primero -80045 y dos días después un 503 en HTML. Sondeé el borde de Apple sin credenciales, aislé un crash que era un framework vacío de Xcode 27 y propuse el arreglo a AltStore (PR #1834), probado en iPad y iPhone. El mantenedor lo integró el 21 de octubre y lo usó para arreglar AltStore Classic; no sirve a todas las cuentas', en: 'AltServer on macOS 27 stopped signing in: first -80045, then an HTML 503 two days later. I probed Apple\'s edge without credentials, isolated a crash that turned out to be an empty Xcode 27 framework, and proposed the fix to AltStore (PR #1834), tested on iPad and iPhone. The maintainer merged it on 21 October and used it to fix AltStore Classic; it doesn\'t work for every account' },
     tags: ['AltServer', 'anisette', 'GrandSlam', { es: 'ingeniería inversa', en: 'reverse engineering' }],
     lang: 'en · es',
     href: 'writeups/altstore-80045/',
