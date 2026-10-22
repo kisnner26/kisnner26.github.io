@@ -11,8 +11,8 @@ export const projects = [
     id: 'frutiger-aero-islands',
     title: 'Frutiger Aero Islands',
     line: {
-      es: 'una isla decorable dibujada con PixiJS bajo ventanas de Windows Vista hechas en HTML, y un planeta en Three.js donde se ven las islas de otros jugadores; los datos viven en Supabase con seguridad por fila',
-      en: 'a decorable island drawn with PixiJS under Windows Vista windows built in HTML, and a Three.js planet where you see other players\' islands; the data lives in Supabase with row-level security',
+      es: 'una isla decorable dibujada con PixiJS bajo ventanas de Windows Vista hechas en HTML, y un planeta en Three.js con las islas de otros jugadores; incluye dos battle royale (disparos y estilo agar.io) con salas en línea donde el anfitrión corre la simulación, y los datos viven en Supabase con seguridad por fila',
+      en: 'a decorable island drawn with PixiJS under Windows Vista windows built in HTML, and a Three.js planet with other players\' islands; it includes two battle royales (shooter and agar.io-style) with online rooms where the host runs the simulation, and the data lives in Supabase with row-level security',
     },
     tags: ['React', 'TypeScript', 'PixiJS', 'Three.js', 'Supabase'],
     media: { src: 'assets/img/projects/frutiger-aero-islands.jpg', alt: { es: 'Frutiger Aero Islands: una isla verde con palmeras, fuente y pabellón de vidrio sobre un lago, con burbujas, peces y una ventana de decoraciones al estilo Windows Vista', en: 'Frutiger Aero Islands: a green island with palm trees, a fountain and a glass pavilion on a lake, with bubbles, fish and a Windows Vista style decorations window' } },
