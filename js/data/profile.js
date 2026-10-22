@@ -25,7 +25,7 @@ export const profile = {
   freelanceSince: '2025-01-01',
   // últimos valores conocidos (2026-10-20): solo se usan si data/stats.json no carga; lo normal es que mande js/lib/liveStats.js
   fallbackStats: {
-    merged: { value: '9', label: { es: 'pull requests mergeados en proyectos ajenos: radare2, Node.js, Geode y más', en: 'pull requests merged into other people\'s projects: radare2, Node.js, Geode and more' } },
+    merged: { value: '11', label: { es: 'pull requests mergeados en proyectos ajenos: radare2, Node.js, Geode y más', en: 'pull requests merged into other people\'s projects: radare2, Node.js, Geode and more' } },
     prs: { value: '42', label: { es: 'pull requests enviados en total, 26 abiertos en revisión', en: 'pull requests sent in total, 26 open and under review' } },
   },
 };

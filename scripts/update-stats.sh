@@ -18,10 +18,13 @@ gh api graphql -f q="author:$LOGIN type:pr -user:$LOGIN" -f query='
 query($q:String!){ search(query:$q, type:ISSUE, first:100){ issueCount nodes{ ... on PullRequest{
   title number url state merged createdAt repository{ name owner{ login } } } } } }' > "$TMP"
 
-jq --argjson contrib "$CONTRIB" --arg login "$LOGIN" --arg updated "$(date -u +%F)" '
+# PRs que el mantenedor integró copiando los commits a mano: GitHub los muestra cerrados o abiertos aunque se aceptaron
+INTEGRATED='["https://github.com/altstoreio/AltStore/pull/1834","https://github.com/rileytestut/AltSign/pull/61"]'
+
+jq --argjson contrib "$CONTRIB" --arg login "$LOGIN" --arg updated "$(date -u +%F)" --argjson integrated "$INTEGRATED" '
   [ .data.search.nodes[] | select(. != null and .number != null) | {
       repo: .repository.name, owner: .repository.owner.login, title: .title, number: .number, url: .url,
-      status: (if .merged then "merged" elif .state == "OPEN" then "open" else "closed" end), createdAt: .createdAt } ]
+      status: (if .merged or (.url | IN($integrated[])) then "merged" elif .state == "OPEN" then "open" else "closed" end), createdAt: .createdAt } ]
   | sort_by(.createdAt) | reverse as $items
   | { updated: $updated, login: $login, contributions: $contrib,
       prs: { total: ($items | length),
