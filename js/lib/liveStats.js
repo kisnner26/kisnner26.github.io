@@ -35,6 +35,6 @@ export function mergeContributions(curated, live) {
   const byUrl = new Map(live.prs.items.map((p) => [p.url, p]));
   return curated.map((c) => {
     const p = byUrl.get(c.url);
-    return p ? { ...c, title: p.title, status: p.status } : c;
+    return p ? { ...c, title: p.title, status: c.keep ? c.status : p.status } : c;
   });
 }
