@@ -1,12 +1,12 @@
 {
-  "updated": "2026-10-23",
+  "updated": "2026-10-24",
   "login": "kisnner26",
-  "contributions": 2214,
+  "contributions": 2220,
   "prs": {
     "total": 42,
     "merged": 11,
-    "open": 22,
-    "closed": 9,
+    "open": 21,
+    "closed": 10,
     "owners": [
       "rizinorg",
       "apple",
@@ -206,7 +206,7 @@
         "title": "add architecture-specific powerpc dynamic tags",
         "number": 675,
         "url": "https://github.com/eliben/pyelftools/pull/675",
-        "status": "open",
+        "status": "closed",
         "createdAt": "2026-10-06T05:29:55Z"
       },
       {
