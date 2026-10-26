@@ -18,8 +18,8 @@ export const featured = {
     {
       label: { es: 'el resultado', en: 'the result' },
       text: {
-        es: 'Una build no oficial con más de mil descargas; otros usuarios confirmaron en el hilo público que inician sesión, y un colaborador de AltStore construyó su propio PR sobre mi AltSign#61. El 21 de octubre el mantenedor de AltStore integró los dos pull requests y los usó como base para arreglar AltStore Classic; la actualización oficial aún no sale y el arreglo no funciona en todas las cuentas.',
-        en: 'An unofficial build with over a thousand downloads; other users confirmed in the public thread that they can sign in, and an AltStore collaborator built his own PR on top of my AltSign#61. On 21 October the AltStore maintainer merged both pull requests and used them as the basis to fix AltStore Classic; the official update is not out yet and the fix doesn\'t work for every account.',
+        es: 'Una build no oficial con más de mil quinientas descargas; otros usuarios confirmaron en el hilo público que inician sesión, y un colaborador de AltStore construyó su propio PR sobre mi AltSign#61. El 21 de octubre el mantenedor de AltStore integró los dos pull requests y los usó como base para arreglar AltStore Classic, y la cuenta oficial del proyecto me agradeció el arreglo en público; la actualización oficial aún no sale y el arreglo no funciona en todas las cuentas.',
+        en: 'An unofficial build with over 1,500 downloads; other users confirmed in the public thread that they can sign in, and an AltStore collaborator built his own PR on top of my AltSign#61. On 21 October the AltStore maintainer merged both pull requests and used them as the basis to fix AltStore Classic, and the project\'s official account thanked me for the fix in public; the official update is not out yet and the fix doesn\'t work for every account.',
       },
     },
   ],
