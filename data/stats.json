@@ -1,12 +1,12 @@
 {
-  "updated": "2026-10-26",
+  "updated": "2026-10-27",
   "login": "kisnner26",
-  "contributions": 2447,
+  "contributions": 2515,
   "prs": {
     "total": 42,
     "merged": 11,
-    "open": 21,
-    "closed": 10,
+    "open": 20,
+    "closed": 11,
     "owners": [
       "rizinorg",
       "apple",
@@ -260,7 +260,7 @@
         "title": "feat: extension de Safari con limites del plan y chats activos",
         "number": 2,
         "url": "https://github.com/NormanSMA/ClaudeHub/pull/2",
-        "status": "open",
+        "status": "closed",
         "createdAt": "2026-10-04T10:34:16Z"
       },
       {
