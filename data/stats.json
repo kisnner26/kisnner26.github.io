@@ -1,11 +1,11 @@
 {
-  "updated": "2026-10-28",
+  "updated": "2026-10-29",
   "login": "kisnner26",
-  "contributions": 3013,
+  "contributions": 3039,
   "prs": {
-    "total": 42,
+    "total": 44,
     "merged": 11,
-    "open": 20,
+    "open": 22,
     "closed": 11,
     "owners": [
       "rizinorg",
@@ -15,9 +15,10 @@
       "geode-sdk",
       "radareorg",
       "NormanSMA",
-      "fox-it",
-      "ronaldoussoren",
       "altstoreio",
+      "fox-it",
+      "rileytestut",
+      "ronaldoussoren",
       "construct",
       "drewster99",
       "hoowertsg19",
@@ -25,10 +26,27 @@
       "hugsy",
       "kimziro",
       "nodejs",
-      "python-intelhex",
-      "rileytestut"
+      "python-intelhex"
     ],
     "items": [
+      {
+        "repo": "AltSign",
+        "owner": "rileytestut",
+        "title": "fix: use JSON endpoints for SMS verification",
+        "number": 62,
+        "url": "https://github.com/rileytestut/AltSign/pull/62",
+        "status": "open",
+        "createdAt": "2026-10-29T04:10:50Z"
+      },
+      {
+        "repo": "AltStore",
+        "owner": "altstoreio",
+        "title": "fix: preserve fractional source timestamps",
+        "number": 1855,
+        "url": "https://github.com/altstoreio/AltStore/pull/1855",
+        "status": "open",
+        "createdAt": "2026-10-29T03:59:12Z"
+      },
       {
         "repo": "geode",
         "owner": "geode-sdk",
