@@ -1,11 +1,11 @@
 {
   "updated": "2026-11-02",
   "login": "kisnner26",
-  "contributions": 3235,
+  "contributions": 3473,
   "prs": {
-    "total": 44,
-    "merged": 11,
-    "open": 22,
+    "total": 45,
+    "merged": 13,
+    "open": 21,
     "closed": 11,
     "owners": [
       "rizinorg",
@@ -19,6 +19,7 @@
       "fox-it",
       "rileytestut",
       "ronaldoussoren",
+      "Nell16",
       "construct",
       "drewster99",
       "hoowertsg19",
@@ -29,6 +30,15 @@
       "python-intelhex"
     ],
     "items": [
+      {
+        "repo": "sistema-evaluaciones",
+        "owner": "Nell16",
+        "title": "[INT-01-GH] Agregar regla ArchUnit: controllers no exponen entidades de dominio",
+        "number": 10,
+        "url": "https://github.com/Nell16/sistema-evaluaciones/pull/10",
+        "status": "merged",
+        "createdAt": "2026-11-02T07:03:01Z"
+      },
       {
         "repo": "AltSign",
         "owner": "rileytestut",
@@ -206,7 +216,7 @@
         "title": "fix signature generation for python 3 byte buffers",
         "number": 618,
         "url": "https://github.com/erocarrera/pefile/pull/618",
-        "status": "open",
+        "status": "merged",
         "createdAt": "2026-10-06T05:36:28Z"
       },
       {
