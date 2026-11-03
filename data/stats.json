@@ -1,25 +1,25 @@
 {
   "updated": "2026-11-03",
   "login": "kisnner26",
-  "contributions": 3805,
+  "contributions": 3961,
   "prs": {
-    "total": 45,
-    "merged": 13,
-    "open": 21,
+    "total": 50,
+    "merged": 15,
+    "open": 24,
     "closed": 11,
     "owners": [
       "rizinorg",
+      "altstoreio",
       "apple",
       "erocarrera",
+      "Nell16",
       "eliben",
       "geode-sdk",
       "radareorg",
-      "NormanSMA",
-      "altstoreio",
-      "fox-it",
       "rileytestut",
+      "NormanSMA",
+      "fox-it",
       "ronaldoussoren",
-      "Nell16",
       "construct",
       "drewster99",
       "hoowertsg19",
@@ -30,6 +30,51 @@
       "python-intelhex"
     ],
     "items": [
+      {
+        "repo": "AltStore",
+        "owner": "altstoreio",
+        "title": "Resume the reachability probe's continuation only once",
+        "number": 1863,
+        "url": "https://github.com/altstoreio/AltStore/pull/1863",
+        "status": "open",
+        "createdAt": "2026-11-03T17:55:39Z"
+      },
+      {
+        "repo": "sistema-evaluaciones",
+        "owner": "Nell16",
+        "title": "[INT-08] Exigir el visto bueno de Testing antes de fusionar",
+        "number": 20,
+        "url": "https://github.com/Nell16/sistema-evaluaciones/pull/20",
+        "status": "merged",
+        "createdAt": "2026-11-03T17:33:54Z"
+      },
+      {
+        "repo": "sistema-evaluaciones",
+        "owner": "Nell16",
+        "title": "[INT-07] Automatizar el formato del código en el CI",
+        "number": 19,
+        "url": "https://github.com/Nell16/sistema-evaluaciones/pull/19",
+        "status": "merged",
+        "createdAt": "2026-11-03T17:32:00Z"
+      },
+      {
+        "repo": "AltStore",
+        "owner": "altstoreio",
+        "title": "Don't crash when a bundle identifier isn't a valid URL scheme",
+        "number": 1861,
+        "url": "https://github.com/altstoreio/AltStore/pull/1861",
+        "status": "open",
+        "createdAt": "2026-11-03T07:22:58Z"
+      },
+      {
+        "repo": "AltSign",
+        "owner": "rileytestut",
+        "title": "Suggest fixing the clock when Apple's HTTP 503 comes with a skewed Date header",
+        "number": 65,
+        "url": "https://github.com/rileytestut/AltSign/pull/65",
+        "status": "open",
+        "createdAt": "2026-11-03T07:22:48Z"
+      },
       {
         "repo": "sistema-evaluaciones",
         "owner": "Nell16",
