@@ -1,12 +1,12 @@
 {
-  "updated": "2026-11-05",
+  "updated": "2026-11-06",
   "login": "kisnner26",
-  "contributions": 4126,
+  "contributions": 4127,
   "prs": {
     "total": 50,
     "merged": 15,
-    "open": 24,
-    "closed": 11,
+    "open": 23,
+    "closed": 12,
     "owners": [
       "rizinorg",
       "altstoreio",
@@ -225,7 +225,7 @@
         "title": "reject noninteger array dimensions",
         "number": 171,
         "url": "https://github.com/fox-it/dissect.cstruct/pull/171",
-        "status": "open",
+        "status": "closed",
         "createdAt": "2026-10-06T05:58:07Z"
       },
       {
