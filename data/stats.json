@@ -4,8 +4,8 @@
   "contributions": 4138,
   "prs": {
     "total": 50,
-    "merged": 15,
-    "open": 23,
+    "merged": 16,
+    "open": 22,
     "closed": 12,
     "owners": [
       "rizinorg",
@@ -90,7 +90,7 @@
         "title": "fix: use JSON endpoints for SMS verification",
         "number": 62,
         "url": "https://github.com/rileytestut/AltSign/pull/62",
-        "status": "open",
+        "status": "merged",
         "createdAt": "2026-10-29T04:10:50Z"
       },
       {
