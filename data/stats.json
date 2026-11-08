@@ -1,10 +1,10 @@
 {
   "updated": "2026-11-08",
   "login": "kisnner26",
-  "contributions": 4142,
+  "contributions": 4148,
   "prs": {
-    "total": 50,
-    "merged": 16,
+    "total": 51,
+    "merged": 17,
     "open": 22,
     "closed": 12,
     "owners": [
@@ -30,6 +30,15 @@
       "python-intelhex"
     ],
     "items": [
+      {
+        "repo": "cutter-translations",
+        "owner": "rizinorg",
+        "title": "sync Translations.ts with current cutter source (lupdate)",
+        "number": 53,
+        "url": "https://github.com/rizinorg/cutter-translations/pull/53",
+        "status": "open",
+        "createdAt": "2026-11-08T07:27:32Z"
+      },
       {
         "repo": "AltStore",
         "owner": "altstoreio",
@@ -252,7 +261,7 @@
         "title": "support nibble wildcards in peid signature matching",
         "number": 619,
         "url": "https://github.com/erocarrera/pefile/pull/619",
-        "status": "open",
+        "status": "merged",
         "createdAt": "2026-10-06T05:39:06Z"
       },
       {
