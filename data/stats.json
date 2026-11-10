@@ -1,11 +1,11 @@
 {
   "updated": "2026-11-10",
   "login": "kisnner26",
-  "contributions": 4170,
+  "contributions": 4172,
   "prs": {
     "total": 51,
-    "merged": 17,
-    "open": 22,
+    "merged": 19,
+    "open": 20,
     "closed": 12,
     "owners": [
       "rizinorg",
@@ -225,7 +225,7 @@
         "title": "document lightweight source checkout",
         "number": 620,
         "url": "https://github.com/erocarrera/pefile/pull/620",
-        "status": "open",
+        "status": "merged",
         "createdAt": "2026-10-06T06:00:52Z"
       },
       {
@@ -279,7 +279,7 @@
         "title": "allow configuring repeated import address threshold",
         "number": 617,
         "url": "https://github.com/erocarrera/pefile/pull/617",
-        "status": "open",
+        "status": "merged",
         "createdAt": "2026-10-06T05:33:53Z"
       },
       {
