@@ -1,18 +1,18 @@
 {
-  "updated": "2026-11-13",
+  "updated": "2026-11-14",
   "login": "kisnner26",
-  "contributions": 4764,
+  "contributions": 5295,
   "prs": {
-    "total": 51,
+    "total": 53,
     "merged": 19,
-    "open": 20,
-    "closed": 12,
+    "open": 21,
+    "closed": 13,
     "owners": [
       "rizinorg",
+      "Nell16",
       "altstoreio",
       "apple",
       "erocarrera",
-      "Nell16",
       "eliben",
       "geode-sdk",
       "radareorg",
@@ -30,6 +30,24 @@
       "python-intelhex"
     ],
     "items": [
+      {
+        "repo": "sistema-evaluaciones",
+        "owner": "Nell16",
+        "title": "[BFA-FE-01] Cliente y tipos de la API de BFA (pieza 1 del #36)",
+        "number": 45,
+        "url": "https://github.com/Nell16/sistema-evaluaciones/pull/45",
+        "status": "open",
+        "createdAt": "2026-11-14T03:49:51Z"
+      },
+      {
+        "repo": "sistema-evaluaciones",
+        "owner": "Nell16",
+        "title": "[BFA-FE-01] Cliente y tipos de la API de BFA (pieza 1 del #36)",
+        "number": 44,
+        "url": "https://github.com/Nell16/sistema-evaluaciones/pull/44",
+        "status": "closed",
+        "createdAt": "2026-11-14T03:48:23Z"
+      },
       {
         "repo": "cutter-translations",
         "owner": "rizinorg",
