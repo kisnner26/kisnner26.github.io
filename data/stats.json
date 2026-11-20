@@ -1,11 +1,11 @@
 {
-  "updated": "2026-11-19",
+  "updated": "2026-11-20",
   "login": "kisnner26",
-  "contributions": 6698,
+  "contributions": 6703,
   "prs": {
     "total": 53,
-    "merged": 19,
-    "open": 21,
+    "merged": 20,
+    "open": 20,
     "closed": 13,
     "owners": [
       "rizinorg",
@@ -36,7 +36,7 @@
         "title": "[BFA-FE-01] Cliente y tipos de la API de BFA (pieza 1 del #36)",
         "number": 45,
         "url": "https://github.com/Nell16/sistema-evaluaciones/pull/45",
-        "status": "open",
+        "status": "merged",
         "createdAt": "2026-11-14T03:49:51Z"
       },
       {
