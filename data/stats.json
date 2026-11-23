@@ -1,11 +1,11 @@
 {
-  "updated": "2026-11-22",
+  "updated": "2026-11-23",
   "login": "kisnner26",
-  "contributions": 6787,
+  "contributions": 6842,
   "prs": {
-    "total": 53,
+    "total": 54,
     "merged": 20,
-    "open": 20,
+    "open": 21,
     "closed": 13,
     "owners": [
       "rizinorg",
@@ -30,6 +30,15 @@
       "python-intelhex"
     ],
     "items": [
+      {
+        "repo": "sistema-evaluaciones",
+        "owner": "Nell16",
+        "title": "[INT-02] Mock del catálogo (E1 y E2) para el frontend",
+        "number": 81,
+        "url": "https://github.com/Nell16/sistema-evaluaciones/pull/81",
+        "status": "open",
+        "createdAt": "2026-11-23T04:53:01Z"
+      },
       {
         "repo": "sistema-evaluaciones",
         "owner": "Nell16",
