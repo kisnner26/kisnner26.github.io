@@ -6,10 +6,10 @@ export const profile = {
   lede: {
     es:
       'Estudiante de <strong>Ingeniería en Sistemas de Información</strong> (UAM, Nicaragua) y freelancer desde 2025. ' +
-      'Construyo apps full-stack con Node.js, React y TypeScript: backend transaccional, tiempo real y bases de datos con Supabase y PostgreSQL. Tengo pull requests mergeados en radare2, Node.js y Geode.',
+      'Construyo apps full-stack con Node.js, React y TypeScript: backend transaccional, tiempo real y bases de datos con Supabase y PostgreSQL. Tengo pull requests mergeados en radare2, Node.js, AltStore y Geode.',
     en:
       'Information systems engineering student (<strong>UAM, Nicaragua</strong>) and freelancer since 2025. ' +
-      'I build full-stack apps with Node.js, React and TypeScript: transactional backends, real time and databases with Supabase and PostgreSQL. I have merged pull requests in radare2, Node.js and Geode.',
+      'I build full-stack apps with Node.js, React and TypeScript: transactional backends, real time and databases with Supabase and PostgreSQL. I have merged pull requests in radare2, Node.js, AltStore and Geode.',
   },
   links: {
     github: 'https://github.com/kisnner26',
@@ -21,6 +21,12 @@ export const profile = {
   availability: {
     es: ['Remoto', 'UTC−6, sin cambio de hora', 'Español nativo', 'Inglés técnico escrito'],
     en: ['Remote', 'UTC−6, no daylight saving', 'Native Spanish', 'Written technical English'],
+  },
+  // committers.top/nicaragua: usuarios con más seguidores del país, ordenados por contribuciones de los últimos 12 meses (lista del 2026-11-19)
+  ranking: {
+    value: '#1',
+    href: 'https://committers.top/nicaragua',
+    label: { es: 'en contribuciones de GitHub entre los desarrolladores de Nicaragua (committers.top, nov 2026)', en: 'in GitHub contributions among Nicaraguan developers (committers.top, Nov 2026)' },
   },
   freelanceSince: '2025-01-01',
   // últimos valores conocidos (2026-10-20): solo se usan si data/stats.json no carga; lo normal es que mande js/lib/liveStats.js

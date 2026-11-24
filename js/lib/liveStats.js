@@ -9,12 +9,12 @@ export async function loadLiveStats() {
 }
 
 /** Las tres cifras de la franja. Sin datos vivos usa los últimos valores conocidos (`fallback`). */
-export function buildStats({ live, fallback, writeups }) {
+export function buildStats({ live, fallback, writeups, ranking }) {
   const reports = {
     value: String(writeups.length),
     label: { es: 'informes técnicos, con lo que probé y lo que no', en: 'technical write-ups, with what I tested and what I didn\'t' },
   };
-  if (!live) return [fallback.merged, fallback.prs, reports];
+  if (!live) return [fallback.merged, fallback.prs, reports, ranking];
   const { prs } = live;
   return [
     {
@@ -26,6 +26,7 @@ export function buildStats({ live, fallback, writeups }) {
       label: { es: `pull requests enviados en total, ${prs.open} abiertos en revisión`, en: `pull requests sent in total, ${prs.open} open and under review` },
     },
     reports,
+    ranking,
   ];
 }
 

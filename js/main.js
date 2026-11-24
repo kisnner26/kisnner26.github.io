@@ -29,7 +29,7 @@ const hideLoader = mountLoader(loading);
 let live = null;
 let firstRender = true;
 
-const stats = () => renderStats(buildStats({ live, fallback: profile.fallbackStats, writeups }));
+const stats = () => renderStats(buildStats({ live, fallback: profile.fallbackStats, writeups, ranking: profile.ranking }));
 
 function hMain(...children) {
   const main = document.createElement('main');
