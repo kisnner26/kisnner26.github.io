@@ -19,6 +19,39 @@ export const projects = [
     links: [demo('https://kisnner26.github.io/frutiger-aero-islands/'), gh('frutiger-aero-islands')],
   },
   {
+    id: 'hilo',
+    title: 'Hilo',
+    line: {
+      es: 'junta ClickUp y GitHub en una app de escritorio (Electron y TypeScript): dice qué te toca y quién te frena, revisa el formato del PR antes de abrirlo y mide los tokens que el agente se ahorra',
+      en: 'joins ClickUp and GitHub in a desktop app (Electron and TypeScript): it tells you what is on your plate and who is blocking you, checks the PR format before you open it and measures the tokens the agent saves',
+    },
+    tags: ['Electron', 'TypeScript', 'ClickUp API', 'GitHub API'],
+    media: { src: 'assets/img/projects/hilo.jpg', alt: { es: 'Hilo, pantalla Mi día: tareas, PR propios, quién te frena y acciones pendientes de aprobar', en: 'Hilo, My day screen: tasks, own PRs, who is blocking you and actions waiting for approval' } },
+    links: [gh('hilo')],
+  },
+  {
+    id: 'anden',
+    title: 'Andén',
+    line: {
+      es: 'app móvil de buses interlocales de Nicaragua (en desarrollo): reserva de asiento, boleto con QR que funciona sin internet y seguimiento del bus en el mapa; es la base de mi tesis',
+      en: 'mobile app for intercity buses in Nicaragua (in development): seat booking, a QR ticket that works offline and live bus tracking on a map; it is the base of my thesis',
+    },
+    tags: ['TypeScript', 'React Native', 'Supabase', { es: 'tiempo real', en: 'real time' }],
+    media: { src: 'assets/img/projects/anden.jpg', alt: { es: 'Tres pantallas de Andén: viaje en curso con la hora de llegada, boleto con código QR y la pantalla del conductor', en: 'Three Andén screens: trip in progress with arrival time, ticket with QR code and the driver screen' } },
+    links: [gh('anden')],
+  },
+  {
+    id: 'fanal',
+    title: 'Fanal',
+    line: {
+      es: 'motor de animación en Canvas 2D y WebGL2: las animaciones largas se escriben como datos (cámara, partículas, shaders, transiciones) y corre en el navegador o como app de escritorio',
+      en: 'animation engine on Canvas 2D and WebGL2: long animations are written as data (camera, particles, shaders, transitions) and it runs in the browser or as a desktop app',
+    },
+    tags: ['JavaScript', 'WebGL2', 'Canvas', 'Electron'],
+    media: { src: 'assets/img/projects/fanal.jpg', alt: { es: 'Fanal: una toma del motor con un planeta dibujado con shaders', en: 'Fanal: an engine shot with a planet drawn with shaders' } },
+    links: [demo('https://kisnner26.github.io/fanal/'), gh('fanal')],
+  },
+  {
     id: 'relevo',
     title: 'relevo',
     line: {
