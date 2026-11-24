@@ -1,12 +1,12 @@
 {
   "updated": "2026-11-24",
   "login": "kisnner26",
-  "contributions": 6891,
+  "contributions": 6916,
   "prs": {
     "total": 54,
     "merged": 20,
-    "open": 21,
-    "closed": 13,
+    "open": 20,
+    "closed": 14,
     "owners": [
       "rizinorg",
       "Nell16",
@@ -36,7 +36,7 @@
         "title": "[INT-02] Mock del catálogo (E1 y E2) para el frontend",
         "number": 81,
         "url": "https://github.com/Nell16/sistema-evaluaciones/pull/81",
-        "status": "open",
+        "status": "closed",
         "createdAt": "2026-11-23T04:53:01Z"
       },
       {
