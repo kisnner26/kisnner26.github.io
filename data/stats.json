@@ -1,11 +1,11 @@
 {
-  "updated": "2026-11-24",
+  "updated": "2026-11-25",
   "login": "kisnner26",
-  "contributions": 6916,
+  "contributions": 6932,
   "prs": {
-    "total": 54,
+    "total": 55,
     "merged": 20,
-    "open": 20,
+    "open": 21,
     "closed": 14,
     "owners": [
       "rizinorg",
@@ -30,6 +30,15 @@
       "python-intelhex"
     ],
     "items": [
+      {
+        "repo": "sistema-evaluaciones",
+        "owner": "Nell16",
+        "title": "[GEN-35-BE] E3 crear evaluación + tablas sujeto y periodo + E19 y E21 (rescate del #108)",
+        "number": 125,
+        "url": "https://github.com/Nell16/sistema-evaluaciones/pull/125",
+        "status": "open",
+        "createdAt": "2026-11-25T02:00:12Z"
+      },
       {
         "repo": "sistema-evaluaciones",
         "owner": "Nell16",
