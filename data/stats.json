@@ -1,11 +1,11 @@
 {
   "updated": "2026-11-25",
   "login": "kisnner26",
-  "contributions": 6932,
+  "contributions": 7023,
   "prs": {
     "total": 55,
-    "merged": 20,
-    "open": 21,
+    "merged": 21,
+    "open": 20,
     "closed": 14,
     "owners": [
       "rizinorg",
@@ -36,7 +36,7 @@
         "title": "[GEN-35-BE] E3 crear evaluación + tablas sujeto y periodo + E19 y E21 (rescate del #108)",
         "number": 125,
         "url": "https://github.com/Nell16/sistema-evaluaciones/pull/125",
-        "status": "open",
+        "status": "merged",
         "createdAt": "2026-11-25T02:00:12Z"
       },
       {
