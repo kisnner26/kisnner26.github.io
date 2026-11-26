@@ -1,11 +1,11 @@
 {
-  "updated": "2026-11-25",
+  "updated": "2026-11-26",
   "login": "kisnner26",
-  "contributions": 7023,
+  "contributions": 7219,
   "prs": {
-    "total": 55,
-    "merged": 21,
-    "open": 20,
+    "total": 57,
+    "merged": 22,
+    "open": 21,
     "closed": 14,
     "owners": [
       "rizinorg",
@@ -30,6 +30,24 @@
       "python-intelhex"
     ],
     "items": [
+      {
+        "repo": "sistema-evaluaciones",
+        "owner": "Nell16",
+        "title": "[INT-33] Traspaso del sprint 03 e inventario del motor de evaluación",
+        "number": 156,
+        "url": "https://github.com/Nell16/sistema-evaluaciones/pull/156",
+        "status": "open",
+        "createdAt": "2026-11-26T08:30:46Z"
+      },
+      {
+        "repo": "sistema-evaluaciones",
+        "owner": "Nell16",
+        "title": "[GEN-41-BE] corregir autorización del clonado de versiones publicadas",
+        "number": 148,
+        "url": "https://github.com/Nell16/sistema-evaluaciones/pull/148",
+        "status": "merged",
+        "createdAt": "2026-11-25T23:05:02Z"
+      },
       {
         "repo": "sistema-evaluaciones",
         "owner": "Nell16",
