@@ -1,15 +1,15 @@
 {
-  "updated": "2026-11-27",
+  "updated": "2026-11-28",
   "login": "kisnner26",
-  "contributions": 7246,
+  "contributions": 7256,
   "prs": {
-    "total": 57,
+    "total": 67,
     "merged": 23,
-    "open": 20,
+    "open": 30,
     "closed": 14,
     "owners": [
-      "rizinorg",
       "Nell16",
+      "rizinorg",
       "altstoreio",
       "apple",
       "erocarrera",
@@ -30,6 +30,96 @@
       "python-intelhex"
     ],
     "items": [
+      {
+        "repo": "sistema-evaluaciones",
+        "owner": "Nell16",
+        "title": "[INT-33] trazabilidad de reglas utilizadas",
+        "number": 229,
+        "url": "https://github.com/Nell16/sistema-evaluaciones/pull/229",
+        "status": "open",
+        "createdAt": "2026-11-28T02:28:09Z"
+      },
+      {
+        "repo": "sistema-evaluaciones",
+        "owner": "Nell16",
+        "title": "[BFA-BE-31] selección de reglas aprobadas en el primer recálculo",
+        "number": 228,
+        "url": "https://github.com/Nell16/sistema-evaluaciones/pull/228",
+        "status": "open",
+        "createdAt": "2026-11-28T02:28:06Z"
+      },
+      {
+        "repo": "sistema-evaluaciones",
+        "owner": "Nell16",
+        "title": "[BFA-BE-31] concurrencia y rollback por http real",
+        "number": 227,
+        "url": "https://github.com/Nell16/sistema-evaluaciones/pull/227",
+        "status": "open",
+        "createdAt": "2026-11-28T02:28:04Z"
+      },
+      {
+        "repo": "sistema-evaluaciones",
+        "owner": "Nell16",
+        "title": "[BFA-BE-31] api integrada de revisión y publicación",
+        "number": 226,
+        "url": "https://github.com/Nell16/sistema-evaluaciones/pull/226",
+        "status": "open",
+        "createdAt": "2026-11-28T02:28:01Z"
+      },
+      {
+        "repo": "sistema-evaluaciones",
+        "owner": "Nell16",
+        "title": "[BFA-BE-31] regresiones de conflictos y permisos",
+        "number": 225,
+        "url": "https://github.com/Nell16/sistema-evaluaciones/pull/225",
+        "status": "open",
+        "createdAt": "2026-11-28T02:27:58Z"
+      },
+      {
+        "repo": "sistema-evaluaciones",
+        "owner": "Nell16",
+        "title": "[BFA-BE-31] revisión y publicación autorizadas",
+        "number": 224,
+        "url": "https://github.com/Nell16/sistema-evaluaciones/pull/224",
+        "status": "open",
+        "createdAt": "2026-11-28T02:27:55Z"
+      },
+      {
+        "repo": "sistema-evaluaciones",
+        "owner": "Nell16",
+        "title": "[BFA-BE-31] persistencia de snapshots de revisión",
+        "number": 223,
+        "url": "https://github.com/Nell16/sistema-evaluaciones/pull/223",
+        "status": "open",
+        "createdAt": "2026-11-28T02:27:52Z"
+      },
+      {
+        "repo": "sistema-evaluaciones",
+        "owner": "Nell16",
+        "title": "[BFA-BE-31] recálculo con insumos y normas trazables",
+        "number": 222,
+        "url": "https://github.com/Nell16/sistema-evaluaciones/pull/222",
+        "status": "open",
+        "createdAt": "2026-11-28T02:27:49Z"
+      },
+      {
+        "repo": "sistema-evaluaciones",
+        "owner": "Nell16",
+        "title": "[BFA-BE-31] contratos de revisión sobre el esquema común",
+        "number": 221,
+        "url": "https://github.com/Nell16/sistema-evaluaciones/pull/221",
+        "status": "open",
+        "createdAt": "2026-11-28T02:27:45Z"
+      },
+      {
+        "repo": "sistema-evaluaciones",
+        "owner": "Nell16",
+        "title": "[INT-33] instalar el esquema común de resultados",
+        "number": 220,
+        "url": "https://github.com/Nell16/sistema-evaluaciones/pull/220",
+        "status": "open",
+        "createdAt": "2026-11-28T02:27:42Z"
+      },
       {
         "repo": "sistema-evaluaciones",
         "owner": "Nell16",
